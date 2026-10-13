@@ -1,26 +1,153 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/*
+ * Mundo visual: "Repartição datilografada".
+ * - A fonte histórica fala em tipo de máquina de escrever (tinta preta da fita).
+ * - O jogador escreve "a grafite" (texto do jogador sempre com rótulo, nunca só pela cor).
+ * - O arquivo se manifesta por carimbo roxo (estados do sistema, contadores).
+ * - Azul-carbono é reservado ao foco atual do jogador: seleção, foco de teclado, posição anunciada.
+ * - Neutros: escala fechada de 7 tons de papel; nenhum cinza fora dela.
+ */
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+:root {
+  --paper-0: #f7f8f4; /* folha */
+  --paper-1: #eceee7; /* fundo da repartição */
+  --paper-2: #dfe2d9;
+  --paper-3: #c6cabf; /* pautas e fios */
+  --paper-4: #82877c; /* bordas fortes, desabilitado */
+  --paper-5: #575b54; /* texto secundário */
+  --paper-6: #2a2c28;
+
+  --ink: #1d1b18; /* tinta preta da fita */
+  --ribbon: #a12a22; /* metade vermelha da fita: limites e alertas */
+  --carbon: #2f3f9e; /* foco do jogador (reservado) */
+  --stamp: #5a3f91; /* carimbo do arquivo */
+  --graphite: #3d4047; /* escrita do jogador */
+  --manila: #d4b06a; /* pasta do caderno */
+  --manila-deep: #b08a43;
+  --wood: #4b3220; /* tampo da mesa, régua de protocolo */
+  --wood-light: #6b4a2e;
+  --on-wood: #f7f8f4;
+
+  --shadow-sheet-color: 29 27 24;
+  color-scheme: light;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    /* A mesma repartição, à noite: tampo escuro, folhas sob luz baixa. */
+    --paper-0: #2a2723;
+    --paper-1: #1c1a17;
+    --paper-2: #34302b;
+    --paper-3: #4a453e;
+    --paper-4: #7b756b;
+    --paper-5: #b8b2a6;
+    --paper-6: #e4dfd4;
+
+    --ink: #f0ece2;
+    --ribbon: #f08a7e;
+    --carbon: #a9b6ff;
+    --stamp: #c8b0f2;
+    --graphite: #cfd2da;
+    --manila: #6e5630;
+    --manila-deep: #8a6c3c;
+    --wood: #120d09;
+    --wood-light: #2e2016;
+    --on-wood: #f0ece2;
+
+    --shadow-sheet-color: 0 0 0;
+    color-scheme: dark;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@theme inline {
+  --color-paper-0: var(--paper-0);
+  --color-paper-1: var(--paper-1);
+  --color-paper-2: var(--paper-2);
+  --color-paper-3: var(--paper-3);
+  --color-paper-4: var(--paper-4);
+  --color-paper-5: var(--paper-5);
+  --color-paper-6: var(--paper-6);
+  --color-ink: var(--ink);
+  --color-ribbon: var(--ribbon);
+  --color-carbon: var(--carbon);
+  --color-stamp: var(--stamp);
+  --color-graphite: var(--graphite);
+  --color-manila: var(--manila);
+  --color-manila-deep: var(--manila-deep);
+  --color-wood: var(--wood);
+  --color-wood-light: var(--wood-light);
+  --color-on-wood: var(--on-wood);
+
+  --font-sans: var(--font-atkinson), ui-sans-serif, system-ui, sans-serif;
+  --font-typed: var(--font-courier-prime), "Courier New", ui-monospace, monospace;
+
+  /* Escada tipográfica fixa (sem tamanhos fora dela). */
+  --text-xs: 0.875rem;
+  --text-xs--line-height: 1.4;
+  --text-sm: 0.9375rem;
+  --text-sm--line-height: 1.5;
+  --text-base: 1.0625rem;
+  --text-base--line-height: 1.6;
+  --text-lg: 1.25rem;
+  --text-lg--line-height: 1.45;
+  --text-xl: 1.625rem;
+  --text-xl--line-height: 1.25;
+  --text-2xl: 2.125rem;
+  --text-2xl--line-height: 1.15;
+  --text-3xl: 2.875rem;
+  --text-3xl--line-height: 1.05;
+
+  --radius-sheet: 2px;
+  --radius-control: 4px;
+
+  --shadow-sheet: 0 1px 1px rgb(var(--shadow-sheet-color) / 0.1), 0 8px 18px -10px rgb(var(--shadow-sheet-color) / 0.35);
+  --shadow-lifted: 0 2px 3px rgb(var(--shadow-sheet-color) / 0.12), 0 18px 32px -14px rgb(var(--shadow-sheet-color) / 0.45);
+
+  --spacing-touch: 2.75rem; /* 44 px: alvo mínimo de toque */
+}
+
+@layer base {
+  html {
+    background: var(--paper-1);
+    color: var(--ink);
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    line-height: 1.6;
+    caret-color: var(--carbon);
+    font-variant-numeric: tabular-nums;
+  }
+
+  ::selection {
+    background: color-mix(in srgb, var(--carbon) 22%, transparent);
+    color: inherit;
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--carbon);
+    outline-offset: 2px;
+    border-radius: var(--radius-control);
+  }
+
+  a {
+    text-underline-offset: 0.2em;
+    text-decoration-thickness: 1px;
+  }
+
+  * {
+    scrollbar-color: var(--paper-4) var(--paper-2);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
 }

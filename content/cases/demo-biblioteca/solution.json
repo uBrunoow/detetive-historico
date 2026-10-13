@@ -1,0 +1,263 @@
+{
+  "timelineReference": [
+    {
+      "evidenceId": "oficio-prefeitura",
+      "referenceOrder": 1,
+      "belongsToStory": true,
+      "isKeyMilestone": false
+    },
+    {
+      "evidenceId": "recibo-encadernacao",
+      "referenceOrder": 2,
+      "belongsToStory": true,
+      "isKeyMilestone": false
+    },
+    {
+      "evidenceId": "registro-visitas",
+      "referenceOrder": 3,
+      "belongsToStory": true,
+      "isKeyMilestone": true
+    },
+    {
+      "evidenceId": "bilhete",
+      "referenceOrder": 4,
+      "belongsToStory": true,
+      "isKeyMilestone": true,
+      "datingClueExplanation": "O bilhete fala da “visita de ontem”. O livro de visitas mostra que D. Helena esteve na biblioteca em 9 de março; então o bilhete foi escrito em 10 de março. A assinatura “O.” combina com Otávio Lemos, o bibliotecário nomeado no ofício."
+    },
+    {
+      "evidenceId": "croqui",
+      "referenceOrder": 5,
+      "belongsToStory": true,
+      "isKeyMilestone": false,
+      "datingClueExplanation": "O croqui cita a folha 34 do Livro de Terras: só pode ter sido feito depois que D. Helena levou o livro (10 de março). O calendário da sala de leitura marca a medição para o dia 15, e a ata de 20 de março diz que a medição foi feita “na semana passada”."
+    },
+    {
+      "evidenceId": "ata-camara",
+      "referenceOrder": 6,
+      "belongsToStory": true,
+      "isKeyMilestone": true
+    },
+    {
+      "evidenceId": "jornal-1898",
+      "referenceOrder": null,
+      "belongsToStory": false,
+      "isKeyMilestone": false,
+      "outsideReason": "O jornal é de 1898, 25 anos antes do caso, e fala de outro furto, na biblioteca antiga. Ele chama a atenção para a ideia de roubo, mas não tem relação com o que aconteceu em março de 1923."
+    }
+  ],
+  "timelineHints": [
+    {
+      "level": 1,
+      "condition": {
+        "type": "milestone_missing"
+      },
+      "text": "Ainda há cartas importantes fora da linha do tempo. Volte à cena ou ao caderno e veja o que falta posicionar."
+    },
+    {
+      "level": 1,
+      "condition": {
+        "type": "irrelevant_between_milestones"
+      },
+      "text": "Uma das cartas no meio da sua linha do tempo trata de acontecimentos de outra época. Confira as datas com atenção."
+    },
+    {
+      "level": 1,
+      "condition": {
+        "type": "milestones_inverted",
+        "pair": [
+          "registro-visitas",
+          "bilhete"
+        ]
+      },
+      "text": "Releia o bilhete com atenção: ele fala de algo que aconteceu “ontem”. Que acontecimento poderia ser esse?"
+    },
+    {
+      "level": 2,
+      "condition": {
+        "type": "milestones_inverted",
+        "pair": [
+          "registro-visitas",
+          "bilhete"
+        ]
+      },
+      "text": "Um bilhete só pode falar da “visita de ontem” depois que essa visita aconteceu. Compare-o com o livro de visitas."
+    },
+    {
+      "level": 1,
+      "condition": {
+        "type": "milestones_inverted",
+        "pair": [
+          "bilhete",
+          "ata-camara"
+        ]
+      },
+      "text": "Pense no momento em que a Câmara deu falta do livro. O que já tinha acontecido com ele antes disso?"
+    },
+    {
+      "level": 1,
+      "condition": {
+        "type": "milestones_inverted",
+        "pair": [
+          "registro-visitas",
+          "ata-camara"
+        ]
+      },
+      "text": "Confira as datas escritas nas próprias fontes: algumas cartas têm data e funcionam como âncoras."
+    },
+    {
+      "level": 1,
+      "condition": {
+        "type": "default"
+      },
+      "text": "Comece pelas cartas que têm data escrita: elas são âncoras. Depois, encaixe as outras pelos indícios."
+    },
+    {
+      "level": 2,
+      "condition": {
+        "type": "default"
+      },
+      "text": "Para cada carta sem data, pergunte: o que precisava ter acontecido antes para ela existir?"
+    },
+    {
+      "level": 3,
+      "condition": {
+        "type": "default"
+      },
+      "text": "Releia o quadro de avisos e o calendário da sala de leitura: eles ajudam a situar duas cartas sem data."
+    }
+  ],
+  "evidenceRelations": [
+    {
+      "from": "oficio-prefeitura",
+      "to": "registro-visitas",
+      "type": "caused",
+      "explanation": "O ofício manda deixar o Livro de Terras à disposição da agrimensora. Por isso ela vai à biblioteca consultá-lo."
+    },
+    {
+      "from": "bilhete",
+      "to": "registro-visitas",
+      "type": "consequence_of",
+      "explanation": "O bilhete confirma o que foi combinado na “visita de ontem”, a visita registrada em 9 de março."
+    },
+    {
+      "from": "recibo-encadernacao",
+      "to": "bilhete",
+      "type": "confirms",
+      "explanation": "Com o Livro de Empréstimos na encadernação, o empréstimo foi registrado em bilhete, como pedia o aviso da biblioteca."
+    },
+    {
+      "from": "croqui",
+      "to": "bilhete",
+      "type": "confirms",
+      "explanation": "O croqui cita a folha 34 do Livro de Terras: a agrimensora estava com o livro durante a medição."
+    },
+    {
+      "from": "ata-camara",
+      "to": "bilhete",
+      "type": "consequence_of",
+      "explanation": "A Câmara não encontra o livro na biblioteca porque ele tinha sido emprestado à agrimensora, e o bibliotecário, que poderia explicar, estava viajando."
+    }
+  ],
+  "solution": {
+    "referenceAnswer": "O livro não foi roubado. O bibliotecário Otávio Lemos emprestou o Livro de Registro de Terras à agrimensora Helena Prado, como a Prefeitura tinha pedido, para que ela fizesse a medição da divisa da Fazenda Boa Vista. Como o Livro de Empréstimos estava na encadernação, o empréstimo foi registrado só num bilhete, e por isso ninguém encontrou o registro quando a Câmara procurou o livro.",
+    "explanation": [
+      "Em 2 de março, a Prefeitura nomeou Otávio Lemos como bibliotecário e pediu que o Livro de Registro de Terras ficasse à disposição da agrimensora Helena Prado, contratada para medir a divisa da Fazenda Boa Vista.",
+      "Em 5 de março, o Livro de Empréstimos foi para a encadernação. O aviso da biblioteca explica que, até ele voltar, os empréstimos seriam registrados em bilhetes assinados pelo bibliotecário.",
+      "Em 9 de março, D. Helena visitou a biblioteca para consultar o Livro de Terras. No dia seguinte, Otávio deixou um bilhete autorizando que ela levasse o livro para a medição.",
+      "A medição foi feita por volta de 15 de março; o croqui mostra que D. Helena conferiu a divisa com a folha 34 do livro.",
+      "Em 20 de março, a Câmara pediu o livro e não o encontrou. O bibliotecário estava viajando e o empréstimo não aparecia em nenhum registro oficial. Daí a suspeita de roubo — que as fontes não sustentam."
+    ],
+    "sourceLimitations": [
+      "O bilhete não tem data nem nome completo: a data (10 de março) e a autoria (Otávio Lemos) são deduzidas, e não estão escritas nele.",
+      "O croqui também não tem data. Dá para afirmar que foi feito entre 10 e 20 de março; o dia 15 é provável, pela anotação do calendário, mas não é certo.",
+      "As fontes mostram que o livro foi emprestado, mas não dizem se D. Helena o devolveu depois da sessão."
+    ],
+    "conceptGroups": [
+      {
+        "id": "quem",
+        "label": "Quem estava com o livro",
+        "synonyms": [
+          "helena prado",
+          "helena",
+          "agrimensora",
+          "agrimensor",
+          "topografa",
+          "dona helena"
+        ]
+      },
+      {
+        "id": "motivo",
+        "label": "Para que o livro foi levado",
+        "synonyms": [
+          "medicao",
+          "medir",
+          "mediu",
+          "divisa",
+          "limite",
+          "demarcacao",
+          "demarcar",
+          "boa vista",
+          "levantamento",
+          "croqui"
+        ]
+      },
+      {
+        "id": "emprestimo",
+        "label": "O livro foi emprestado com autorização",
+        "synonyms": [
+          "emprestimo",
+          "emprestou",
+          "emprestado",
+          "autorizou",
+          "autorizado",
+          "autorizacao",
+          "permissao",
+          "permitiu",
+          "otavio",
+          "bibliotecario deixou",
+          "nao foi roubado",
+          "nao houve roubo",
+          "nao foi furtado"
+        ]
+      }
+    ],
+    "minGroupsToAccept": 2,
+    "acceptedVariants": [
+      "a agrimensora levou o livro emprestado para fazer a medicao",
+      "o bibliotecario emprestou o livro para a agrimensora"
+    ],
+    "partialAnswers": [
+      {
+        "requiredGroups": [
+          "quem"
+        ],
+        "feedback": "Você descobriu com quem o livro está. Agora explique por que ela o levou e se isso foi permitido."
+      }
+    ],
+    "commonErrors": [
+      {
+        "triggers": [
+          "roubo",
+          "roubou",
+          "roubado",
+          "furto",
+          "furtou",
+          "ladrao",
+          "ladra"
+        ],
+        "feedback": "Será que houve mesmo um roubo? Procure nas cartas algum sinal de que alguém autorizou a saída do livro."
+      },
+      {
+        "triggers": [
+          "1898",
+          "jornal",
+          "serenense"
+        ],
+        "feedback": "O jornal fala de um caso de outra época. Confira as datas: ele ajuda a explicar o que aconteceu em março de 1923?"
+      }
+    ],
+    "defaultPartialFeedback": "Você está no caminho. Sua resposta explica parte do que aconteceu; use a linha do tempo para completar o raciocínio.",
+    "defaultRejectedFeedback": "Sua resposta ainda não explica o que aconteceu com o livro. Volte à linha do tempo e veja o que aconteceu logo depois da visita registrada no livro de visitas."
+  }
+}

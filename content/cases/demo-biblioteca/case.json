@@ -1,0 +1,279 @@
+{
+  "slug": "demo-biblioteca",
+  "status": "published",
+  "fictional": true,
+  "title": "O livro que sumiu da Biblioteca de Vila Serena",
+  "summary": "Caso de demonstração — conteúdo fictício para testes. Em março de 1923, o Livro de Registro de Terras desaparece da biblioteca de uma pequena cidade, às vésperas de uma votação importante.",
+  "cover": {
+    "src": "/cases/demo-biblioteca/cover.svg",
+    "alt": "Ilustração de uma estante de biblioteca com um espaço vazio entre os livros, iluminada por uma luminária de mesa."
+  },
+  "period": "Março de 1923",
+  "place": "Vila Serena, cidade fictícia",
+  "audience": "Anos finais do Ensino Fundamental e Ensino Médio",
+  "question": "O que aconteceu com o Livro de Registro de Terras da Biblioteca Municipal, e por quê?",
+  "briefing": [
+    "Caso de demonstração — conteúdo fictício para testes. As pessoas, os lugares e os documentos deste caso foram inventados.",
+    "Vila Serena, março de 1923. Na sessão de 20 de março, a Câmara Municipal pediu o Livro de Registro de Terras para decidir uma disputa sobre a divisa da Fazenda Boa Vista. O livro não estava na estante.",
+    "Uns falam em roubo. O bibliotecário está viajando e não pode ser ouvido. Sobraram os papéis da biblioteca: registros, recibos, bilhetes e anotações.",
+    "Sua investigação vai de 2 de março, quando chegou o ofício da Prefeitura, até 20 de março, quando a Câmara deu falta do livro. Explore a biblioteca, colete as evidências, organize-as no tempo e explique o que aconteceu."
+  ],
+  "difficulty": "easy",
+  "durationMinutes": 30,
+  "timeline": {
+    "startLabel": "2 de março de 1923 — chega o ofício da Prefeitura",
+    "endLabel": "20 de março de 1923 — a Câmara dá falta do livro"
+  },
+  "minCardsToResolve": 4,
+  "maxTimelineChecks": 3,
+  "maxAttempts": 5,
+  "startSceneId": "sala-leitura",
+  "scenes": [
+    {
+      "id": "sala-leitura",
+      "name": "Sala de leitura",
+      "image": {
+        "src": "/cases/demo-biblioteca/scene-sala-leitura.svg",
+        "alt": "Sala de leitura de uma biblioteca antiga. À esquerda, a mesa do bibliotecário com papéis e uma gaveta; no centro, um púlpito com um livro aberto e, na parede, um calendário; à direita, uma estante alta com um espaço vazio; no alto, à esquerda, um retrato emoldurado."
+      },
+      "objects": [
+        {
+          "id": "mesa-bibliotecario",
+          "type": "evidence",
+          "label": "Papéis sobre a mesa do bibliotecário",
+          "hotspot": { "x": 8, "y": 56, "w": 30, "h": 13 },
+          "evidenceId": "oficio-prefeitura"
+        },
+        {
+          "id": "gaveta-mesa",
+          "type": "locked",
+          "label": "Gaveta da mesa do bibliotecário",
+          "hotspot": { "x": 12, "y": 72, "w": 14, "h": 9 },
+          "evidenceId": "bilhete",
+          "unlock": {
+            "requiresExamined": ["chaveiro"],
+            "lockedMessage": "A gaveta está trancada. Talvez a chave esteja em algum lugar da biblioteca."
+          }
+        },
+        {
+          "id": "livro-visitas",
+          "type": "evidence",
+          "label": "Livro de visitas aberto sobre o púlpito",
+          "hotspot": { "x": 44, "y": 55, "w": 18, "h": 14 },
+          "evidenceId": "registro-visitas"
+        },
+        {
+          "id": "estante-vazia",
+          "type": "context",
+          "label": "Estante com um espaço vazio",
+          "hotspot": { "x": 68, "y": 10, "w": 26, "h": 60 },
+          "content": {
+            "title": "O lugar do Livro de Registro de Terras",
+            "text": "Na terceira prateleira há um vão do tamanho de um livro grande. A plaqueta diz “Registro de Terras — não sai da sala”. Há pouca poeira no espaço vazio: o livro saiu dali há poucos dias, não há meses."
+          }
+        },
+        {
+          "id": "calendario",
+          "type": "context",
+          "label": "Calendário de parede de março de 1923",
+          "hotspot": { "x": 46, "y": 14, "w": 10, "h": 20 },
+          "content": {
+            "title": "Calendário de março de 1923",
+            "text": "Alguns dias têm anotações a lápis, com a mesma letra.",
+            "transcription": "Dia 2: ofício da Prefeitura.\nDia 15: medição da Boa Vista (D. Helena).\nDia 20: sessão da Câmara."
+          }
+        },
+        {
+          "id": "retrato",
+          "type": "decorative",
+          "label": "Retrato emoldurado do fundador da biblioteca",
+          "hotspot": { "x": 14, "y": 10, "w": 16, "h": 26 },
+          "content": {
+            "text": "Um senhor de bigode observa a sala de dentro da moldura. A plaqueta está gasta demais para ler o nome."
+          }
+        }
+      ]
+    },
+    {
+      "id": "arquivo",
+      "name": "Arquivo dos fundos",
+      "image": {
+        "src": "/cases/demo-biblioteca/scene-arquivo.svg",
+        "alt": "Sala de arquivo com prateleiras de pastas à esquerda, um quadro de avisos e um chaveiro na parede, uma mesa com um mapa enrolado e uma escrivaninha com papéis, e uma pilha de jornais velhos no canto direito."
+      },
+      "objects": [
+        {
+          "id": "pasta-recibos",
+          "type": "evidence",
+          "label": "Pasta de recibos na prateleira",
+          "hotspot": { "x": 6, "y": 30, "w": 16, "h": 18 },
+          "evidenceId": "recibo-encadernacao"
+        },
+        {
+          "id": "quadro-avisos",
+          "type": "reading",
+          "label": "Quadro de avisos da biblioteca",
+          "hotspot": { "x": 34, "y": 10, "w": 22, "h": 26 },
+          "content": {
+            "title": "Aviso afixado no quadro",
+            "text": "Um aviso datilografado, preso com quatro tachinhas.",
+            "transcription": "AVISO\nO Livro de Empréstimos foi enviado à encadernação e volta no dia 15 de março.\nAté lá, empréstimos excepcionais serão registrados em bilhete assinado pelo bibliotecário.\nA Direção."
+          }
+        },
+        {
+          "id": "chaveiro",
+          "type": "context",
+          "label": "Chaveiro pendurado na parede",
+          "hotspot": { "x": 62, "y": 16, "w": 8, "h": 16 },
+          "content": {
+            "title": "Chaveiro",
+            "text": "Três chaves penduradas num prego. Uma delas tem uma etiqueta: “gaveta da sala de leitura”. Agora você pode abrir a gaveta da mesa do bibliotecário."
+          }
+        },
+        {
+          "id": "rolo-croqui",
+          "type": "evidence",
+          "label": "Mapa enrolado sobre a mesa",
+          "hotspot": { "x": 26, "y": 58, "w": 22, "h": 14 },
+          "evidenceId": "croqui"
+        },
+        {
+          "id": "copia-ata",
+          "type": "evidence",
+          "label": "Papéis sobre a escrivaninha",
+          "hotspot": { "x": 54, "y": 56, "w": 16, "h": 13 },
+          "evidenceId": "ata-camara"
+        },
+        {
+          "id": "pilha-jornais",
+          "type": "evidence",
+          "label": "Pilha de jornais velhos no canto",
+          "hotspot": { "x": 76, "y": 62, "w": 16, "h": 24 },
+          "evidenceId": "jornal-1898"
+        }
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "id": "oficio-prefeitura",
+      "code": "SL-01",
+      "title": "Ofício da Prefeitura",
+      "sourceType": "Documento oficial",
+      "image": {
+        "src": "/cases/demo-biblioteca/ev-oficio.svg",
+        "alt": "Folha datilografada com o brasão da Prefeitura no alto e um carimbo de protocolo."
+      },
+      "description": "Ofício datilografado da Prefeitura de Vila Serena endereçado à Biblioteca Municipal, com carimbo de recebimento.",
+      "transcription": "Vila Serena, 2 de março de 1923.\nAo Sr. Otávio Lemos, novo bibliotecário.\nComunico que V. S. assume hoje a Biblioteca Municipal. Peço que o Livro de Registro de Terras seja franqueado à agrimensora D. Helena Prado, contratada para medir a divisa entre a Fazenda Boa Vista e as terras do Município.\nO Prefeito.",
+      "provenance": "Encontrado sobre a mesa do bibliotecário, na sala de leitura.",
+      "author": "Prefeito de Vila Serena",
+      "date": { "iso": "1923-03-02", "label": "2 de março de 1923" },
+      "back": "A Prefeitura nomeia o novo bibliotecário e pede que o Livro de Terras fique à disposição da agrimensora."
+    },
+    {
+      "id": "recibo-encadernacao",
+      "code": "AR-01",
+      "title": "Recibo da encadernação",
+      "sourceType": "Recibo",
+      "image": {
+        "src": "/cases/demo-biblioteca/ev-recibo.svg",
+        "alt": "Pequeno recibo impresso, preenchido à mão, com um selo colado no canto."
+      },
+      "description": "Recibo de uma oficina gráfica pela encadernação de um livro da biblioteca.",
+      "transcription": "Oficina Gráfica Irmãos Bento.\nRecebemos da Biblioteca Municipal o Livro de Empréstimos para nova encadernação. Entrega prevista: 15 de março.\nVila Serena, 5 de março de 1923.",
+      "provenance": "Guardado numa pasta de recibos no arquivo dos fundos.",
+      "author": "Oficina Gráfica Irmãos Bento",
+      "date": { "iso": "1923-03-05", "label": "5 de março de 1923" },
+      "back": "O Livro de Empréstimos saiu da biblioteca para ser encadernado e só voltaria no dia 15."
+    },
+    {
+      "id": "registro-visitas",
+      "code": "SL-02",
+      "title": "Livro de visitas",
+      "sourceType": "Registro",
+      "image": {
+        "src": "/cases/demo-biblioteca/ev-visitas.svg",
+        "alt": "Página pautada de um livro de visitas, com colunas de data, nome e assunto preenchidas a tinta."
+      },
+      "description": "Página do livro em que os visitantes da biblioteca anotam a data, o nome e o assunto da visita.",
+      "transcription": "7/3/1923 — Prof. Aristides Moura — jornais do ano passado.\n9/3/1923 — D. Helena Prado, agrimensora — consulta ao Livro de Registro de Terras.\n12/3/1923 — Sr. Carlos Teixeira — dicionário.",
+      "provenance": "Aberto sobre o púlpito da sala de leitura.",
+      "author": "Visitantes da biblioteca",
+      "date": { "iso": "1923-03-09", "label": "9 de março de 1923 (registro da visita de D. Helena)" },
+      "back": "Em 9 de março, a agrimensora Helena Prado esteve na biblioteca para consultar o Livro de Terras."
+    },
+    {
+      "id": "bilhete",
+      "code": "SL-03",
+      "title": "Bilhete sem data",
+      "sourceType": "Bilhete manuscrito",
+      "image": {
+        "src": "/cases/demo-biblioteca/ev-bilhete.svg",
+        "alt": "Pedaço de papel dobrado com algumas linhas escritas à mão e uma assinatura abreviada."
+      },
+      "description": "Bilhete escrito à mão, sem data, assinado apenas com a inicial “O.”.",
+      "transcription": "D. Helena,\nconforme combinamos na visita de ontem, a senhora pode levar o Livro de Terras para a medição. Peço que o devolva antes da sessão da Câmara.\nO.",
+      "provenance": "Encontrado dentro da gaveta trancada da mesa do bibliotecário. Parece ser uma cópia, ou um bilhete que não chegou a ser entregue.",
+      "author": "Assinado “O.”",
+      "back": "Alguém que assina “O.” autoriza D. Helena a levar o Livro de Terras, combinando isso na “visita de ontem”."
+    },
+    {
+      "id": "croqui",
+      "code": "AR-02",
+      "title": "Croqui da divisa",
+      "sourceType": "Mapa com anotações",
+      "image": {
+        "src": "/cases/demo-biblioteca/ev-croqui.svg",
+        "alt": "Desenho à mão de um terreno, com uma linha tracejada marcando a divisa, um riacho e anotações nas margens."
+      },
+      "description": "Desenho à mão da divisa entre a Fazenda Boa Vista e as terras do Município, com medidas e anotações. Não tem data.",
+      "transcription": "Levantamento da divisa Boa Vista / Município.\nMarco 1: pedra grande junto ao riacho.\nConferido com o Livro de Registro de Terras, folha 34.\nH. Prado.",
+      "provenance": "Enrolado sobre a mesa do arquivo dos fundos.",
+      "author": "H. Prado",
+      "back": "A agrimensora desenhou a divisa conferindo com a folha 34 do Livro de Terras. Ela tinha o livro em mãos quando fez o croqui."
+    },
+    {
+      "id": "ata-camara",
+      "code": "AR-04",
+      "title": "Ata da Câmara",
+      "sourceType": "Documento oficial",
+      "image": {
+        "src": "/cases/demo-biblioteca/ev-ata.svg",
+        "alt": "Folha de ata manuscrita, com margens largas e várias assinaturas no final."
+      },
+      "description": "Cópia da ata da sessão da Câmara Municipal deixada na biblioteca pelo secretário.",
+      "transcription": "Ata da sessão de 20 de março de 1923.\nO vereador Souza informou que a medição da divisa da Boa Vista foi feita na semana passada e que o relatório será apresentado na próxima sessão. Pedido o Livro de Registro de Terras à Biblioteca, ele não foi encontrado. O bibliotecário, Sr. Otávio Lemos, está em viagem a serviço até o dia 25. Fica registrado o desaparecimento do livro.",
+      "provenance": "Sobre a escrivaninha do arquivo dos fundos.",
+      "author": "Secretário da Câmara Municipal",
+      "date": { "iso": "1923-03-20", "label": "20 de março de 1923" },
+      "back": "Na sessão de 20 de março, a Câmara pede o Livro de Terras e ele não está na biblioteca. A medição já tinha sido feita."
+    },
+    {
+      "id": "jornal-1898",
+      "code": "AR-03",
+      "title": "Jornal O Serenense",
+      "sourceType": "Jornal",
+      "image": {
+        "src": "/cases/demo-biblioteca/ev-jornal.svg",
+        "alt": "Primeira página amarelada de um jornal, com o título em letras grandes e colunas estreitas de texto."
+      },
+      "description": "Exemplar antigo do jornal local, com uma notícia sobre livros furtados.",
+      "transcription": "O Serenense — 14 de março de 1898.\nFURTO NA BIBLIOTECA: desapareceram da antiga sala de leitura três volumes de poesia. A polícia suspeita de um viajante que passou pela cidade.",
+      "provenance": "No meio de uma pilha de jornais velhos, no canto do arquivo.",
+      "author": "Redação de O Serenense",
+      "date": { "iso": "1898-03-14", "label": "14 de março de 1898" },
+      "back": "Notícia de um furto de livros na biblioteca antiga de Vila Serena."
+    }
+  ],
+  "references": [
+    {
+      "kind": "credit",
+      "text": "Caso de demonstração — conteúdo fictício para testes. Pessoas, lugares e documentos foram inventados pela equipe de desenvolvimento e não devem ser usados como fonte histórica."
+    },
+    {
+      "kind": "credit",
+      "text": "Ilustrações: marcadores de posição em SVG desenhados para este projeto."
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" role="img" aria-label="Arquivo dos fundos (ilustração de marcador de posição)">
+  <defs>
+    <pattern id="boards2" width="160" height="40" patternUnits="userSpaceOnUse">
+      <rect width="160" height="40" fill="#45301f"/><path d="M0 39.5H160M50 0V40" stroke="#33231a" stroke-width="2"/>
+    </pattern>
+  </defs>
+  <rect width="1600" height="1000" fill="#c9cdbd"/>
+  <rect y="800" width="1600" height="200" fill="url(#boards2)"/>
+  <rect y="790" width="1600" height="12" fill="#6b4a2e"/>
+  <!-- prateleiras de pastas -->
+  <rect x="40" y="120" width="360" height="680" fill="#5a3a22"/>
+  <g fill="#3a2618"><rect x="56" y="136" width="328" height="150"/><rect x="56" y="300" width="328" height="190"/><rect x="56" y="504" width="328" height="140"/><rect x="56" y="658" width="328" height="130"/></g>
+  <g fill="#c9a25a" stroke="#8a6a33" stroke-width="2">
+    <rect x="70" y="160" width="60" height="126"/><rect x="134" y="168" width="60" height="118"/><rect x="198" y="156" width="60" height="130"/><rect x="262" y="166" width="60" height="120"/><rect x="326" y="160" width="50" height="126"/>
+    <rect x="270" y="530" width="54" height="114"/><rect x="328" y="524" width="50" height="120"/><rect x="70" y="676" width="80" height="112"/><rect x="154" y="680" width="80" height="108"/>
+  </g>
+  <rect x="96" y="300" width="256" height="180" fill="#d8b56c" stroke="#8a6a33" stroke-width="3"/>
+  <rect x="180" y="300" width="88" height="22" fill="#f6f7f3"/>
+  <text x="224" y="317" text-anchor="middle" font-family="Courier New, monospace" font-size="16" fill="#1d1b18">RECIBOS</text>
+  <path d="M116 360h216M116 384h180M116 408h200" stroke="#8a6a33" stroke-width="3"/>
+  <g fill="#7a2e2a"><rect x="70" y="530" width="40" height="114"/><rect x="114" y="536" width="40" height="108"/></g>
+  <!-- quadro de avisos -->
+  <rect x="544" y="100" width="352" height="260" fill="#8a6440"/>
+  <rect x="560" y="116" width="320" height="228" fill="#b98f5d"/>
+  <rect x="610" y="140" width="220" height="180" fill="#f6f7f3"/>
+  <text x="720" y="176" text-anchor="middle" font-family="Courier New, monospace" font-size="22" font-weight="700" fill="#1d1b18">AVISO</text>
+  <path d="M630 200h180M630 220h170M630 240h180M630 260h140M630 280h160" stroke="#5e625a" stroke-width="3"/>
+  <g fill="#a12a22"><circle cx="620" cy="150" r="6"/><circle cx="820" cy="150" r="6"/><circle cx="620" cy="310" r="6"/><circle cx="820" cy="310" r="6"/></g>
+  <!-- chaveiro -->
+  <rect x="1000" y="168" width="112" height="20" fill="#6b4a2e"/>
+  <circle cx="1056" cy="178" r="5" fill="#2b2d29"/>
+  <g stroke="#9a7a3a" stroke-width="6" fill="none" stroke-linecap="round">
+    <circle cx="1024" cy="214" r="12"/><path d="M1024 226v60M1024 270h12M1024 282h10"/>
+    <circle cx="1056" cy="214" r="12"/><path d="M1056 226v70M1056 280h12M1056 292h10"/>
+    <circle cx="1088" cy="214" r="12"/><path d="M1088 226v56M1088 266h12"/>
+  </g>
+  <rect x="1046" y="296" width="30" height="20" fill="#f6f7f3" transform="rotate(10 1060 306)"/>
+  <!-- mesa com croqui -->
+  <rect x="380" y="700" width="420" height="24" fill="#6b4a2e"/>
+  <rect x="400" y="724" width="24" height="80" fill="#5a3a22"/><rect x="756" y="724" width="24" height="80" fill="#5a3a22"/>
+  <rect x="430" y="610" width="320" height="86" fill="#efe4c6" stroke="#8a6a33" stroke-width="2"/>
+  <ellipse cx="430" cy="653" rx="16" ry="43" fill="#d8c79c" stroke="#8a6a33" stroke-width="2"/>
+  <ellipse cx="750" cy="653" rx="16" ry="43" fill="#d8c79c" stroke="#8a6a33" stroke-width="2"/>
+  <path d="M470 680q60-60 120-20t120-30" stroke="#4a3d8f" stroke-width="4" fill="none"/>
+  <path d="M480 630l220 40" stroke="#1d1b18" stroke-width="3" stroke-dasharray="10 8"/>
+  <!-- escrivaninha com ata -->
+  <rect x="840" y="690" width="300" height="24" fill="#6b4a2e"/>
+  <rect x="856" y="714" width="268" height="86" fill="#5a3a22"/>
+  <g transform="rotate(4 990 630)"><rect x="900" y="572" width="170" height="112" fill="#f6f7f3" stroke="#9da196" stroke-width="2"/><path d="M916 594h138M916 610h130M916 626h138M916 642h120M916 664h60M990 664h60" stroke="#5e625a" stroke-width="3"/></g>
+  <!-- jornais -->
+  <g>
+    <rect x="1216" y="800" width="256" height="60" fill="#d6cfb8" stroke="#9d9680" stroke-width="2"/>
+    <rect x="1224" y="756" width="240" height="48" fill="#e2dcc6" stroke="#9d9680" stroke-width="2" transform="rotate(-3 1344 780)"/>
+    <rect x="1220" y="712" width="250" height="48" fill="#d6cfb8" stroke="#9d9680" stroke-width="2" transform="rotate(2 1344 736)"/>
+    <rect x="1230" y="630" width="230" height="86" fill="#e8e2cd" stroke="#9d9680" stroke-width="2"/>
+    <text x="1345" y="660" text-anchor="middle" font-family="Georgia, serif" font-size="22" font-weight="700" fill="#2b2d29">O SERENENSE</text>
+    <path d="M1246 676h200M1246 690h60M1316 690h60M1386 690h60M1246 704h60M1316 704h60M1386 704h60" stroke="#5e625a" stroke-width="2"/>
+  </g>
+</svg>

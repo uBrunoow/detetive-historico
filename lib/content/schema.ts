@@ -1,0 +1,197 @@
+import { z } from "zod";
+
+/**
+ * Formato dos arquivos de um caso.
+ *
+ * Cada caso vive em `content/cases/<slug>/` com dois arquivos:
+ * - `case.json`     → conteúdo público (pode ir para o navegador);
+ * - `solution.json` → conteúdo privado (só o servidor lê, e só libera no encerramento).
+ *
+ * Os schemas são `strict`: uma chave desconhecida é erro, para que nada que revele a
+ * solução escape para o arquivo público por engano.
+ */
+
+const id = z.string().regex(/^[a-z0-9][a-z0-9-]*$/, "use letras minúsculas, números e hífens");
+const text = z.string().trim().min(1);
+const percent = z.number().min(0).max(100);
+
+export const imageSchema = z.strictObject({
+  src: text,
+  alt: text,
+});
+
+export const hotspotSchema = z
+  .strictObject({ x: percent, y: percent, w: percent, h: percent })
+  .refine((h) => h.x + h.w <= 100 && h.y + h.h <= 100, "o hotspot ultrapassa os limites da cena");
+
+export const objectTypeSchema = z.enum(["evidence", "reading", "context", "locked", "decorative"]);
+
+export const sceneObjectSchema = z.strictObject({
+  id,
+  type: objectTypeSchema,
+  label: text,
+  hotspot: hotspotSchema,
+  content: z
+    .strictObject({
+      title: text.optional(),
+      text: text,
+      transcription: text.optional(),
+    })
+    .optional(),
+  evidenceId: id.optional(),
+  unlock: z
+    .strictObject({
+      requiresExamined: z.array(id).min(1),
+      lockedMessage: text,
+    })
+    .optional(),
+});
+
+export const sceneSchema = z.strictObject({
+  id,
+  name: text,
+  image: imageSchema,
+  objects: z.array(sceneObjectSchema).min(1),
+});
+
+export const evidenceSchema = z.strictObject({
+  id,
+  code: z.string().regex(/^[A-Z]{2}-\d{2}$/, "código de procedência no formato AA-00"),
+  title: text,
+  sourceType: text,
+  image: imageSchema,
+  description: text,
+  transcription: text.optional(),
+  provenance: text,
+  author: text.optional(),
+  /** Data explícita presente na própria fonte. Ausente = carta sem data. */
+  date: z
+    .strictObject({
+      iso: z.iso.date().optional(),
+      label: text,
+    })
+    .optional(),
+  back: text,
+});
+
+export const referenceSchema = z.strictObject({
+  kind: z.enum(["source", "bibliography", "credit"]),
+  text,
+  url: z.url().optional(),
+});
+
+export const difficultySchema = z.enum(["easy", "medium", "hard"]);
+
+export const publicCaseSchema = z.strictObject({
+  slug: id,
+  status: z.enum(["draft", "published"]),
+  fictional: z.boolean(),
+  title: text,
+  summary: text,
+  cover: imageSchema,
+  period: text,
+  place: text,
+  audience: text,
+  question: text,
+  briefing: z.array(text).min(1),
+  difficulty: difficultySchema,
+  durationMinutes: z.number().int().positive(),
+  timeline: z.strictObject({
+    startLabel: text,
+    endLabel: text,
+  }),
+  minCardsToResolve: z.number().int().positive(),
+  maxTimelineChecks: z.number().int().nonnegative().default(3),
+  maxAttempts: z.number().int().positive().default(5),
+  startSceneId: id,
+  scenes: z.array(sceneSchema).min(1),
+  evidence: z.array(evidenceSchema).min(1),
+  references: z.array(referenceSchema),
+});
+
+export const linkTypeSchema = z.enum(["caused", "consequence_of", "confirms", "contradicts", "mentions"]);
+
+export const hintConditionSchema = z.discriminatedUnion("type", [
+  /** Dois marcos-chave aparecem na ordem trocada na linha do jogador. */
+  z.strictObject({ type: z.literal("milestones_inverted"), pair: z.tuple([id, id]) }),
+  /** Alguma carta que não pertence à história está entre os marcos-chave. */
+  z.strictObject({ type: z.literal("irrelevant_between_milestones") }),
+  /** Algum marco-chave não está na zona da linha do tempo. */
+  z.strictObject({ type: z.literal("milestone_missing") }),
+  /** Dica genérica, usada quando nenhuma condição específica se aplica. */
+  z.strictObject({ type: z.literal("default") }),
+]);
+
+export const privateCaseSchema = z.strictObject({
+  timelineReference: z
+    .array(
+      z.strictObject({
+        evidenceId: id,
+        /** Cartas simultâneas compartilham o mesmo número. `null` para quem está fora da história. */
+        referenceOrder: z.number().int().positive().nullable(),
+        belongsToStory: z.boolean(),
+        isKeyMilestone: z.boolean(),
+        /** Como situar a carta: obrigatório para cartas sem data que pertencem à história. */
+        datingClueExplanation: text.optional(),
+        /** Por que a carta não pertence à história. */
+        outsideReason: text.optional(),
+      }),
+    )
+    .min(1),
+  timelineHints: z
+    .array(
+      z.strictObject({
+        level: z.number().int().positive(),
+        condition: hintConditionSchema,
+        text,
+      }),
+    )
+    .min(1),
+  evidenceRelations: z.array(
+    z.strictObject({
+      from: id,
+      to: id,
+      type: linkTypeSchema,
+      explanation: text,
+    }),
+  ),
+  solution: z.strictObject({
+    referenceAnswer: text,
+    explanation: z.array(text).min(1),
+    sourceLimitations: z.array(text),
+    conceptGroups: z
+      .array(
+        z.strictObject({
+          id,
+          label: text,
+          synonyms: z.array(text).min(1),
+        }),
+      )
+      .min(1),
+    minGroupsToAccept: z.number().int().positive(),
+    /** Respostas inteiras aceitas como estão (comparadas já normalizadas). */
+    acceptedVariants: z.array(text),
+    partialAnswers: z.array(
+      z.strictObject({
+        requiredGroups: z.array(id).min(1),
+        feedback: text,
+      }),
+    ),
+    commonErrors: z.array(
+      z.strictObject({
+        triggers: z.array(text).min(1),
+        feedback: text,
+      }),
+    ),
+    defaultPartialFeedback: text,
+    defaultRejectedFeedback: text,
+  }),
+});
+
+export type PublicCase = z.infer<typeof publicCaseSchema>;
+export type PrivateCase = z.infer<typeof privateCaseSchema>;
+export type Scene = z.infer<typeof sceneSchema>;
+export type SceneObject = z.infer<typeof sceneObjectSchema>;
+export type Evidence = z.infer<typeof evidenceSchema>;
+export type Difficulty = z.infer<typeof difficultySchema>;
+export type LinkType = z.infer<typeof linkTypeSchema>;
