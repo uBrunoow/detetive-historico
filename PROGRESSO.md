@@ -1,6 +1,6 @@
 # Progresso
 
-## Fase 0 — Fundação ✅ (aguardando revisão)
+## Fase 0 — Fundação ✅
 
 **Feito**
 - Next.js 16 (App Router) + React 19 + TypeScript strict + Tailwind 4.
@@ -13,7 +13,7 @@
 
 **Como testar manualmente**
 1. `pnpm install && pnpm dev` e abra http://localhost:3000: a página provisória lista o caso de demonstração.
-2. `pnpm test`: 38 testes passam.
+2. `pnpm test`: os testes passam.
 3. Quebre o caso de propósito (ex.: apague `datingClueExplanation` do `bilhete` em `solution.json`) e rode `pnpm test`: o erro aponta o problema.
 4. `pnpm build && pnpm check:leaks`.
 
@@ -21,19 +21,130 @@
 - A página inicial é provisória; o catálogo de verdade é a Fase 1.
 - O aviso `Failed to find font override values for Atkinson Hyperlegible Next` no build é inofensivo (só desativa a fonte de fallback ajustada).
 
+## Fase 1 — Catálogo, briefing e cena ✅ (aguardando revisão)
+
+**Feito**
+- **Catálogo** (`/`): capa, aviso de conteúdo fictício, pergunta, período, local, dificuldade, duração e situação (não iniciado / em andamento / concluído), lida do progresso salvo no navegador.
+- **Briefing** (`/casos/[slug]`): ofício datilografado com carimbo "Caso aberto", pergunta investigativa, intervalo da investigação, como jogar e "Começar/Continuar a investigação" (volta à última cena visitada).
+- **Cena** (`/casos/[slug]/cena/[sceneId]`): imagem com hotspots em porcentagem (alvo mínimo de 44 px), abas de lugar (pastas manila), "Mostrar o que dá para examinar", lista acessível dos objetos, estados examinado / trancado / no caderno em texto, contador de fontes ainda não descobertas. No celular a cena rola na horizontal.
+- **Ambientação**: luz de luminária que acompanha o ponteiro e o foco do teclado; a luz "acende" (com uma piscada) ao entrar num lugar; desliga com movimento reduzido.
+- **Documentos realistas** (`components/document/DocumentSheet.tsx`): ofício datilografado com timbre e carimbo, recibo com faixa vermelha, livro de visitas pautado, bilhete e ata manuscritos (com opção "letra de forma"), jornal com cabeçalho e colunas, croqui em papel envelhecido. Tudo a partir da transcrição.
+- **Visualizador de evidência**: a fonte sobre a mesa, a ficha de catálogo (tipo, data quando houver, autoria, procedência, descrição, código de procedência) e um lembrete de que fonte não é fato. "Guardar no caderno" carimba "Arquivado" no papel e anuncia por `aria-live`.
+- Objetos de leitura, contexto, decorativos e trancados com painéis próprios; a gaveta abre depois de examinar o chaveiro.
+- Estados de carregamento ("Buscando no arquivo…") e 404 no tom do jogo.
+- Progresso no `localStorage` (`lib/progress/store.ts`), regras puras de exploração testadas (`lib/game/scene.ts`).
+- Estudo de referência do Carmen Sandiego no Google Earth: `docs/referencias/carmen-sandiego-google-earth.md`.
+
+**Como testar manualmente**
+1. `pnpm dev` e abra http://localhost:3000.
+2. Abra o caso e clique em "Começar a investigação".
+3. Na sala de leitura, passe o mouse pela cena (a luz acompanha) e use Tab para percorrer os objetos.
+4. Abra os papéis da mesa e guarde no caderno: aparece o carimbo "Arquivado".
+5. Tente a gaveta (trancada). Vá ao "Arquivo dos fundos", examine o chaveiro, volte e abra a gaveta. No bilhete, teste "Ler em letra de forma".
+6. Recarregue a página e volte ao catálogo: o caso aparece "Em andamento" e os objetos continuam examinados.
+7. Teste com 390 px de largura, no modo escuro e com "reduzir movimento" ativado no sistema.
+
+**Pendente / observações**
+- O caderno (Fase 2) ainda não existe: as cartas são guardadas, mas só aparecem no contador.
+- Imagens das cenas são marcadores de posição em SVG; ilustrações definitivas ficam para o caso-piloto.
+
+## Fase 2 — Caderno de investigação ✅ (aguardando revisão)
+
+**Feito**
+- **Caderno** (`components/notebook/Notebook.tsx`): botão "Caderno" no topo da cena abre o caderno por cima do lugar, sem sair dele (PRD §5.6). Três seções separadas em abas: **Fontes**, **Anotações** e **Hipóteses** (setas esquerda/direita trocam de aba).
+- **Fontes**: cartas coletadas (frente com miniatura, título, tipo de fonte), importantes primeiro. Cada carta mostra se tem anotação e que ainda não está na linha do tempo.
+- **Ficha (verso)**: tipo, data quando houver, autoria, procedência, descrição, texto do verso, "Marcar como importante" e anotações do jogador, salvas a cada tecla. "Ver a fonte completa" mostra o documento desenhado, com a opção de letra de forma.
+- **Anotações**: anotações gerais do caderno e um resumo das anotações feitas nas fontes, com atalho para cada ficha.
+- **Hipóteses**: criar, editar e apagar (com confirmação na própria linha). Cada uma leva a etiqueta "hipótese, não confirmada", e o texto de abertura diz que hipótese não é fato.
+- Contador de fontes ainda não descobertas no caderno e atalho para a linha do tempo.
+- Progresso ganhou `notes` e `hypotheses`; dados salvos antes continuam válidos (campos novos entram com valor vazio).
+- Regras puras em `lib/game/notebook.ts`, testadas em `tests/unit/notebook.test.ts`.
+- Corrigido: na cena, a 390 px a página rolava na horizontal (textos `sr-only` das abas de lugar escapavam da faixa rolável).
+
+**Como testar manualmente**
+1. Abra o caso, guarde algumas fontes e clique em "Caderno".
+2. Abra uma carta, marque como importante e escreva uma anotação. Volte: a carta sobe para o começo e mostra "com anotação".
+3. "Ver a fonte completa" e "Voltar à ficha". No bilhete, teste a letra de forma.
+4. Em Anotações, escreva algo; em Hipóteses, crie, edite e apague uma hipótese.
+5. Recarregue a página: tudo continua lá.
+6. Navegue só pelo teclado (Tab, setas nas abas, Esc fecha) e teste a 390 px de largura.
+
+**Pendente / observações**
+- Hipóteses ainda não se ligam a cartas; isso pode entrar junto da linha do tempo ou da resolução.
+
+## Fase 3 — Linha do tempo ✅ (aguardando revisão)
+
+**Feito**
+- **Tela da linha do tempo** (`/casos/[slug]/linha-do-tempo`), aberta pela cena ("Linha do tempo") e pelo caderno. Vertical em todas as larguras, do "Começo" ao "Fim" definidos pelo caso; no desktop, o caderno e a área "Fora da história" ficam numa coluna lateral fixa.
+- **Tudo por botão e teclado, sem arrastar** (PRD §5.7.2):
+  - pôr uma carta do caderno no fim, no começo ou "depois de" qualquer momento;
+  - mover para antes/depois;
+  - "Aconteceu junto com a de cima" agrupa simultâneas; "Separar do grupo" desfaz;
+  - mandar para **Fora da história**, com justificativa opcional;
+  - devolver ao caderno.
+- Em cada carta posicionada: **grau de certeza** (certo / provável / incerto), "Por que está aqui?" e as ligações em que ela aparece.
+- **Ligações entre cartas** (causou, é consequência de, confirma, contradiz, menciona) com explicação editável. Não aceita a mesma carta nas duas pontas nem ligação repetida. Uma ligação some da tela quando uma das cartas volta ao caderno e reaparece quando ela volta ao jogo.
+- Depois de cada ação, o foco segue a carta e um `aria-live` anuncia o resultado ("Ofício da Prefeitura está na posição 2 de 3.").
+- Contador "X de N cartas na linha do tempo para liberar a conclusão" (`minCardsToResolve`). Libera pela quantidade, não pela ordem (PRD §5.7.4).
+- O aviso "Esta é a sua reconstrução…" deixa claro que a posição é hipótese do jogador.
+- O caderno mostra a situação real de cada carta (na linha do tempo / fora da história / ainda não está).
+- **Medalha Cronista** passa a valer: linha montada até o mínimo do caso e toda carta posicionada justificada.
+- Justificativas e certeza ficam guardadas mesmo quando a carta volta ao caderno.
+- Regras puras em `lib/game/timeline.ts`, testadas em `tests/unit/timeline.test.ts`. Nada privado (ordem de referência, marcos) vai para o navegador; `check:leaks` passa.
+
+**Como testar manualmente**
+1. Guarde algumas fontes na cena e clique em "Linha do tempo".
+2. Ponha cartas usando "no fim", "no começo" e "depois de…". Mova com "Antes"/"Depois", inclusive só pelo teclado: o foco acompanha a carta.
+3. Em "Mais ações", junte uma carta com a de cima, separe, mande para "Fora da história" e devolva ao caderno.
+4. Marque a certeza, escreva "Por que está aqui?" e crie uma ligação. Tente criar a mesma ligação de novo.
+5. Com 4 cartas posicionadas e justificadas, a medalha Cronista acende em /fases.
+6. Recarregue: tudo continua. Teste a 390 px.
+
+**Pendente / observações**
+
+## Fase 4 — Conferência, conclusão e encerramento ✅ (aguardando revisão)
+
+**Feito**
+- **Contadores no servidor**: conferências usadas, tentativas usadas e o resultado (resolvido / encerrado) ficam num cookie `httpOnly` assinado com HMAC (`lib/game/signed-state.ts`). Recarregar, fechar a aba ou editar o `localStorage` não reabre nada. Em produção, `GAME_SECRET` é obrigatório; em desenvolvimento há um segredo de reserva.
+- **Server Actions** (`lib/game/actions.ts`): validam tudo com zod e devolvem só o resultado da regra. A solução só sai em `getClosure`, e só depois do encerramento. `check:leaks` continua passando.
+- **Conferência da linha do tempo** (painel na linha do tempo):
+  - limitada a `maxTimelineChecks` (3 no caso de demonstração), opcional e com confirmação antes de gastar;
+  - olha só os marcos-chave e devolve uma pista pelas regras da D6 (marco faltando → carta estranha entre marcos → par invertido → padrão), com o nível da dica subindo a cada conferência;
+  - se os marcos estão coerentes, diz isso sem falar das outras cartas;
+  - as pistas anteriores ficam no histórico.
+- **Tela da conclusão** (`/casos/[slug]/conclusao`): pergunta, linha do tempo como painel de consulta com seleção das cartas que sustentam a resposta, texto livre (rascunho salvo), contador de tentativas, aviso antes de gastar uma tentativa (e aviso especial na última), resultado com feedback orientador e histórico das tentativas.
+  - Menos de 3 palavras não gasta tentativa.
+  - O servidor confere de novo o mínimo de cartas posicionadas.
+- **Avaliação da resposta** (`lib/game/answer.ts`): variantes aceitas e grupos de conceitos, sem acentos, maiúsculas nem pontuação. Termos de 5 letras ou mais casam com o começo da palavra ("agrimensor" → "agrimensora"). Os erros comuns ignoram negações ("não foi roubado" não dispara o erro "roubo"). Depois vêm as respostas parciais previstas e os feedbacks padrão.
+- **Encerramento** (`/casos/[slug]/encerramento`): resultado; pergunta e última conclusão; o que aconteceu e a resposta de referência; **linha de referência lado a lado com a do jogador**, com marcas para "em ordem coerente", "a ordem diverge", "bem descartada", "fazia parte da história" e "não posicionada"; como situar as cartas sem data; cartas fora da história e por quê; relações entre as fontes; limites das fontes; referências; medalhas. O tom é de aprendizado, não de correção.
+- O status local (catálogo, medalha Detetive) acompanha o resultado do servidor, mesmo se o caso foi encerrado em outra aba.
+- Testes: avaliação de respostas, conferência, comparação no encerramento e assinatura do estado (`tests/unit/resolution.test.ts`, `tests/unit/signed-state.test.ts`).
+
+**Como testar manualmente**
+1. Monte a linha do tempo com o bilhete antes do livro de visitas e clique em "Conferir": vem uma pista sobre "ontem". Recarregue: o contador continua.
+2. Com 4 cartas na linha, abra "Escrever a conclusão". Envie "roubo": não gasta tentativa.
+3. Envie "Alguém roubou o livro": a resposta é recusada com orientação e as tentativas caem para 4 de 5.
+4. Envie "O bibliotecário emprestou o livro para a agrimensora fazer a medição": a conclusão é aceita. Abra o encerramento.
+5. Para ver o caminho das 5 tentativas erradas, apague os cookies do site (isso recomeça os contadores).
+
+**Pendente / observações**
+- Em produção, defina `GAME_SECRET` (veja `.env.example`).
+- Hipóteses ainda não se ligam a cartas nem a trechos da linha (PRD §5.8): fica para uma próxima etapa.
+- Sem painel do professor nem métricas (fora do MVP, D1).
+
 ## Critérios de aceitação do PRD (§12)
 
-- [ ] Iniciar uma investigação
-- [ ] Explorar objetos
-- [ ] Coletar evidências
-- [ ] Montar a linha do tempo
-- [ ] Justificar posições
-- [ ] Relacionar cartas
-- [ ] Montar sem arrastar
-- [ ] Preservar progresso
-- [ ] Liberar a resolução
-- [ ] Enviar uma solução
-- [ ] Limitar tentativas
-- [ ] Apresentar feedback
-- [ ] Explicar o caso
+- [x] Iniciar uma investigação (Fase 1)
+- [x] Explorar objetos (Fase 1)
+- [x] Coletar evidências (Fases 1 e 2)
+- [x] Montar a linha do tempo (Fase 3)
+- [x] Justificar posições (Fase 3)
+- [x] Relacionar cartas (Fase 3)
+- [x] Montar sem arrastar (Fase 3)
+- [x] Preservar progresso (Fases 1–4)
+- [x] Liberar a resolução (Fase 4)
+- [x] Enviar uma solução (Fase 4)
+- [x] Limitar tentativas (Fase 4)
+- [x] Apresentar feedback (Fase 4)
+- [x] Explicar o caso (Fase 4)
 - [ ] Usar em dispositivos diferentes

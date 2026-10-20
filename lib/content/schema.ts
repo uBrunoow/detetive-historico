@@ -24,6 +24,19 @@ export const hotspotSchema = z
   .strictObject({ x: percent, y: percent, w: percent, h: percent })
   .refine((h) => h.x + h.w <= 100 && h.y + h.h <= 100, "o hotspot ultrapassa os limites da cena");
 
+/**
+ * Como o documento é desenhado no visualizador (papel, letra, carimbo).
+ * É só apresentação: o conteúdo continua sendo a transcrição, legível por leitor de tela.
+ */
+export const presentationSchema = z.strictObject({
+  /** typed: datilografado · handwritten: manuscrito · printed: impresso (jornal) · ledger: livro pautado com linhas de registro · drawing: desenho/mapa (mostra a imagem) */
+  style: z.enum(["typed", "handwritten", "printed", "ledger", "drawing"]),
+  paper: z.enum(["office", "lined", "aged", "newsprint", "receipt"]).optional(),
+  /** Cabeçalho impresso do papel (timbre, título do jornal). */
+  heading: text.optional(),
+  stamp: z.strictObject({ text, detail: text.optional() }).optional(),
+});
+
 export const objectTypeSchema = z.enum(["evidence", "reading", "context", "locked", "decorative"]);
 
 export const sceneObjectSchema = z.strictObject({
@@ -36,6 +49,7 @@ export const sceneObjectSchema = z.strictObject({
       title: text.optional(),
       text: text,
       transcription: text.optional(),
+      presentation: presentationSchema.optional(),
     })
     .optional(),
   evidenceId: id.optional(),
@@ -72,6 +86,7 @@ export const evidenceSchema = z.strictObject({
     })
     .optional(),
   back: text,
+  presentation: presentationSchema.default({ style: "typed" }),
 });
 
 export const referenceSchema = z.strictObject({
@@ -193,5 +208,6 @@ export type PrivateCase = z.infer<typeof privateCaseSchema>;
 export type Scene = z.infer<typeof sceneSchema>;
 export type SceneObject = z.infer<typeof sceneObjectSchema>;
 export type Evidence = z.infer<typeof evidenceSchema>;
+export type Presentation = z.infer<typeof presentationSchema>;
 export type Difficulty = z.infer<typeof difficultySchema>;
 export type LinkType = z.infer<typeof linkTypeSchema>;

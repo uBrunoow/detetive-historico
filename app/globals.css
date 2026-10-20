@@ -151,3 +151,418 @@
     }
   }
 }
+
+/*
+ * Documentos: papel é papel. As folhas usam uma paleta própria, que não inverte no
+ * modo escuro (só escurece um pouco), como um documento real sob luz baixa.
+ */
+@theme inline {
+  --font-hand: var(--font-kalam), "Segoe Print", cursive;
+  --color-doc-paper: #f4f2ea;
+  --color-doc-aged: #ece1c4;
+  --color-doc-news: #e6e0cb;
+  --color-doc-ink: #1f1c19;
+  --color-doc-iron: #2b2420; /* tinta ferrogálica dos manuscritos */
+  --color-doc-faint: #5b574f;
+  --color-doc-rule: #b9c2cf;
+  --color-doc-margin: #c0574f;
+  --color-doc-stamp: #553a8c;
+  --color-doc-ribbon: #9b2a22;
+}
+
+@layer components {
+  .doc-sheet {
+    --noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .35 0 0 0 0 .3 0 0 0 0 .22 0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    position: relative;
+    color: var(--color-doc-ink);
+    background-color: var(--color-doc-paper);
+    background-image:
+      var(--noise),
+      linear-gradient(90deg, transparent 49.6%, rgb(0 0 0 / 0.045) 50%, rgb(255 255 255 / 0.35) 50.4%, transparent 51%);
+    /* papel em pixel: canto em degrau e sombra sólida, texto nítido */
+    box-shadow:
+      0 -3px 0 0 var(--color-doc-paper),
+      0 3px 0 0 var(--color-doc-paper),
+      -3px 0 0 0 var(--color-doc-paper),
+      3px 0 0 0 var(--color-doc-paper),
+      6px 9px 0 0 rgb(0 0 0 / 0.45),
+      inset 0 0 40px rgb(120 100 60 / 0.08);
+  }
+
+  .doc-sheet[data-paper="aged"] {
+    background-color: var(--color-doc-aged);
+    background-image:
+      var(--noise),
+      radial-gradient(ellipse at 85% 12%, rgb(140 100 40 / 0.18), transparent 32%),
+      radial-gradient(ellipse at 10% 90%, rgb(140 100 40 / 0.14), transparent 30%),
+      linear-gradient(90deg, transparent 49.6%, rgb(0 0 0 / 0.05) 50%, transparent 50.6%);
+    box-shadow:
+      0 -3px 0 0 var(--color-doc-aged),
+      0 3px 0 0 var(--color-doc-aged),
+      -3px 0 0 0 var(--color-doc-aged),
+      3px 0 0 0 var(--color-doc-aged),
+      6px 9px 0 0 rgb(0 0 0 / 0.45),
+      inset 0 0 60px rgb(120 80 30 / 0.22);
+  }
+
+  .doc-sheet[data-paper="newsprint"] {
+    --color-doc-paper: var(--color-doc-news);
+    background-color: var(--color-doc-news);
+    background-image:
+      var(--noise),
+      radial-gradient(ellipse at 50% 50%, transparent 55%, rgb(120 90 40 / 0.22)),
+      linear-gradient(0deg, transparent 49.7%, rgb(0 0 0 / 0.05) 50%, transparent 50.4%);
+  }
+
+  .doc-sheet[data-paper="lined"] {
+    background-image:
+      var(--noise),
+      linear-gradient(90deg, transparent 2.6rem, var(--color-doc-margin) 2.6rem, var(--color-doc-margin) calc(2.6rem + 1px), transparent calc(2.6rem + 1px)),
+      repeating-linear-gradient(180deg, transparent 0, transparent calc(2rem - 1px), var(--color-doc-rule) calc(2rem - 1px), var(--color-doc-rule) 2rem);
+    background-position: 0 0, 0 0, 0 0.35rem;
+  }
+
+  .doc-sheet[data-paper="receipt"] {
+    background-image:
+      var(--noise),
+      linear-gradient(180deg, var(--color-doc-ribbon) 0, var(--color-doc-ribbon) 6px, transparent 6px);
+  }
+
+  .doc-stamp {
+    font-family: var(--font-pixel);
+    --stamp-noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='s'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.4' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -1.5 1.55'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23s)'/%3E%3C/svg%3E");
+    color: var(--color-doc-stamp);
+    border: 3px solid currentColor;
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+    mix-blend-mode: multiply;
+    opacity: 0.92;
+    -webkit-mask-image: var(--stamp-noise);
+    mask-image: var(--stamp-noise);
+  }
+
+  .doc-shadow-desk {
+    background-color: var(--wood);
+    background-image:
+      radial-gradient(ellipse at 30% 0%, rgb(255 230 170 / 0.16), transparent 60%),
+      repeating-linear-gradient(92deg, rgb(0 0 0 / 0.07) 0 2px, transparent 2px 9px),
+      repeating-linear-gradient(88deg, rgb(255 255 255 / 0.025) 0 1px, transparent 1px 23px);
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .doc-sheet {
+    filter: brightness(0.9) saturate(0.95);
+  }
+}
+
+@keyframes dialog-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.985);
+  }
+}
+
+/* Cena: a luminária acompanha o olhar do jogador (ponteiro ou foco do teclado). */
+@property --lx {
+  syntax: "<percentage>";
+  inherits: true;
+  initial-value: 26%;
+}
+@property --ly {
+  syntax: "<percentage>";
+  inherits: true;
+  initial-value: 58%;
+}
+
+@layer components {
+  .scene-stage {
+    transition:
+      --lx 450ms cubic-bezier(0.16, 1, 0.3, 1),
+      --ly 450ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .scene-light {
+    background: radial-gradient(
+      circle at var(--lx) var(--ly),
+      rgb(255 232 176 / 0.14) 0 9%,
+      rgb(255 232 176 / 0.06) 9% 16%,
+      transparent 16% 24%,
+      rgb(14 9 5 / 0.18) 24% 34%,
+      rgb(14 9 5 / 0.32) 34% 48%,
+      rgb(14 9 5 / 0.45) 48%
+    );
+    transition: opacity 300ms ease-out;
+  }
+
+  .scene-stage[data-areas] .scene-light {
+    opacity: 0.2;
+  }
+
+  /* Ao entrar num lugar, a luz se acende (uma vez). */
+  .scene-power {
+    background: #0c0805;
+    opacity: 0;
+    animation: lamp-on 1.2s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .hotspot {
+    transition:
+      background-color 160ms ease-out,
+      box-shadow 160ms ease-out;
+  }
+
+  .hotspot:hover,
+  .hotspot:focus-visible {
+    background-color: rgb(255 240 205 / 0.14);
+    box-shadow:
+      inset 0 0 0 3px var(--carbon),
+      inset 0 0 0 5px rgb(255 255 255 / 0.7);
+    outline: none;
+  }
+
+  .scene-stage[data-areas] .hotspot:not(:hover):not(:focus-visible) {
+    background-color: rgb(255 240 205 / 0.1);
+    box-shadow:
+      inset 0 0 0 2px rgb(247 248 244 / 0.95),
+      inset 0 0 0 4px rgb(29 27 24 / 0.55);
+    background-image: repeating-linear-gradient(135deg, transparent 0 8px, rgb(255 255 255 / 0.08) 8px 10px);
+  }
+
+  .hotspot-tag {
+    position: absolute;
+    left: 0.25rem;
+    top: 0.25rem;
+    width: max-content;
+    max-width: 13rem;
+    padding: 0.2rem 0.5rem;
+    background: var(--paper-0);
+    color: var(--ink);
+    font-family: var(--font-pixel);
+    font-size: var(--text-sm);
+    line-height: 1.2;
+    text-align: left;
+    box-shadow:
+      0 -2px 0 0 var(--ink),
+      0 2px 0 0 var(--ink),
+      -2px 0 0 0 var(--ink),
+      2px 0 0 0 var(--ink),
+      3px 5px 0 0 rgb(0 0 0 / 0.4);
+    opacity: 0;
+    transform: translateY(2px);
+    transition:
+      opacity 140ms ease-out,
+      transform 140ms ease-out;
+    pointer-events: none;
+  }
+
+  .hotspot-state {
+    display: block;
+    color: var(--stamp);
+    font-weight: 700;
+  }
+
+  .hotspot:hover .hotspot-tag,
+  .hotspot:focus-visible .hotspot-tag,
+  .scene-stage[data-areas] .hotspot-tag {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes lamp-on {
+  0% {
+    opacity: 0.94;
+  }
+  28% {
+    opacity: 0.5;
+  }
+  33% {
+    opacity: 0.86;
+  }
+  40% {
+    opacity: 0.35;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes stamp-in {
+  0% {
+    opacity: 0;
+    transform: scale(1.35) rotate(-14deg);
+  }
+  60% {
+    opacity: 0.95;
+    transform: scale(0.97) rotate(-9deg);
+  }
+  100% {
+    opacity: 0.92;
+    transform: scale(1) rotate(-9deg);
+  }
+}
+
+/*
+ * Camada pixel: o jogo é pixel art 2D, a leitura continua nítida.
+ * Pixel em cenas, ícones, molduras, botões, títulos e carimbos;
+ * texto corrido e documentos em Atkinson / Courier Prime / Kalam.
+ */
+@theme inline {
+  --font-pixel: var(--font-pixelify), var(--font-courier-prime), monospace;
+}
+
+@layer components {
+  .pixelated {
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+  }
+
+  /* Moldura com cantos em degrau: quatro sombras sólidas no lugar da borda. */
+  .px-frame {
+    --px: 3px;
+    --px-line: var(--ink);
+    --px-drop: rgb(var(--shadow-sheet-color) / 0.45);
+    box-shadow:
+      0 calc(var(--px) * -1) 0 0 var(--px-line),
+      0 var(--px) 0 0 var(--px-line),
+      calc(var(--px) * -1) 0 0 0 var(--px-line),
+      var(--px) 0 0 0 var(--px-line),
+      calc(var(--px) * 2) calc(var(--px) * 3) 0 0 var(--px-drop);
+  }
+
+  .px-frame-flat {
+    box-shadow:
+      0 calc(var(--px, 3px) * -1) 0 0 var(--px-line, var(--ink)),
+      0 var(--px, 3px) 0 0 var(--px-line, var(--ink)),
+      calc(var(--px, 3px) * -1) 0 0 0 var(--px-line, var(--ink)),
+      var(--px, 3px) 0 0 0 var(--px-line, var(--ink));
+  }
+
+  /* Botão pixel: chanfro claro em cima, escuro embaixo; afunda ao apertar. */
+  .px-btn {
+    --btn-bg: var(--manila);
+    --btn-fg: var(--ink);
+    position: relative;
+    display: inline-flex;
+    min-height: 2.75rem;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    padding: 0.55rem 1.25rem;
+    background: var(--btn-bg);
+    color: var(--btn-fg);
+    font-family: var(--font-pixel);
+    font-size: var(--text-lg);
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    box-shadow:
+      inset 3px 3px 0 0 rgb(255 255 255 / 0.35),
+      inset -3px -3px 0 0 rgb(0 0 0 / 0.28),
+      0 -3px 0 0 var(--ink),
+      0 3px 0 0 var(--ink),
+      -3px 0 0 0 var(--ink),
+      3px 0 0 0 var(--ink),
+      0 7px 0 0 rgb(0 0 0 / 0.35);
+    transition: transform 80ms steps(2);
+  }
+  .px-btn:hover {
+    filter: brightness(1.08);
+  }
+  .px-btn:active {
+    transform: translateY(3px);
+    box-shadow:
+      inset 3px 3px 0 0 rgb(0 0 0 / 0.2),
+      0 -3px 0 0 var(--ink),
+      0 3px 0 0 var(--ink),
+      -3px 0 0 0 var(--ink),
+      3px 0 0 0 var(--ink);
+  }
+  .px-btn:focus-visible {
+    outline: 3px solid var(--carbon);
+    outline-offset: 6px;
+    border-radius: 0;
+  }
+  .px-btn[aria-disabled="true"],
+  .px-btn:disabled {
+    --btn-bg: var(--paper-3);
+    --btn-fg: var(--paper-5);
+    cursor: not-allowed;
+    filter: none;
+    transform: none;
+  }
+  .px-btn-ink {
+    --btn-bg: var(--ink);
+    --btn-fg: var(--paper-0);
+  }
+  .px-btn-paper {
+    --btn-bg: var(--paper-0);
+    --btn-fg: var(--ink);
+  }
+
+  /* Texto de título com sombra em degrau, como letreiro de jogo. */
+  .px-title {
+    font-family: var(--font-pixel);
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    text-shadow:
+      3px 3px 0 var(--wood),
+      6px 6px 0 rgb(0 0 0 / 0.45);
+  }
+
+  .scene-stage {
+    cursor:
+      url("/art/ui/cursor-lupa.png") 12 12,
+      zoom-in;
+  }
+}
+
+/* Preferências do jogador (Opções). Aplicadas em <html> antes da pintura. */
+html[data-text-size="large"] {
+  font-size: 112.5%;
+}
+
+html[data-reduce-motion="true"] *,
+html[data-reduce-motion="true"] *::before,
+html[data-reduce-motion="true"] *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+}
+
+/* Home: o letreiro cai em degraus uma vez; a janela acesa pisca de vez em quando. */
+.title-logo {
+  animation: logo-in 700ms steps(6, end) both;
+}
+@keyframes logo-in {
+  from {
+    opacity: 0;
+    transform: translateY(-24px);
+  }
+}
+.title-window {
+  mix-blend-mode: screen;
+  opacity: 0;
+  animation: window-flicker 9s steps(1, end) infinite;
+}
+@keyframes window-flicker {
+  0%,
+  88% {
+    opacity: 0;
+  }
+  89% {
+    opacity: 0.55;
+  }
+  90% {
+    opacity: 0;
+  }
+  92% {
+    opacity: 0.4;
+  }
+  93%,
+  100% {
+    opacity: 0;
+  }
+}

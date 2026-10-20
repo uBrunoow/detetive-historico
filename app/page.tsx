@@ -1,33 +1,36 @@
+import { HomeMenu } from "@/components/home/HomeMenu";
+import { PixelBackdrop } from "@/components/home/PixelBackdrop";
 import { listPublishedCases } from "@/lib/content/public";
 import { strings } from "@/lib/strings/pt-BR";
 
-// Página provisória da Fase 0: só confirma que o conteúdo carrega e que os tokens
-// estão aplicados. O catálogo completo chega na Fase 1.
 export default async function Home() {
   const cases = await listPublishedCases();
-  const t = strings.catalog;
+  const refs = cases.map((c) => ({
+    slug: c.slug,
+    title: c.title,
+    startSceneId: c.startSceneId,
+    sceneIds: c.scenes.map((s) => s.id),
+  }));
 
   return (
-    <main className="mx-auto w-full max-w-3xl px-4 py-12 sm:px-8">
-      <h1 className="font-typed text-3xl font-bold text-ink">{strings.app.name}</h1>
-      <p className="mt-3 max-w-prose text-paper-5">{strings.app.description}</p>
+    <main id="conteudo" className="relative isolate flex min-h-dvh flex-1 flex-col overflow-hidden text-paper-0">
+      <PixelBackdrop src="/art/title.png" alt={strings.home.sceneAlt}>
+        {/* a única janela acesa do arquivo, que pisca de vez em quando */}
+        <div className="title-window absolute bg-[#f0d9a0]" style={{ left: "39.7%", top: "46.5%", width: "6.3%", height: "13%" }} />
+      </PixelBackdrop>
+      <div aria-hidden className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgb(20_26_43/0.92)_0%,rgb(20_26_43/0.72)_38%,transparent_70%)]" />
 
-      <h2 className="mt-12 font-typed text-xl font-bold">{t.heading}</h2>
-      {cases.length === 0 ? (
-        <p className="mt-4 text-paper-5">{t.empty}</p>
-      ) : (
-        <ul className="mt-4 space-y-4">
-          {cases.map((c) => (
-            <li key={c.slug} className="rounded-sheet bg-paper-0 p-5 shadow-sheet">
-              <p className="font-typed text-lg font-bold">{c.title}</p>
-              <p className="mt-1 text-sm text-paper-5">
-                {c.period} — {c.place} — {t.duration(c.durationMinutes)}
-              </p>
-              {c.fictional && <p className="mt-2 text-sm font-bold text-stamp">{t.fictional}</p>}
-            </li>
-          ))}
-        </ul>
-      )}
+      <div className="relative mx-auto flex w-full max-w-6xl flex-1 flex-col justify-center px-4 py-10 sm:px-10">
+        <h1 className="px-title title-logo text-[clamp(2.75rem,9vw,5.5rem)] leading-[0.95] text-[#f0d9a0]">
+          Detetive
+          <br />
+          Histórico
+        </h1>
+        <p className="mt-5 max-w-sm text-lg text-paper-0/90 [text-shadow:2px_2px_0_rgb(0_0_0/0.6)]">{strings.home.tagline}</p>
+        <div className="mt-10 w-full max-w-xs">
+          <HomeMenu cases={refs} />
+        </div>
+      </div>
     </main>
   );
 }
