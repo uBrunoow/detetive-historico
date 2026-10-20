@@ -46,7 +46,7 @@
 
 **Pendente / observações**
 - O caderno (Fase 2) ainda não existe: as cartas são guardadas, mas só aparecem no contador.
-- Imagens das cenas são marcadores de posição em SVG; ilustrações definitivas ficam para o caso-piloto.
+- ~~Imagens das cenas são marcadores de posição em SVG.~~ Substituídas por arte em pixel gerada por script (`scripts/pixel-art/`), junto com o menu com tela de título e a tela de fases com medalhas.
 
 ## Fase 2 — Caderno de investigação ✅ (aguardando revisão)
 
@@ -131,6 +131,27 @@
 - Em produção, defina `GAME_SECRET` (veja `.env.example`).
 - Hipóteses ainda não se ligam a cartas nem a trechos da linha (PRD §5.8): fica para uma próxima etapa.
 - Sem painel do professor nem métricas (fora do MVP, D1).
+
+## Caso real 1 — "A lei de dois artigos" (abolição) ✅ (aguardando revisão de História)
+
+**Feito**
+- Caso `abolicao` com fontes reais, desenhado em `docs/superpowers/specs/2026-10-20-caso-abolicao-design.md` a partir do Caso 3 do documento de casos da versão inicial.
+- Pergunta: "Como e por que a escravidão terminou no Brasil?". Duas cenas reconstruídas (redação de jornal e escritório de advogado), avisadas como reconstrução no briefing.
+- 7 cartas: Lei nº 581/1850 (fora da história), Lei do Ventre Livre (1871), trecho de *O Abolicionismo* de Joaquim Nabuco sem data (situável entre 1871 e 1885), Lei dos Sexagenários (1885), pedido do Clube Militar (out. 1887, só descrição), Lei Áurea (1888) e missa campal de 17/5/1888 (ilustração da equipe). Marcos-chave: 1871, 1885 e 1888.
+- Transcrições conferidas no original: leis no Planalto; Nabuco na edição de 1883 digitalizada pela UNESP (p. 34–35). O verso de cada carta explica em português atual.
+- Contexto com abolicionistas negros: Luiz Gama, André Rebouças e José do Patrocínio.
+- Arte em `scripts/pixel-art/abolicao.mjs` (peças de cenário comuns em `scenery.mjs`). Testes em `tests/unit/abolicao.test.ts`.
+
+**Como testar manualmente**
+1. `pnpm build && GAME_SECRET=qualquer-coisa-longa pnpm start` (sem `GAME_SECRET` a conferência e a conclusão dão erro em produção).
+2. Em /fases, abra "A lei de dois artigos". Na redação, a gaveta está trancada; a chave fica no escritório.
+3. Guarde as 7 fontes, monte a linha e ponha a lei de 1850 em "Fora da história". Conferir deve dar "ok".
+4. Envie "foi por bondade da princesa": recebe orientação. Envie "aos poucos, com as leis de 1871 e 1885, e por pressão dos abolicionistas e das fugas": aceita.
+
+**Pendente / observações**
+- Localizar o texto original e o dia exato do pedido do Clube Militar (25 ou 26 de outubro de 1887).
+- Revisão do conteúdo pela professora / alguém de História (PRD §7).
+- A Gazeta de Notícias de 14/5/1888 ficou de fora (texto não localizado).
 
 ## Critérios de aceitação do PRD (§12)
 

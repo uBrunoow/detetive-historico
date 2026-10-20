@@ -63,6 +63,13 @@ await shot("Caderno de investigação", "Fontes coletadas, anotações e hipóte
 await shot("Linha do tempo", "O jogador ordena as fontes cronologicamente e as relaciona.", { path: `${C}/linha-do-tempo`, progress: full });
 await shot("Conclusão", "O jogador responde à pergunta do caso usando as fontes como apoio.", { path: `${C}/conclusao`, progress: full });
 await shot("Encerramento", "Tela final do caso. Só abre depois que o jogador conclui o caso ou usa todas as tentativas; aqui aparece o aviso de bloqueio.", { path: `${C}/encerramento`, progress: full });
+const A = "/casos/abolicao";
+await shot("Caso real: briefing", "Caso \"A lei de dois artigos\": fim da escravidão no Brasil, com fontes reais.", { path: A, progress: null });
+await shot("Caso real: redação do jornal", "Primeira cena do caso real, com os objetos clicáveis destacados.", {
+  path: `${A}/cena/redacao`, progress: null, before: (p) => p.getByRole("button", { name: /Mostrar o que dá/ }).click(),
+});
+await shot("Caso real: escritório do advogado", "Segunda cena: leis de 1850, 1871 e 1885, o livro de Nabuco e retratos de abolicionistas.", { path: `${A}/cena/escritorio`, progress: null });
+await shot("Caso real: fonte aberta", "A Lei Áurea, transcrita do original com a grafia de época.", { path: `${A}/cena/redacao`, progress: null, before: open("Folha impressa") });
 await shot("Como jogar", "Instruções do jogo.", { path: "/como-jogar" });
 await shot("Opções", "Configurações (tamanho do texto, movimento etc.).", { path: "/opcoes" });
 await shot("Créditos", "Créditos e referências.", { path: "/creditos" });
