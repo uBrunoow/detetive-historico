@@ -1,4 +1,12 @@
 {
+  "choiceAnswer": {
+    "correctId": "governou-ditador",
+    "wrongFeedback": {
+      "eleito-1930": "Revise a carta do novo governo de 1930: Vargas chegou ao poder por uma eleição ou por um movimento armado?",
+      "imperador": "Em 1930 o Brasil já era uma República havia muito tempo. Observe quem assina as leis da sua linha do tempo.",
+      "so-direitos": "Os direitos foram criados, mas houve também censura e fechamento do Congresso. Revise a Constituição de 1937."
+    }
+  },
   "timelineReference": [
     { "evidenceId": "posse-1930", "referenceOrder": 1, "belongsToStory": true, "isKeyMilestone": true },
     { "evidenceId": "codigo-eleitoral", "referenceOrder": 2, "belongsToStory": true, "isKeyMilestone": false },

@@ -1,4 +1,12 @@
 {
+  "choiceAnswer": {
+    "correctId": "carta-caminha",
+    "wrongFeedback": {
+      "colombo": "Colombo chegou à América em 1492, por outra rota e a serviço da Espanha. Releia quem é o capitão nesta carta.",
+      "terra-vazia": "Revise o trecho “Gente na praia”: quem os portugueses encontraram quando chegaram?",
+      "so-frota": "Observe com calma: a carta fala só dos navios, ou também do que foi visto em terra? Revise os trechos com data."
+    }
+  },
   "timelineReference": [
     { "evidenceId": "partida", "referenceOrder": 1, "belongsToStory": true, "isKeyMilestone": true },
     { "evidenceId": "monte-pascoal", "referenceOrder": 2, "belongsToStory": true, "isKeyMilestone": true },

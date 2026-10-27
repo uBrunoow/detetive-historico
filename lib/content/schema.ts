@@ -39,6 +39,34 @@ export const presentationSchema = z.strictObject({
 
 export const objectTypeSchema = z.enum(["evidence", "reading", "context", "locked", "decorative"]);
 
+/** Pergunta de múltipla escolha com a resposta no arquivo privado (`epochAnswer`, `quizAnswers`). */
+export const epochGuessSchema = z.strictObject({
+  question: text,
+  options: z.array(text).length(4),
+});
+
+export const quizSchema = z.strictObject({
+  question: text,
+  options: z.array(text).length(3),
+});
+
+/** Cadeado de código: o código certo fica em `codes` (arquivo privado). */
+export const codeUnlockSchema = z.strictObject({
+  code: z.strictObject({
+    prompt: text,
+    hint: text,
+    inputMode: z.enum(["numeric", "text"]),
+  }),
+  lockedMessage: text,
+});
+
+const examinedUnlockSchema = z.strictObject({
+  requiresExamined: z.array(id).min(1),
+  lockedMessage: text,
+});
+
+export const conclusionChoiceSchema = z.strictObject({ id, text });
+
 export const sceneObjectSchema = z.strictObject({
   id,
   type: objectTypeSchema,
@@ -53,12 +81,7 @@ export const sceneObjectSchema = z.strictObject({
     })
     .optional(),
   evidenceId: id.optional(),
-  unlock: z
-    .strictObject({
-      requiresExamined: z.array(id).min(1),
-      lockedMessage: text,
-    })
-    .optional(),
+  unlock: z.union([examinedUnlockSchema, codeUnlockSchema]).optional(),
 });
 
 export const sceneSchema = z.strictObject({
@@ -87,6 +110,10 @@ export const evidenceSchema = z.strictObject({
     .optional(),
   back: text,
   presentation: presentationSchema.default({ style: "typed" }),
+  /** Enigma opcional: montar a carta rasgada. */
+  puzzle: z.literal("pieces").optional(),
+  /** Pergunta opcional sobre a fonte (resposta em `quizAnswers`). */
+  quiz: quizSchema.optional(),
 });
 
 export const referenceSchema = z.strictObject({
@@ -123,7 +150,13 @@ export const publicCaseSchema = z.strictObject({
   }),
   minCardsToResolve: z.number().int().positive(),
   maxTimelineChecks: z.number().int().nonnegative().default(3),
-  maxAttempts: z.number().int().positive().default(5),
+  /** Palpite opcional sobre a época (resposta em `epochAnswer`). */
+  epochGuess: epochGuessSchema.optional(),
+  /** Alternativas da conclusão; a certa fica em `choiceAnswer` (arquivo privado). */
+  conclusion: z.strictObject({
+    choices: z.array(conclusionChoiceSchema).length(4),
+    maxChoices: z.number().int().positive().default(2),
+  }),
   startSceneId: id,
   scenes: z.array(sceneSchema).min(1),
   evidence: z.array(evidenceSchema).min(1),
@@ -144,6 +177,18 @@ export const hintConditionSchema = z.discriminatedUnion("type", [
 ]);
 
 export const privateCaseSchema = z.strictObject({
+  /** Índice (0 a 3) da época certa em `epochGuess.options`. */
+  epochAnswer: z.number().int().min(0).max(3).optional(),
+  /** Código de cada objeto trancado por código. */
+  codes: z.record(id, text).optional(),
+  quizAnswers: z
+    .record(id, z.strictObject({ correct: z.number().int().nonnegative(), explanation: text }))
+    .optional(),
+  choiceAnswer: z.strictObject({
+    correctId: id,
+    /** Orientação curta para cada alternativa errada. */
+    wrongFeedback: z.record(id, text),
+  }),
   timelineReference: z
     .array(
       z.strictObject({
@@ -211,6 +256,10 @@ export const privateCaseSchema = z.strictObject({
 
 export type PublicCase = z.infer<typeof publicCaseSchema>;
 export type PrivateCase = z.infer<typeof privateCaseSchema>;
+export type EpochGuess = z.infer<typeof epochGuessSchema>;
+export type CodeUnlock = z.infer<typeof codeUnlockSchema>;
+export type Quiz = z.infer<typeof quizSchema>;
+export type ConclusionChoice = z.infer<typeof conclusionChoiceSchema>;
 export type Scene = z.infer<typeof sceneSchema>;
 export type SceneObject = z.infer<typeof sceneObjectSchema>;
 export type Evidence = z.infer<typeof evidenceSchema>;

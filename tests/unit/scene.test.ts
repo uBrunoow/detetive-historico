@@ -18,6 +18,12 @@ describe("exploração da cena", () => {
     expect(isUnlocked(gaveta, ["chaveiro"])).toBe(true);
   });
 
+  it("cadeado de código só abre quando o objeto está em unlocked", () => {
+    const cofre = { ...gaveta, id: "cofre", unlock: { code: { prompt: "Código?", hint: "Dica.", inputMode: "numeric" as const }, lockedMessage: "Trancado." } };
+    expect(isUnlocked(cofre, ["chaveiro"])).toBe(false);
+    expect(isUnlocked(cofre, [], ["cofre"])).toBe(true);
+  });
+
   it("examinar marca o objeto uma vez só e inicia o caso", () => {
     let p = markExamined(emptyProgress(), "chaveiro", "arquivo");
     p = markExamined(p, "chaveiro", "arquivo");

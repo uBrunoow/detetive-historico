@@ -1,4 +1,12 @@
 {
+  "choiceAnswer": {
+    "correctId": "aos-poucos",
+    "wrongFeedback": {
+      "lei-sozinha": "A princesa assinou a lei, mas ela veio depois de muita pressão. Revise quem pressionou e o que as leis anteriores diziam.",
+      "ventre-livre": "Releia o artigo 1º da lei de 1871: quem ela tornou livre? Observe também a lei de 1885.",
+      "so-pressao": "As fugas foram importantes, mas as leis também contam a história. Revise a linha do tempo e veja o que cada lei mudou."
+    }
+  },
   "timelineReference": [
     { "evidenceId": "ventre-livre", "referenceOrder": 1, "belongsToStory": true, "isKeyMilestone": true },
     {

@@ -28,7 +28,27 @@
   },
   "minCardsToResolve": 4,
   "maxTimelineChecks": 3,
-  "maxAttempts": 5,
+  "conclusion": {
+    "choices": [
+      {
+        "id": "eleito-1930",
+        "text": "A carta foi de um presidente eleito em 1930, que governou sempre com eleições livres."
+      },
+      {
+        "id": "governou-ditador",
+        "text": "A carta foi de Getúlio Vargas, que chegou ao poder em 1930, criou leis trabalhistas, governou como ditador no Estado Novo e morreu em 1954."
+      },
+      {
+        "id": "imperador",
+        "text": "A carta foi de um imperador, que criou o voto das mulheres e as leis do trabalho."
+      },
+      {
+        "id": "so-direitos",
+        "text": "A carta foi de um governante que só ampliou direitos e nunca restringiu a liberdade de ninguém."
+      }
+    ],
+    "maxChoices": 2
+  },
   "startSceneId": "gabinete",
   "scenes": [
     {

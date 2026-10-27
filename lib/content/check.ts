@@ -35,10 +35,12 @@ export function checkCaseBundle(pub: PublicCase, priv: PrivateCase): string[] {
       if (obj.type === "evidence" && !obj.evidenceId) problems.push(`${where}: objeto de evidência sem evidenceId`);
       if (obj.type === "locked") {
         if (!obj.unlock) problems.push(`${where}: objeto bloqueado sem condição de desbloqueio`);
-        for (const req of obj.unlock?.requiresExamined ?? []) {
+        const requires = obj.unlock && "requiresExamined" in obj.unlock ? obj.unlock.requiresExamined : [];
+        for (const req of requires) {
           if (!objectIds.has(req)) problems.push(`${where}: desbloqueio depende de objeto inexistente ${req}`);
         }
       }
+      if (obj.unlock && "code" in obj.unlock && !priv.codes?.[obj.id]) problems.push(`${where}: cadeado sem código`);
       if ((obj.type === "reading" || obj.type === "context") && !obj.content) {
         problems.push(`${where}: objeto de ${obj.type} sem conteúdo`);
       }
@@ -46,6 +48,26 @@ export function checkCaseBundle(pub: PublicCase, priv: PrivateCase): string[] {
   }
   for (const e of pub.evidence) {
     if (!collectable.has(e.id)) problems.push(`evidência ${e.id} não pode ser encontrada em nenhuma cena`);
+  }
+
+  if (pub.epochGuess && priv.epochAnswer === undefined) problems.push("epochGuess sem epochAnswer");
+  if (pub.epochGuess && priv.epochAnswer !== undefined && priv.epochAnswer >= pub.epochGuess.options.length) {
+    problems.push("epochAnswer fora das opções");
+  }
+  for (const e of pub.evidence) {
+    if (!e.quiz) continue;
+    const answer = priv.quizAnswers?.[e.id];
+    if (!answer) problems.push(`${e.id}: pergunta sem resposta`);
+    else if (answer.correct >= e.quiz.options.length) problems.push(`${e.id}: resposta da pergunta fora das opções`);
+  }
+
+  const choiceIds = pub.conclusion.choices.map((c) => c.id);
+  for (const d of dupes(choiceIds)) problems.push(`alternativa duplicada: ${d}`);
+  if (!choiceIds.includes(priv.choiceAnswer.correctId)) problems.push("alternativa certa inexistente");
+  for (const cid of choiceIds) {
+    if (cid !== priv.choiceAnswer.correctId && !priv.choiceAnswer.wrongFeedback[cid]) {
+      problems.push(`alternativa ${cid} sem feedback`);
+    }
   }
 
   const refById = new Map(priv.timelineReference.map((r) => [r.evidenceId, r]));

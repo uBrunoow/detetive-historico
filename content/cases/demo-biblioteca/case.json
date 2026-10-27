@@ -28,7 +28,27 @@
   },
   "minCardsToResolve": 4,
   "maxTimelineChecks": 3,
-  "maxAttempts": 5,
+  "conclusion": {
+    "choices": [
+      {
+        "id": "emprestou",
+        "text": "O bibliotecário Otávio Lemos emprestou o livro à agrimensora Helena Prado, como a Prefeitura pediu, e o empréstimo ficou só num bilhete."
+      },
+      {
+        "id": "roubo",
+        "text": "O livro foi roubado da biblioteca, como num caso parecido que o jornal de 1898 conta."
+      },
+      {
+        "id": "sumiu",
+        "text": "O livro se perdeu e ninguém sabe onde ele foi parar."
+      },
+      {
+        "id": "escondeu",
+        "text": "O bibliotecário escondeu o livro para não ter de entregá-lo à Câmara."
+      }
+    ],
+    "maxChoices": 2
+  },
   "startSceneId": "sala-leitura",
   "scenes": [
     {

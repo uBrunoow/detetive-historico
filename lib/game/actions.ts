@@ -33,12 +33,12 @@ async function load(slug: unknown) {
   return { c, state: await readState(s) };
 }
 
-function view(c: { maxTimelineChecks: number; maxAttempts: number }, state: GameState): PublicGameState {
+function view(c: { maxTimelineChecks: number; conclusion: { maxChoices: number } }, state: GameState): PublicGameState {
   return {
     checksLeft: Math.max(0, c.maxTimelineChecks - state.checksUsed),
-    attemptsLeft: Math.max(0, c.maxAttempts - state.attemptsUsed),
+    attemptsLeft: Math.max(0, c.conclusion.maxChoices - state.attemptsUsed),
     maxChecks: c.maxTimelineChecks,
-    maxAttempts: c.maxAttempts,
+    maxAttempts: c.conclusion.maxChoices,
     outcome: state.outcome,
   };
 }
@@ -79,7 +79,7 @@ export async function submitAnswer(slug: string, input: unknown): Promise<Answer
   const { c, state } = await load(slug);
   const { answer, order } = answerSchema.parse(input);
   if (state.outcome) return { ok: false, error: "closed", state: view(c, state) };
-  if (state.attemptsUsed >= c.maxAttempts) return { ok: false, error: "no_attempts", state: view(c, state) };
+  if (state.attemptsUsed >= c.conclusion.maxChoices) return { ok: false, error: "no_attempts", state: view(c, state) };
   // Resposta vazia ou curta demais não consome tentativa.
   if (normalize(answer).split(" ").filter(Boolean).length < 3) return { ok: false, error: "empty", state: view(c, state) };
   // A tela só libera com o mínimo de cartas posicionadas (PRD §5.7.4); o servidor confere de novo.
@@ -88,7 +88,7 @@ export async function submitAnswer(slug: string, input: unknown): Promise<Answer
 
   const { verdict, feedback } = evaluateAnswer((await getPrivateCase(c.slug)).solution, answer);
   const attemptsUsed = state.attemptsUsed + 1;
-  const outcome = verdict === "accepted" ? "solved" : attemptsUsed >= c.maxAttempts ? "failed" : null;
+  const outcome = verdict === "accepted" ? "solved" : attemptsUsed >= c.conclusion.maxChoices ? "failed" : null;
   const next: GameState = { ...state, attemptsUsed, outcome };
   await writeState(next);
   return { ok: true, verdict, feedback, state: view(c, next) };

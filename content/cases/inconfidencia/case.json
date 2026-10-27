@@ -28,7 +28,27 @@
   },
   "minCardsToResolve": 4,
   "maxTimelineChecks": 3,
-  "maxAttempts": 5,
+  "conclusion": {
+    "choices": [
+      {
+        "id": "independencia",
+        "text": "Eles planejavam a independência de todo o Brasil, que aconteceu em 1822 com Dom Pedro."
+      },
+      {
+        "id": "roubo-ouro",
+        "text": "Eles roubaram o ouro da Coroa e foram presos por isso."
+      },
+      {
+        "id": "so-presos",
+        "text": "Eles foram só presos e exilados, sem que houvesse plano nenhum de revolta."
+      },
+      {
+        "id": "revolta-ouro",
+        "text": "Eles planejavam a Inconfidência Mineira, uma revolta contra a cobrança do ouro para separar Minas de Portugal, mas foram denunciados e presos."
+      }
+    ],
+    "maxChoices": 2
+  },
   "startSceneId": "museu",
   "scenes": [
     {

@@ -3,9 +3,11 @@ import type { PublicCase, SceneObject } from "@/lib/content/schema";
 
 /** Regras puras de exploração da cena (sem React). */
 
-export function isUnlocked(obj: SceneObject, examined: readonly string[]): boolean {
+export function isUnlocked(obj: SceneObject, examined: readonly string[], unlocked: readonly string[] = []): boolean {
   if (obj.type !== "locked") return true;
-  return (obj.unlock?.requiresExamined ?? []).every((id) => examined.includes(id));
+  if (obj.unlock && "code" in obj.unlock) return unlocked.includes(obj.id);
+  const requires = obj.unlock && "requiresExamined" in obj.unlock ? obj.unlock.requiresExamined : [];
+  return requires.every((id) => examined.includes(id));
 }
 
 export function markExamined(progress: CaseProgress, objectId: string, sceneId: string): CaseProgress {

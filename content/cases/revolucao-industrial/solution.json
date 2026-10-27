@@ -1,4 +1,12 @@
 {
+  "choiceAnswer": {
+    "correctId": "industrial-reacao",
+    "wrongFeedback": {
+      "brasil-clt": "A CLT é do Brasil, de 1943. Este caso se passa em outro país e em outra época: revise o lugar de cada fonte.",
+      "eletricidade": "Ainda não havia eletricidade nas fábricas. Revise a patente de 1769: que máquina movia as fábricas?",
+      "sem-reacao": "Observe os luditas e a Lei das Fábricas: o que as pessoas fizeram diante dessas condições? Revise o depoimento."
+    }
+  },
   "timelineReference": [
     { "evidenceId": "watt-patente", "referenceOrder": 1, "belongsToStory": true, "isKeyMilestone": true },
     { "evidenceId": "ludd", "referenceOrder": 2, "belongsToStory": true, "isKeyMilestone": true },

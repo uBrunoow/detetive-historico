@@ -1,4 +1,12 @@
 {
+  "choiceAnswer": {
+    "correctId": "emprestou",
+    "wrongFeedback": {
+      "roubo": "Será que houve mesmo um roubo? Procure nas cartas algum sinal de que alguém autorizou a saída do livro. Confira também a data do jornal.",
+      "sumiu": "Há cartas que dizem onde o livro está e quem o levou. Revise o bilhete e o livro de visitas.",
+      "escondeu": "Observe o ofício da Prefeitura: o que ele pedia ao bibliotecário? Revise também o bilhete."
+    }
+  },
   "timelineReference": [
     {
       "evidenceId": "oficio-prefeitura",
