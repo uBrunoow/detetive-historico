@@ -31,19 +31,19 @@
     "choices": [
       {
         "id": "carta-caminha",
-        "text": "Pero Vaz de Caminha, escrivão da frota de Cabral, contou ao rei D. Manuel I a chegada dos portugueses ao litoral da Bahia em 1500."
+        "text": "Pero Vaz de Caminha, escrivão da frota de Cabral, escreveu ao rei D. Manuel I contando a chegada à Bahia em 1500."
       },
       {
         "id": "colombo",
-        "text": "Cristóvão Colombo escreveu ao rei contando como chegou à América em 1492."
+        "text": "Cristóvão Colombo escreveu ao rei da Espanha contando a chegada à América, em 1492, depois de cruzar o oceano."
       },
       {
         "id": "terra-vazia",
-        "text": "Um marinheiro descreveu uma terra vazia, onde ninguém morava, que os portugueses encontraram em 1500."
+        "text": "Um marinheiro da frota de Cabral escreveu ao rei que a terra estava vazia, sem ninguém morando, quando chegaram em 1500."
       },
       {
         "id": "so-frota",
-        "text": "Um capitão apenas listou os navios da frota de Cabral, sem contar o que viu na terra."
+        "text": "Pero Vaz de Caminha escreveu ao rei em 1500 só para listar os navios e os mantimentos da frota, sem falar da terra."
       }
     ],
     "maxChoices": 2

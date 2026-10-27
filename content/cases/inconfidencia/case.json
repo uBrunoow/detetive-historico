@@ -32,19 +32,19 @@
     "choices": [
       {
         "id": "independencia",
-        "text": "Eles planejavam a independência de todo o Brasil, que aconteceu em 1822 com Dom Pedro."
+        "text": "Eles planejavam separar todo o Brasil de Portugal, e a revolta, denunciada em 1789, terminou com a independência em 1822."
       },
       {
         "id": "roubo-ouro",
-        "text": "Eles roubaram o ouro da Coroa e foram presos por isso."
+        "text": "Eles eram contrabandistas que roubavam ouro da Coroa, e a denúncia de 1789 os levou à prisão por esse crime."
       },
       {
-        "id": "so-presos",
-        "text": "Eles foram só presos e exilados, sem que houvesse plano nenhum de revolta."
+        "id": "todos-executados",
+        "text": "Eles planejavam uma revolta contra a derrama, mas foram presos antes e todos acabaram executados em 1792, como Tiradentes."
       },
       {
         "id": "revolta-ouro",
-        "text": "Eles planejavam a Inconfidência Mineira, uma revolta contra a cobrança do ouro para separar Minas de Portugal, mas foram denunciados e presos."
+        "text": "Eles planejavam uma república em Minas contra a cobrança do ouro, mas foram denunciados em 1789 e só Tiradentes foi executado."
       }
     ],
     "maxChoices": 2

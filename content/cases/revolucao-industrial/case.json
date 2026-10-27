@@ -31,19 +31,19 @@
     "choices": [
       {
         "id": "brasil-clt",
-        "text": "Era o Brasil de 1943, quando a CLT criou os direitos dos trabalhadores das fábricas."
+        "text": "Era o Brasil de 1943, quando a CLT passou a proteger os trabalhadores das fábricas e acabou com o trabalho infantil."
       },
       {
-        "id": "eletricidade",
-        "text": "As fábricas funcionavam com eletricidade e computadores, e o trabalho ficou mais leve para todos."
+        "id": "trabalho-leve",
+        "text": "Era a Revolução Industrial na Grã-Bretanha, e as máquinas a vapor deixaram o trabalho mais leve, com jornadas curtas para crianças."
       },
       {
         "id": "industrial-reacao",
-        "text": "Era a Revolução Industrial na Grã-Bretanha: máquinas a vapor aumentaram a produção, o trabalho nas fábricas era duro e houve reações, como os luditas e a Lei das Fábricas."
+        "text": "Era a Revolução Industrial na Grã-Bretanha: máquinas a vapor, fábricas com jornadas longas e reações como os luditas e a Lei das Fábricas."
       },
       {
         "id": "sem-reacao",
-        "text": "Era a Revolução Industrial, e os trabalhadores aceitaram as condições das fábricas sem protestar."
+        "text": "Era a Revolução Industrial na Grã-Bretanha, com máquinas a vapor e trabalho duro, e os operários aceitaram tudo sem protestar."
       }
     ],
     "maxChoices": 2

@@ -32,19 +32,19 @@
     "choices": [
       {
         "id": "lei-sozinha",
-        "text": "A princesa libertou todas as pessoas escravizadas por bondade, de uma hora para outra, com a Lei Áurea."
+        "text": "A princesa libertou todas as pessoas escravizadas por bondade, de uma hora para outra, ao assinar a Lei Áurea em 1888."
       },
       {
         "id": "ventre-livre",
-        "text": "A Lei do Ventre Livre, de 1871, já tinha libertado todas as pessoas escravizadas."
+        "text": "A Lei do Ventre Livre, de 1871, já tinha libertado todas as pessoas escravizadas, e a lei de 1888 só confirmou isso."
       },
       {
         "id": "aos-poucos",
-        "text": "A escravidão acabou aos poucos, com leis que adiavam a liberdade, e terminou em 1888 com a Lei Áurea, depois de muita pressão dos abolicionistas."
+        "text": "A escravidão acabou aos poucos, com leis como a do Ventre Livre e a dos Sexagenários, e a Lei Áurea veio em 1888 após muita pressão."
       },
       {
         "id": "so-pressao",
-        "text": "A escravidão acabou só por causa das fugas, sem que nenhuma lei antes de 1888 tivesse mudado nada."
+        "text": "Só a pressão das fugas e dos abolicionistas acabou com a escravidão em 1888; as leis de 1871 e 1885 não mudaram nada."
       }
     ],
     "maxChoices": 2

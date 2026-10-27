@@ -32,19 +32,19 @@
     "choices": [
       {
         "id": "eleito-1930",
-        "text": "A carta foi de um presidente eleito em 1930, que governou sempre com eleições livres."
+        "text": "Vargas chegou ao poder em 1930 ganhando uma eleição, governou com o Congresso aberto e deixou o governo em 1945."
       },
       {
         "id": "governou-ditador",
-        "text": "A carta foi de Getúlio Vargas, que chegou ao poder em 1930, criou leis trabalhistas, governou como ditador no Estado Novo e morreu em 1954."
-      },
-      {
-        "id": "imperador",
-        "text": "A carta foi de um imperador, que criou o voto das mulheres e as leis do trabalho."
+        "text": "Getúlio Vargas chegou ao poder em 1930, criou leis do trabalho, governou como ditador a partir de 1937 e morreu em 1954."
       },
       {
         "id": "so-direitos",
-        "text": "A carta foi de um governante que só ampliou direitos e nunca restringiu a liberdade de ninguém."
+        "text": "Vargas só ampliou direitos, como o voto feminino e a CLT, e nunca fechou o Congresso nem criou censura no país."
+      },
+      {
+        "id": "ordem-trocada",
+        "text": "Vargas só chegou ao poder depois de 1945, quando criou a CLT e o voto das mulheres, e depois governou como ditador."
       }
     ],
     "maxChoices": 2
