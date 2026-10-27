@@ -279,10 +279,10 @@ export async function getResult(slug: string): Promise<{ official: Result | null
   return { official: state.official, current: state.outcome ? (state.current ?? null) : null, practice: state.practice };
 }
 
-/** Zera o caso, mas guarda o resultado oficial; a nova partida é "treino". */
+/** Zera o caso, mas guarda o resultado oficial; a nova partida é "treino" só se já houver oficial. */
 export async function restartCase(slug: string): Promise<PublicGameState> {
   const { c, state } = await load(slug);
-  const next: GameState = { ...freshState(c.slug), official: state.official, practice: true };
+  const next: GameState = { ...freshState(c.slug), official: state.official, practice: state.official !== null };
   await writeState(next);
   return view(c, next);
 }

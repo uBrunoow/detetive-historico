@@ -80,4 +80,29 @@ describe("submitChoice / getResult / restartCase", () => {
     expect(res.current?.stars).toBe(0);
     expect(res.practice).toBe(true);
   });
+
+  it("recomeçar antes de qualquer encerramento não é treino: o próximo fecho vira oficial", async () => {
+    const { right, wrong } = await ids();
+    await submitChoice(slug, { choiceId: wrong, justification: "", order });
+    const s = await restartCase(slug);
+    expect(s).toMatchObject({ practice: false, official: null, choicesLeft: 2 });
+    await submitChoice(slug, { choiceId: right, justification: "", order });
+    const res = await getResult(slug);
+    expect(res.practice).toBe(false);
+    expect(res.official).not.toBeNull();
+    expect(res.official).toEqual(res.current);
+  });
+
+  it("treino melhor que o oficial não o sobrescreve", async () => {
+    const { right, wrong } = await ids();
+    await submitChoice(slug, { choiceId: wrong, justification: "", order });
+    await submitChoice(slug, { choiceId: wrong, justification: "", order });
+    const official = (await getResult(slug)).official!;
+    expect(official.stars).toBe(0);
+    expect((await restartCase(slug)).practice).toBe(true);
+    await submitChoice(slug, { choiceId: right, justification: "", order });
+    const res = await getResult(slug);
+    expect(res.current!.points).toBeGreaterThan(official.points);
+    expect(res.official).toEqual(official);
+  });
 });
