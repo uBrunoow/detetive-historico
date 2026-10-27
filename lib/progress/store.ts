@@ -22,9 +22,10 @@ function load(slug: string): CaseProgress {
   try {
     const raw = window.localStorage.getItem(key(slug));
     if (!raw) return emptyProgress();
-    const parsed = JSON.parse(raw) as Partial<CaseProgress>;
-    if (parsed.version !== 1) return emptyProgress();
-    return { ...emptyProgress(), ...parsed };
+    const parsed = JSON.parse(raw) as Partial<Omit<CaseProgress, "version">> & { version?: number };
+    // v1 e v2 têm os mesmos campos antigos; a migração só completa os novos.
+    if (parsed.version !== 1 && parsed.version !== 2) return emptyProgress();
+    return { ...emptyProgress(), ...parsed, version: 2 };
   } catch {
     return emptyProgress();
   }
@@ -48,6 +49,12 @@ export function updateProgress(slug: string, update: (current: CaseProgress) => 
     // Sem armazenamento disponível: o estado vale só nesta aba.
   }
   listeners.forEach((l) => l());
+}
+
+/** "Jogar de novo": zera o caso; com `keepOfficial` guarda o resultado oficial e marca como treino. */
+export function resetProgress(slug: string, keepOfficial: boolean) {
+  const official = keepOfficial ? readProgress(slug).official : null;
+  updateProgress(slug, () => ({ ...emptyProgress(), official, practice: official !== null }));
 }
 
 function subscribe(listener: () => void) {

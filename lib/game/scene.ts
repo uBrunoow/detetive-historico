@@ -34,17 +34,9 @@ export function startCase(progress: CaseProgress): CaseProgress {
 }
 
 /**
- * Fontes ainda não descobertas: nem coletadas, nem vistas (objeto que a contém examinado
- * e destrancado). Conta todas as fontes, não só as relevantes: ver DECISOES.md, D4.
+ * Fontes ainda sem carta no caderno. Ver uma fonte não basta: só conta quando o jogador a guarda.
+ * Conta todas as fontes, não só as relevantes: ver DECISOES.md, D4.
  */
 export function undiscoveredCount(c: PublicCase, progress: CaseProgress): number {
-  const seen = new Set<string>();
-  for (const scene of c.scenes) {
-    for (const obj of scene.objects) {
-      if (obj.evidenceId && progress.examined.includes(obj.id) && isUnlocked(obj, progress.examined)) {
-        seen.add(obj.evidenceId);
-      }
-    }
-  }
-  return c.evidence.filter((e) => !progress.cards[e.id] && !seen.has(e.id)).length;
+  return c.evidence.filter((e) => !progress.cards[e.id]).length;
 }

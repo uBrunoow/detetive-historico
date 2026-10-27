@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { collectEvidence, isUnlocked, markExamined, startCase } from "@/lib/game/scene";
 import { emptyProgress } from "@/lib/progress/types";
 import type { SceneObject } from "@/lib/content/schema";
@@ -52,13 +52,74 @@ describe("fontes não descobertas", async () => {
     expect(undiscoveredCount(c, emptyProgress())).toBe(c.evidence.length);
   });
 
-  it("uma fonte vista conta como descoberta mesmo antes de ir para o caderno", () => {
+  it("fonte só examinada, sem carta coletada, ainda conta como não guardada", () => {
     const p = markExamined(emptyProgress(), "mesa-bibliotecario", "sala-leitura");
+    expect(undiscoveredCount(c, p)).toBe(c.evidence.length);
+  });
+
+  it("gaveta examinada trancada e chaveiro depois, sem coletar o bilhete: ainda falta ao menos uma", () => {
+    let p = markExamined(emptyProgress(), "gaveta-mesa", "sala-leitura");
+    p = markExamined(p, "chaveiro", "sala-leitura");
+    expect(undiscoveredCount(c, p)).toBeGreaterThanOrEqual(1);
+  });
+
+  it("cada carta coletada reduz o contador em um", () => {
+    const p = collectEvidence(emptyProgress(), c.evidence[0].id);
     expect(undiscoveredCount(c, p)).toBe(c.evidence.length - 1);
   });
 
   it("gaveta examinada ainda trancada não revela o bilhete", () => {
     const p = markExamined(emptyProgress(), "gaveta-mesa", "sala-leitura");
     expect(undiscoveredCount(c, p)).toBe(c.evidence.length);
+  });
+});
+
+describe("progresso v2", () => {
+  it("emptyProgress é v2 com os campos novos vazios", () => {
+    const p = emptyProgress();
+    expect(p.version).toBe(2);
+    expect(p.unlocked).toEqual([]);
+    expect(p.official).toBeNull();
+    expect(p.practice).toBe(false);
+  });
+
+  it("progresso v1 salvo migra sem perder cartas e linha do tempo", async () => {
+    const { readProgress } = await import("@/lib/progress/store");
+    const v1 = {
+      ...emptyProgress(),
+      version: 1,
+      examined: ["a"],
+      cards: { bilhete: { collectedAt: "2026-01-01", notes: "n", important: true } },
+      timeline: { slots: [["bilhete"]], outside: [], placements: {}, links: [] },
+    };
+    const store = new Map<string, string>([["detetive-historico:v1:progress:x", JSON.stringify(v1)]]);
+    vi.stubGlobal("window", {
+      localStorage: { getItem: (k: string) => store.get(k) ?? null, setItem: (k: string, v: string) => void store.set(k, v) },
+    });
+    const p = readProgress("x");
+    vi.unstubAllGlobals();
+    expect(p.version).toBe(2);
+    expect(p.cards.bilhete.notes).toBe("n");
+    expect(p.timeline.slots).toEqual([["bilhete"]]);
+    expect(p.examined).toEqual(["a"]);
+    expect(p.unlocked).toEqual([]);
+    expect(p.official).toBeNull();
+    expect(p.practice).toBe(false);
+  });
+
+  it("resetProgress mantém o resultado oficial só quando pedido", async () => {
+    const { resetProgress, readProgress, updateProgress } = await import("@/lib/progress/store");
+    const store = new Map<string, string>();
+    vi.stubGlobal("window", {
+      localStorage: { getItem: (k: string) => store.get(k) ?? null, setItem: (k: string, v: string) => void store.set(k, v) },
+    });
+    updateProgress("y", (p) => ({ ...p, examined: ["a"], official: { stars: 2, points: 900 } }));
+    resetProgress("y", true);
+    expect(readProgress("y")).toMatchObject({ examined: [], official: { stars: 2, points: 900 }, practice: true });
+    resetProgress("y", false);
+    expect(readProgress("y")).toMatchObject({ official: null, practice: false });
+    resetProgress("z", true);
+    expect(readProgress("z").practice).toBe(false);
+    vi.unstubAllGlobals();
   });
 });

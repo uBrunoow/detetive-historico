@@ -42,7 +42,7 @@ export function SceneView({ caseData, sceneId }: Props) {
   }, []);
 
   const openObject = openId ? scene.objects.find((o) => o.id === openId) : undefined;
-  const openLocked = openObject ? !isUnlocked(openObject, progress.examined) : false;
+  const openLocked = openObject ? !isUnlocked(openObject, progress.examined, progress.unlocked) : false;
   const openEvidence =
     openObject && !openLocked && openObject.evidenceId
       ? caseData.evidence.find((e) => e.id === openObject.evidenceId)
@@ -161,7 +161,7 @@ export function SceneView({ caseData, sceneId }: Props) {
 
               {scene.objects.map((obj) => {
                 const examined = hydrated && progress.examined.includes(obj.id);
-                const locked = !isUnlocked(obj, progress.examined);
+                const locked = !isUnlocked(obj, progress.examined, progress.unlocked);
                 const inNotebook = Boolean(obj.evidenceId && progress.cards[obj.evidenceId] && !locked);
                 const states = [examined && t.examined, locked && t.locked, inNotebook && t.collected].filter(Boolean);
                 const { x, y, w, h } = obj.hotspot;
@@ -200,7 +200,7 @@ export function SceneView({ caseData, sceneId }: Props) {
             <ul className="mt-2 grid gap-1 sm:grid-cols-2">
               {scene.objects.map((obj) => {
                 const examined = hydrated && progress.examined.includes(obj.id);
-                const locked = !isUnlocked(obj, progress.examined);
+                const locked = !isUnlocked(obj, progress.examined, progress.unlocked);
                 const inNotebook = Boolean(obj.evidenceId && progress.cards[obj.evidenceId] && !locked);
                 const states = [examined && t.examined, locked && t.locked, inNotebook && t.collected].filter(Boolean);
                 return (

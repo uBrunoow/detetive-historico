@@ -63,7 +63,7 @@ export type CheckRecord = {
 };
 
 export type CaseProgress = {
-  version: 1;
+  version: 2;
   status: CaseStatus;
   /** Objetos de cena já examinados (ids). */
   examined: string[];
@@ -77,12 +77,18 @@ export type CaseProgress = {
   attempts: AttemptRecord[];
   /** Rascunho da conclusão, para não perder o texto ao sair da tela. */
   draft: { answer: string; supporting: string[] };
+  /** Cadeados de código já abertos (ids dos objetos). */
+  unlocked: string[];
+  /** Resultado da 1ª conclusão, copiado para Fases e HUD. Quem conta é o servidor. */
+  official: { stars: number; points: number } | null;
+  /** Verdadeiro quando o caso foi jogado de novo depois do resultado oficial. */
+  practice: boolean;
   lastSceneId: string | null;
   updatedAt: string | null;
 };
 
 export const emptyProgress = (): CaseProgress => ({
-  version: 1,
+  version: 2,
   status: "not_started",
   examined: [],
   cards: {},
@@ -92,6 +98,9 @@ export const emptyProgress = (): CaseProgress => ({
   checks: [],
   attempts: [],
   draft: { answer: "", supporting: [] },
+  unlocked: [],
+  official: null,
+  practice: false,
   lastSceneId: null,
   updatedAt: null,
 });
