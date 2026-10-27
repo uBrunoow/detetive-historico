@@ -356,6 +356,9 @@ export const strings = {
     again: "Escolher outra fase",
     error: "Não foi possível carregar o encerramento. Recarregue a página.",
   },
+  puzzles: {
+    epochHint: "Olhe as datas das fontes que você já guardou.",
+  },
   viewer: {
     close: "Voltar à cena",
     source: "A fonte",

@@ -1,33 +1,25 @@
 import { describe, expect, it } from "vitest";
 import { getPrivateCase } from "@/lib/content/private";
-import { evaluateAnswer } from "@/lib/game/answer";
+import { getPublicCase } from "@/lib/content/public";
 import { checkTimeline } from "@/lib/game/check";
 
-/** Casos beta: a linha de referência confere, a resposta de referência é aceita e um erro comum orienta. */
-const cases: { slug: string; answer: string; wrong: string }[] = [
+/** Casos beta: a linha de referência confere, as alternativas da conclusão estão completas. */
+const cases: { slug: string }[] = [
   {
     slug: "caminha",
-    answer: "Pero Vaz de Caminha escreveu ao rei contando a chegada da frota de Cabral em 1500",
-    wrong: "Colombo achou uma terra vazia",
   },
   {
     slug: "inconfidencia",
-    answer: "Eles planejavam uma revolta contra a derrama e Tiradentes foi enforcado",
-    wrong: "Eles roubaram o ouro",
   },
   {
     slug: "vargas",
-    answer: "Getúlio Vargas criou a CLT e o voto feminino, mas também fez uma ditadura",
-    wrong: "Foi o imperador",
   },
   {
     slug: "revolucao-industrial",
-    answer: "As fábricas com máquinas a vapor exploravam o trabalho das crianças",
-    wrong: "Foi a internet",
   },
 ];
 
-describe.each(cases)("caso $slug", ({ slug, answer, wrong }) => {
+describe.each(cases)("caso $slug", ({ slug }) => {
   it("linha de referência confere ok", async () => {
     const priv = await getPrivateCase(slug);
     const story = priv.timelineReference.filter((r) => r.belongsToStory);
@@ -37,16 +29,13 @@ describe.each(cases)("caso $slug", ({ slug, answer, wrong }) => {
     expect(checkTimeline(priv, { slots, outside }, 1)).toEqual({ kind: "ok" });
   });
 
-  it("aceita a resposta de referência e uma resposta curta de aluno", async () => {
-    const sol = (await getPrivateCase(slug)).solution;
-    expect(evaluateAnswer(sol, sol.referenceAnswer).verdict).toBe("accepted");
-    expect(evaluateAnswer(sol, answer).verdict).toBe("accepted");
-  });
-
-  it("erro comum recebe orientação, não aceite", async () => {
-    const sol = (await getPrivateCase(slug)).solution;
-    const r = evaluateAnswer(sol, wrong);
-    expect(r.verdict).not.toBe("accepted");
-    expect(sol.commonErrors.map((e) => e.feedback)).toContain(r.feedback);
+  it("a alternativa certa existe entre as 4 e cada errada tem orientação", async () => {
+    const pub = await getPublicCase(slug);
+    const priv = await getPrivateCase(slug);
+    const ids = pub!.conclusion.choices.map((c) => c.id);
+    expect(ids).toContain(priv.choiceAnswer.correctId);
+    for (const id of ids.filter((i) => i !== priv.choiceAnswer.correctId)) {
+      expect(priv.choiceAnswer.wrongFeedback[id]?.length).toBeGreaterThan(0);
+    }
   });
 });

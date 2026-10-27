@@ -27,6 +27,7 @@ export type GameState = {
   puzzles: PuzzleState;
   official: Result | null; // 1ª conclusão; nunca apagado por restart
   practice: boolean; // true depois de "Jogar de novo"
+  current?: Result | null; // resultado desta partida, gravado no encerramento
 };
 
 type GameStateV1 = { v: 1; slug: string; checksUsed: number; attemptsUsed: number; outcome: "solved" | "failed" | null };
