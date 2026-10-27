@@ -9,12 +9,38 @@ vi.mock("next/headers", () => ({
   }),
 }));
 
+// O caso de teste ganha um cadeado de código em memória.
+vi.mock("@/lib/content/public", async (orig) => {
+  const m = await orig<typeof import("@/lib/content/public")>();
+  return {
+    ...m,
+    getPublicCase: async (slug: string) => {
+      const c = await m.getPublicCase(slug);
+      if (!c) return c;
+      const copy = structuredClone(c);
+      copy.scenes[0].objects[0].id = "cadeado-teste";
+      copy.scenes[0].objects[0].unlock = { code: { prompt: "?", hint: "dica", inputMode: "numeric" }, lockedMessage: "trancado" };
+      return copy;
+    },
+  };
+});
+vi.mock("@/lib/content/private", async (orig) => {
+  const m = await orig<typeof import("@/lib/content/private")>();
+  return {
+    ...m,
+    getPrivateCase: async (slug: string) => {
+      const p = await m.getPrivateCase(slug);
+      return { ...p, codes: { "cadeado-teste": "1500" } };
+    },
+  };
+});
+
 import { getPrivateCase } from "@/lib/content/private";
 import { getPublicCase } from "@/lib/content/public";
-import { getResult, restartCase, submitChoice } from "@/lib/game/actions";
+import { getResult, restartCase, submitChoice, tryCode } from "@/lib/game/actions";
 
 const slug = "demo-biblioteca";
-const order = { slots: [], outside: [] };
+const order = { slots: [["oficio-prefeitura"], ["recibo-encadernacao"], ["registro-visitas"], ["bilhete"]], outside: [] };
 
 async function ids() {
   const c = (await getPublicCase(slug))!;
@@ -71,7 +97,7 @@ describe("submitChoice / getResult / restartCase", () => {
     await submitChoice(slug, { choiceId: right, justification: "", order });
     const official = (await getResult(slug)).official!;
     const s = await restartCase(slug);
-    expect(s).toMatchObject({ outcome: null, choicesLeft: 2, practice: true, official: { stars: official.stars, points: official.points } });
+    expect(s).toMatchObject({ ok: true, state: { outcome: null, choicesLeft: 2, practice: true, official: { stars: official.stars, points: official.points } } });
     expect((await getResult(slug)).current).toBeNull();
     await submitChoice(slug, { choiceId: wrong, justification: "", order });
     await submitChoice(slug, { choiceId: wrong, justification: "", order });
@@ -81,16 +107,36 @@ describe("submitChoice / getResult / restartCase", () => {
     expect(res.practice).toBe(true);
   });
 
-  it("recomeçar antes de qualquer encerramento não é treino: o próximo fecho vira oficial", async () => {
-    const { right, wrong } = await ids();
+  it("recomeçar com o caso aberto é recusado e não apaga nada", async () => {
+    const { wrong } = await ids();
     await submitChoice(slug, { choiceId: wrong, justification: "", order });
-    const s = await restartCase(slug);
-    expect(s).toMatchObject({ practice: false, official: null, choicesLeft: 2 });
-    await submitChoice(slug, { choiceId: right, justification: "", order });
+    const r = await restartCase(slug);
+    expect(r).toMatchObject({ ok: false, error: "not_closed", state: { outcome: null, choicesLeft: 1 } });
+    expect((await getResult(slug)).practice).toBe(false);
+  });
+
+  it("1ª conclusão errada também grava o oficial (0 estrelas, pontos aparecem)", async () => {
+    const { wrong } = await ids();
+    await submitChoice(slug, { choiceId: wrong, justification: "", order });
+    await submitChoice(slug, { choiceId: wrong, justification: "", order });
     const res = await getResult(slug);
-    expect(res.practice).toBe(false);
-    expect(res.official).not.toBeNull();
-    expect(res.official).toEqual(res.current);
+    expect(res.official).toMatchObject({ stars: 0 });
+    expect(res.official!.points).toBeGreaterThan(0);
+  });
+
+  it("com poucas cartas a escolha é recusada e não é gasta", async () => {
+    const { right } = await ids();
+    const r = await submitChoice(slug, { choiceId: right, justification: "", order: { slots: [["bilhete"]], outside: [] } });
+    expect(r).toMatchObject({ ok: false, error: "locked", state: { outcome: null, choicesLeft: 2 } });
+  });
+
+  it("código vazio não conta como tentativa", async () => {
+    const r = await tryCode(slug, "cadeado-teste", "   ");
+    expect(r).toMatchObject({ ok: false, error: "empty" });
+    const a = await tryCode(slug, "cadeado-teste", "1");
+    const b = await tryCode(slug, "cadeado-teste", "2");
+    expect(a).toMatchObject({ showHint: false });
+    expect(b).toMatchObject({ showHint: true, hint: "dica" });
   });
 
   it("treino melhor que o oficial não o sobrescreve", async () => {
@@ -99,7 +145,7 @@ describe("submitChoice / getResult / restartCase", () => {
     await submitChoice(slug, { choiceId: wrong, justification: "", order });
     const official = (await getResult(slug)).official!;
     expect(official.stars).toBe(0);
-    expect((await restartCase(slug)).practice).toBe(true);
+    expect(await restartCase(slug)).toMatchObject({ ok: true, state: { practice: true } });
     await submitChoice(slug, { choiceId: right, justification: "", order });
     const res = await getResult(slug);
     expect(res.current!.points).toBeGreaterThan(official.points);

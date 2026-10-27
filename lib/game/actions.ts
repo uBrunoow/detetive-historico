@@ -179,6 +179,8 @@ export async function tryCode(slug: string, objectId: string, input: string) {
   const text = z.string().max(40).parse(input);
   const lock = codeLock(c, oid);
   if (state.outcome) return { ok: false, error: "closed", state: view(c, state) } as Closed;
+  // Entrada vazia não conta como tentativa.
+  if (text.trim() === "") return { ok: false, error: "empty", state: view(c, state) } as Rejected<"empty">;
   const code = (await getPrivateCase(c.slug)).codes?.[oid];
   if (code === undefined) throw new Error("Cadeado sem código.");
   const r = applyCodeTry(state, oid, text, code);
@@ -236,7 +238,7 @@ const choiceSchema = z.strictObject({
 
 export type ChoiceResponse =
   | { ok: true; verdict: "correct" | "wrong"; feedback: string | null; state: PublicGameState }
-  | { ok: false; error: "closed" | "no_choices"; state: PublicGameState };
+  | { ok: false; error: "closed" | "no_choices" | "locked"; state: PublicGameState };
 
 const better = (a: GameState["justification"], b: GameState["justification"]) => {
   const rank = { accepted: 2, partial: 1 } as const;
@@ -249,6 +251,9 @@ export async function submitChoice(slug: string, input: unknown): Promise<Choice
   if (!c.conclusion.choices.some((x) => x.id === choiceId)) throw new Error("Alternativa inexistente.");
   if (state.outcome) return { ok: false, error: "closed", state: view(c, state) };
   if (state.choicesUsed >= c.conclusion.maxChoices) return { ok: false, error: "no_choices", state: view(c, state) };
+  // Mesmo mínimo de cartas da tela; o servidor confere de novo e não gasta a escolha.
+  const placed = new Set(order.slots.flat().filter((id) => c.evidence.some((e) => e.id === id))).size;
+  if (placed < c.minCardsToResolve) return { ok: false, error: "locked", state: view(c, state) };
 
   const priv = await getPrivateCase(c.slug);
   const correct = choiceId === priv.choiceAnswer.correctId;
@@ -279,10 +284,11 @@ export async function getResult(slug: string): Promise<{ official: Result | null
   return { official: state.official, current: state.outcome ? (state.current ?? null) : null, practice: state.practice };
 }
 
-/** Zera o caso, mas guarda o resultado oficial; a nova partida é "treino" só se já houver oficial. */
-export async function restartCase(slug: string): Promise<PublicGameState> {
+/** Só depois do encerramento: zera o caso, guarda o resultado oficial e a nova partida é "treino". */
+export async function restartCase(slug: string): Promise<{ ok: true; state: PublicGameState } | Rejected<"not_closed">> {
   const { c, state } = await load(slug);
+  if (!state.outcome) return { ok: false, error: "not_closed", state: view(c, state) };
   const next: GameState = { ...freshState(c.slug), official: state.official, practice: state.official !== null };
   await writeState(next);
-  return view(c, next);
+  return { ok: true, state: view(c, next) };
 }
