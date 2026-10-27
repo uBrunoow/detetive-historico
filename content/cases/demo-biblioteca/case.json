@@ -1,6 +1,8 @@
 {
   "slug": "demo-biblioteca",
   "status": "published",
+  "order": 0,
+  "tutorial": true,
   "fictional": true,
   "title": "O livro que sumiu da Biblioteca de Vila Serena",
   "summary": "Caso de demonstração — conteúdo fictício para testes. Em março de 1923, o Livro de Registro de Terras desaparece da biblioteca de uma pequena cidade, às vésperas de uma votação importante.",

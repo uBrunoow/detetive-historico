@@ -153,6 +153,22 @@
 - Revisão do conteúdo pela professora / alguém de História (PRD §7).
 - A Gazeta de Notícias de 14/5/1888 ficou de fora (texto não localizado).
 
+## Casos beta 1, 2, 4 e 5 + tutorial ✅ (aguardando revisão de História)
+
+**Feito**
+- Tela de fases em ordem: **Tutorial** (`demo-biblioteca`) → Caminha → Inconfidência → Abolição → Vargas → Revolução Industrial. Campos novos no `case.json`: `order`, `tutorial` e `beta` (etiqueta "Beta: conteúdo em revisão").
+- Quatro casos em versão de baixa fidelidade, a partir do documento "Casos da Versão Inicial": 1 cena, 6 cartas (5 da história, 1 fora), 1 carta sem data situável, 3 marcos-chave, gaveta trancada com chave na cena.
+  - `caminha` — "A carta guardada por 270 anos": trechos da carta de Caminha (Wikisource, ortografia atualizada); Tordesilhas fora da história.
+  - `inconfidencia` — "O ouro, o poeta e a forca": Cartas Chilenas (sem data) e sentença (Wikisource); quinto, denúncia e bandeira resumidos; lei da bandeira de MG (1963) fora da história.
+  - `vargas` — "O homem que saiu da vida": Código Eleitoral, Constituição de 1937 e CLT (Planalto); carta-testamento (sem data); Constituição de 1891 fora da história. Aviso de mediação no briefing.
+  - `revolucao-industrial` — "O vapor e as crianças da fábrica": patente de Watt, depoimento à comissão Sadler (sem data, traduzido), Factory Act, Chadwick; CLT brasileira fora da história.
+- Arte em `scripts/pixel-art/casos-iniciais.mjs` (as quatro cenas usam a mesma planta de sala). Testes em `tests/unit/casos-beta.test.ts`.
+- Next.js atualizado para 16.4.3 (corrige a falha de segurança das Server Actions).
+
+**Pendente / observações**
+- Revisão de conteúdo pela professora / alguém de História. Várias cartas resumem documentos em vez de transcrever (quinto, denúncia, bandeira, Ludd, Factory Act, Chadwick).
+- Versões Fundamental/Médio, distintivos por caso e dicas dentro do cenário ficaram para depois.
+
 ## Critérios de aceitação do PRD (§12)
 
 - [x] Iniciar uma investigação (Fase 1)

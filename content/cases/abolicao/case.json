@@ -1,6 +1,8 @@
 {
   "slug": "abolicao",
   "status": "published",
+  "order": 3,
+  "beta": true,
   "fictional": false,
   "title": "A lei de dois artigos",
   "summary": "Em maio de 1888, o Rio de Janeiro comemora nas ruas uma lei tão curta que cabe num bilhete. Como o Brasil chegou até ela?",

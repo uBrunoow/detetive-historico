@@ -100,6 +100,12 @@ export const difficultySchema = z.enum(["easy", "medium", "hard"]);
 export const publicCaseSchema = z.strictObject({
   slug: id,
   status: z.enum(["draft", "published"]),
+  /** Posição na tela de fases (menor primeiro). */
+  order: z.number().int().nonnegative().default(100),
+  /** Caso de treino: aparece primeiro, com a etiqueta "Tutorial". */
+  tutorial: z.boolean().default(false),
+  /** Conteúdo ainda em revisão: mostra a etiqueta "Beta". */
+  beta: z.boolean().default(false),
   fictional: z.boolean(),
   title: text,
   summary: text,

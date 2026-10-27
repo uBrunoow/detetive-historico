@@ -24,7 +24,7 @@ export const strings = {
   },
   levels: {
     title: "Fases",
-    intro: "Cada fase é um caso. Escolha qualquer um: não há ordem obrigatória.",
+    intro: "Cada fase é um caso. Comece pelo tutorial para aprender a jogar; depois escolha qualquer um, não há ordem obrigatória.",
     back: "Menu",
     medals: "Medalhas",
     earned: "conquistada",
@@ -91,6 +91,8 @@ export const strings = {
     intro: "Escolha um caso. Você vai examinar o lugar, recolher as fontes, colocá-las em ordem e explicar o que aconteceu.",
     empty: "Nenhum caso publicado ainda. Os casos entram como arquivos em content/cases/.",
     fictional: "Conteúdo fictício para testes",
+    tutorial: "Tutorial",
+    beta: "Beta: conteúdo em revisão",
     period: "Período",
     place: "Local",
     difficultyLabel: "Dificuldade",

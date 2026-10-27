@@ -18,5 +18,5 @@ export async function listPublishedCases(): Promise<PublicCase[]> {
   "use cache";
   const slugs = await listCaseSlugs();
   const cases = await Promise.all(slugs.map((s) => getPublicCase(s)));
-  return cases.filter((c): c is PublicCase => c !== null);
+  return cases.filter((c): c is PublicCase => c !== null).sort((a, b) => a.order - b.order);
 }

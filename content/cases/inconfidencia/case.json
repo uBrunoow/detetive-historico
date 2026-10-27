@@ -1,0 +1,206 @@
+{
+  "slug": "inconfidencia",
+  "status": "published",
+  "order": 2,
+  "beta": true,
+  "fictional": false,
+  "title": "O ouro, o poeta e a forca",
+  "summary": "Numa cidade de montanhas, o ouro saía do chão, mas homens ricos e estudados começaram a se reunir em segredo. O que eles planejavam?",
+  "cover": {
+    "src": "/cases/inconfidencia/cover.png",
+    "alt": "Uma barra de ouro sobre uma mesa, com uma bandeira branca de triângulo vermelho ao fundo."
+  },
+  "period": "1750 a 1792",
+  "place": "Vila Rica (atual Ouro Preto), Minas Gerais",
+  "audience": "Anos finais do Ensino Fundamental e Ensino Médio",
+  "question": "O que os homens de Vila Rica planejavam, e o que aconteceu com eles?",
+  "briefing": [
+    "Versão beta: o conteúdo ainda está em revisão. A sala é uma reconstrução; os documentos são reais, e cada um indica de onde veio.",
+    "Ouro Preto, hoje. Numa sala de museu estão guardados papéis de quando a cidade se chamava Vila Rica e era a capital das minas de ouro do Império português.",
+    "O ouro enriquecia a Coroa. Mesmo assim, alguns homens ricos e estudados da vila começaram a se reunir em segredo. Anos depois, só um deles subiu à forca.",
+    "Examine a sala, colete as fontes, ponha-as em ordem e explique o que eles planejavam e o que aconteceu com eles."
+  ],
+  "difficulty": "medium",
+  "durationMinutes": 25,
+  "timeline": {
+    "startLabel": "1750 — a Coroa exige 100 arrobas de ouro por ano",
+    "endLabel": "Abril de 1792 — a execução no Rio de Janeiro"
+  },
+  "minCardsToResolve": 4,
+  "maxTimelineChecks": 3,
+  "maxAttempts": 5,
+  "startSceneId": "museu",
+  "scenes": [
+    {
+      "id": "museu",
+      "name": "Sala do museu",
+      "image": {
+        "src": "/cases/inconfidencia/scene-museu.png",
+        "alt": "Sala de museu com paredes claras: um retrato de homem de barba, um pergaminho emoldurado, uma vitrine com um livro e um desenho de bandeira, um cofre com uma barra de ouro, uma bandeira branca com triângulo vermelho e um oratório de madeira."
+      },
+      "objects": [
+        {
+          "id": "cofre-ouro",
+          "type": "evidence",
+          "label": "Cofre com uma barra de ouro",
+          "hotspot": { "x": 55, "y": 58, "w": 15, "h": 26 },
+          "evidenceId": "quinto"
+        },
+        {
+          "id": "livro-vitrine",
+          "type": "evidence",
+          "label": "Livro aberto na vitrine",
+          "hotspot": { "x": 16.25, "y": 53, "w": 11.25, "h": 12 },
+          "evidenceId": "cartas-chilenas"
+        },
+        {
+          "id": "desenho-bandeira",
+          "type": "evidence",
+          "label": "Desenho de bandeira na vitrine",
+          "hotspot": { "x": 28.75, "y": 54, "w": 11.25, "h": 11 },
+          "evidenceId": "bandeira-plano"
+        },
+        {
+          "id": "pergaminho-quadro",
+          "type": "evidence",
+          "label": "Pergaminho emoldurado",
+          "hotspot": { "x": 32.5, "y": 12, "w": 20, "h": 24 },
+          "evidenceId": "sentenca"
+        },
+        {
+          "id": "bandeira-parede",
+          "type": "evidence",
+          "label": "Bandeira branca com triângulo vermelho",
+          "hotspot": { "x": 75, "y": 10, "w": 15, "h": 26 },
+          "evidenceId": "bandeira-mg"
+        },
+        {
+          "id": "gaveta-vitrine",
+          "type": "locked",
+          "label": "Gaveta trancada da vitrine",
+          "hotspot": { "x": 11.25, "y": 73, "w": 13.75, "h": 9 },
+          "evidenceId": "denuncia",
+          "unlock": {
+            "requiresExamined": ["chave-guarda"],
+            "lockedMessage": "A gaveta da vitrine está trancada. O guarda do museu deve ter a chave."
+          }
+        },
+        {
+          "id": "chave-guarda",
+          "type": "context",
+          "label": "Chave pendurada perto da porta",
+          "hotspot": { "x": 61.25, "y": 18, "w": 7.5, "h": 16 },
+          "content": {
+            "title": "A chave do guarda",
+            "text": "Uma chave pequena com a etiqueta “gaveta da vitrine”. Agora você pode abrir a gaveta."
+          }
+        },
+        {
+          "id": "retrato",
+          "type": "context",
+          "label": "Retrato de um homem de barba",
+          "hotspot": { "x": 5, "y": 10, "w": 20, "h": 30 },
+          "content": {
+            "title": "Um rosto inventado depois",
+            "text": "Ninguém sabe como era o rosto de Tiradentes: não há retrato dele feito em vida. A imagem de barba e cabelos longos foi criada muito depois, quando o Brasil virou República, para fazer dele um herói."
+          }
+        },
+        {
+          "id": "oratorio",
+          "type": "decorative",
+          "label": "Oratório de madeira",
+          "hotspot": { "x": 73.75, "y": 40, "w": 22.5, "h": 48 }
+        }
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "id": "quinto",
+      "code": "VR-01",
+      "title": "O quinto do ouro",
+      "sourceType": "Lei (resumo da equipe)",
+      "image": { "src": "/cases/inconfidencia/ev-quinto.png", "alt": "Barra de ouro com um carimbo e a fração 1/5." },
+      "description": "Lei do rei de Portugal sobre o ouro das Minas. Todo ouro tinha de ser levado às Casas de Fundição, onde a Coroa ficava com a quinta parte, o “quinto”. A capitania devia entregar no mínimo 100 arrobas (cerca de 1.500 kg) por ano. Se faltasse, a diferença podia ser cobrada à força da população: era a “derrama”.",
+      "provenance": "Alvará de 3 de dezembro de 1750. Esta carta resume o que ele determinava.",
+      "author": "Rei D. José I",
+      "date": { "iso": "1750-12-03", "label": "3 de dezembro de 1750" },
+      "back": "O ouro começou a ficar escasso, e a capitania quase nunca conseguia entregar as 100 arrobas. A dívida com a Coroa só crescia, e todos temiam a derrama.",
+      "presentation": { "style": "typed", "paper": "aged", "heading": "Alvará", "stamp": { "text": "Selo real" } }
+    },
+    {
+      "id": "cartas-chilenas",
+      "code": "VR-02",
+      "title": "Cartas Chilenas",
+      "sourceType": "Trecho de poema satírico",
+      "image": { "src": "/cases/inconfidencia/ev-cartas-chilenas.png", "alt": "Livro aberto com versos manuscritos." },
+      "description": "Cartas em versos, assinadas por “Critilo”, que conta ao amigo Doroteu os abusos de um governador vaidoso chamado “Fanfarrão Minésio”, em “Chile”. Circularam escondidas, copiadas à mão. Esta cópia não traz data.",
+      "transcription": "Amigo Doroteu, prezado amigo,\nAbre os olhos, boceja, estende os braços\nE limpa, das pestanas carregadas,\nO pegajoso humor, que o sono ajunta.\nCritilo, o teu Critilo é quem te chama;\n[…]\nPara se instruírem pelo segundo, era necessário que eu fosse descobrir o Fanfarrão Minésio, em um reino estranho!",
+      "provenance": "Cartas Chilenas, 1ª Carta e Dedicatória. Texto disponível no Wikisource e no portal Domínio Público.",
+      "author": "“Critilo” (pseudônimo)",
+      "back": "O “Chile” do poema é uma máscara: a cidade de “Santiago” é Vila Rica, e o Fanfarrão Minésio é o governador Luís da Cunha Meneses, que governou Minas de 1783 a 1788. Criticar o governador às claras era perigoso. Quando será que isso foi escrito?",
+      "presentation": { "style": "handwritten", "paper": "aged", "heading": "Cartas Chilenas" }
+    },
+    {
+      "id": "bandeira-plano",
+      "code": "VR-03",
+      "title": "O desenho da bandeira",
+      "sourceType": "Depoimento no processo (resumo da equipe)",
+      "image": { "src": "/cases/inconfidencia/ev-bandeira-plano.png", "alt": "Desenho de uma bandeira branca com um triângulo e uma frase em latim." },
+      "description": "Nos interrogatórios do processo, os presos contaram como seria a bandeira da nova república que eles queriam criar em Minas: branca, com um triângulo e o lema em latim “Libertas quae sera tamen” (liberdade ainda que tardia).",
+      "provenance": "Autos de Devassa da Inconfidência Mineira (Arquivo Nacional; edição da Câmara dos Deputados e do Governo de Minas). Esta carta resume os depoimentos.",
+      "author": "Conjurados de Vila Rica",
+      "date": { "label": "1788 a 1789 (planos contados no processo)" },
+      "back": "O lema vem do poeta latino Virgílio. Os conjurados planejavam separar Minas de Portugal e formar uma república. Hoje o lema está na bandeira de Minas Gerais.",
+      "presentation": { "style": "drawing" }
+    },
+    {
+      "id": "denuncia",
+      "code": "VR-04",
+      "title": "A denúncia",
+      "sourceType": "Denúncia (resumo da equipe)",
+      "image": { "src": "/cases/inconfidencia/ev-denuncia.png", "alt": "Carta dobrada com um lacre vermelho." },
+      "description": "Joaquim Silvério dos Reis, que devia muito dinheiro à Coroa, contou ao governador, o Visconde de Barbacena, que um grupo planejava uma revolta em Minas. Em troca, pedia o perdão das suas dívidas. Depois ele pôs a denúncia por escrito.",
+      "provenance": "Autos de Devassa da Inconfidência Mineira, volume 1 (edição da Câmara dos Deputados e do Governo de Minas). Esta carta resume a denúncia.",
+      "author": "Joaquim Silvério dos Reis",
+      "date": { "label": "Março de 1789" },
+      "back": "Depois da denúncia, o governador suspendeu a derrama e mandou prender os envolvidos. Começou então a “devassa”, a investigação oficial.",
+      "presentation": { "style": "drawing" }
+    },
+    {
+      "id": "sentenca",
+      "code": "VR-05",
+      "title": "A sentença",
+      "sourceType": "Sentença",
+      "image": { "src": "/cases/inconfidencia/ev-sentenca.png", "alt": "Pergaminho com um selo e muitas linhas de texto." },
+      "description": "Trecho da sentença do tribunal que julgou os réus da conjuração de Minas Gerais, no Rio de Janeiro.",
+      "transcription": "Mostra-se que na Capitania de Minas alguns vassalos da dita Senhora, animados de espírito da pérfida ambição, formaram um infame plano para se subtraírem da sujeição e obediência devida à mesma Senhora, pretendendo desmembrar e separar do Estado aquela Capitania, para formarem uma república independente, por meio de uma formal rebelião […]\nPortanto condenam o réu Joaquim José da Silva Xavier, por alcunha o Tiradentes, alferes que foi do Regimento pago da Capitania de Minas, a que, com baraço e pregão seja conduzido pelas ruas públicas ao lugar da forca, e nela morra morte natural para sempre, e que depois de morto lhe seja cortada a cabeça e levada a Vila Rica […]",
+      "provenance": "Sentença proferida contra os réus do levante e conjuração de Minas Gerais. Autos no Arquivo Nacional; texto disponível no Wikisource.",
+      "author": "Tribunal da Alçada, Rio de Janeiro",
+      "date": { "iso": "1792-04-18", "label": "18 de abril de 1792" },
+      "back": "Em português de hoje: o tribunal diz que os réus queriam separar Minas de Portugal e formar uma república. Tiradentes, alferes do regimento de Minas, foi condenado à forca. Ele foi executado no Rio de Janeiro em 21 de abril de 1792. Os outros condenados à morte tiveram a pena trocada por exílio na África.",
+      "presentation": { "style": "typed", "paper": "aged", "heading": "Sentença", "stamp": { "text": "Alçada" } }
+    },
+    {
+      "id": "bandeira-mg",
+      "code": "VR-06",
+      "title": "Lei da bandeira de Minas Gerais",
+      "sourceType": "Lei estadual (resumo da equipe)",
+      "image": { "src": "/cases/inconfidencia/ev-bandeira-mg.png", "alt": "Bandeira branca com um triângulo vermelho e as palavras LIBERTAS QUAE SERA TAMEN." },
+      "description": "Lei do estado de Minas Gerais que tornou oficial a bandeira do estado: um retângulo branco com um triângulo vermelho no centro e o lema “Libertas quae sera tamen”.",
+      "provenance": "Lei nº 2.793, de 8 de janeiro de 1963, do estado de Minas Gerais (Assembleia Legislativa de Minas Gerais).",
+      "author": "Governo do estado de Minas Gerais",
+      "date": { "iso": "1963-01-08", "label": "8 de janeiro de 1963" },
+      "back": "A bandeira de Minas homenageia os conjurados de Vila Rica, mas foi oficializada quase dois séculos depois.",
+      "presentation": { "style": "typed", "paper": "office", "heading": "Lei nº 2.793" }
+    }
+  ],
+  "references": [
+    { "kind": "source", "text": "Alvará de 3 de dezembro de 1750 (sistema do quinto com cota de 100 arrobas)." },
+    { "kind": "source", "text": "GONZAGA, Tomás Antônio (atribuição). Cartas Chilenas. Wikisource.", "url": "https://pt.wikisource.org/wiki/Cartas_Chilenas" },
+    { "kind": "source", "text": "Autos de Devassa da Inconfidência Mineira, v. 1. Edição da Câmara dos Deputados e do Governo de Minas Gerais (PDF no TJMG).", "url": "https://ejef.tjmg.jus.br/wp-content/uploads/2022/06/atos_volume-1.pdf" },
+    { "kind": "source", "text": "Sentença proferida contra os réus do levante e conjuração de Minas Gerais, 1792. Wikisource.", "url": "https://pt.wikisource.org/wiki/Senten%C3%A7a_proferida_contra_os_r%C3%A9us_do_levante_e_conjura%C3%A7%C3%A3o_de_Minas_Gerais" },
+    { "kind": "source", "text": "Minas Gerais. Lei nº 2.793, de 8 de janeiro de 1963 (bandeira do estado).", "url": "https://www.almg.gov.br/legislacao-mineira/texto/LEI/2793/1963/" },
+    { "kind": "credit", "text": "Ilustrações em pixel feitas pela equipe." }
+  ]
+}

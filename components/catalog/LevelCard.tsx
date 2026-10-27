@@ -23,9 +23,9 @@ export function LevelCard({ c }: { c: PublicCase }) {
       <div aria-hidden className="absolute -top-5 left-4 h-5 w-28 bg-paper-0 px-frame-flat" />
       <div className="relative aspect-[16/10] overflow-hidden bg-paper-6">
         <Image src={c.cover.src} alt={c.cover.alt} fill unoptimized className="pixelated object-cover" />
-        {c.fictional && (
+        {(c.tutorial || c.beta) && (
           <p className="absolute left-2 top-2 bg-paper-0 px-2 py-0.5 font-pixel text-sm font-semibold text-stamp px-frame-flat">
-            {t.fictional}
+            {c.tutorial ? t.tutorial : t.beta}
           </p>
         )}
         <p className="absolute bottom-2 right-2 bg-paper-0 px-2 py-0.5 font-pixel text-sm font-semibold px-frame-flat">
