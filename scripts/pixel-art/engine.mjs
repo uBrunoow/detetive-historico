@@ -7,17 +7,22 @@ import { deflateSync } from "node:zlib";
 
 /** Paleta do jogo (repartição à luz de luminária). Índice → cor. */
 export const PALETTE = {
+  sky: "#4aa9df",
+  skyDeep: "#1672b5",
+  grass: "#42a85f",
+  grassDeep: "#24733d",
+  sun: "#f5c542",
   ink: "#1a1210", // contorno
   woodDark: "#3a2618",
-  wood: "#5a3a22",
-  woodLight: "#8a5a32",
+  wood: "#8b552f",
+  woodLight: "#c27a3c",
   manila: "#c9a25a",
   lamp: "#f0d9a0",
   paper: "#f4f2ea",
   paperShade: "#d9d4c4",
   wallLight: "#b9bfb0",
-  wall: "#8e9786",
-  wallDark: "#5d6659",
+  wall: "#a7c7d4",
+  wallDark: "#477387",
   green: "#2f4a3a",
   greenLight: "#4f7a5e",
   red: "#7a2e2a",

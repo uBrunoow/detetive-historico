@@ -1,272 +1,341 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
-import { useId, useRef, useState, useTransition } from "react";
-import { Button, ButtonLink } from "@/components/ui/Button";
+import { useRouter } from "next/navigation";
+import { useRef, useState, useTransition, type KeyboardEvent } from "react";
+import { NightSky } from "@/components/pixel/NightSky";
+import { PixelSprite } from "@/components/pixel/PixelSprite";
+import { Button } from "@/components/ui/Button";
 import { Loading } from "@/components/ui/Loading";
 import type { PublicCase } from "@/lib/content/schema";
-import { submitAnswer } from "@/lib/game/actions";
-import { canResolve } from "@/lib/game/timeline";
+import { submitVerdict } from "@/lib/game/actions";
+import { ORDER_POINTS } from "@/lib/game/score";
 import { useGameState } from "@/lib/game/use-game-state";
 import { useHydrated, useProgress } from "@/lib/progress/store";
-import type { AttemptRecord, CaseProgress } from "@/lib/progress/types";
 import { strings } from "@/lib/strings/pt-BR";
 
 const t = strings.resolution;
+const LETTERS = ["A", "B", "C", "D", "E"];
 
-const verdictStyle: Record<AttemptRecord["verdict"], string> = {
-  accepted: "border-[#3f7a3a] bg-[#e4efdc] text-[#1f3d1c] dark:bg-[#22331f] dark:text-[#d4ecca]",
-  partial: "border-manila-deep bg-paper-1",
-  rejected: "border-paper-4 bg-paper-1",
-};
-
-/** Tela de conclusão (PRD §5.9): pergunta, linha do tempo como consulta, texto livre e tentativas. */
+/**
+ * Veredito (DECISOES.md, D21), igual ao mockup aprovado: parte 1, a época (blocos A a E);
+ * parte 2, a ordem (pegar a pista na bandeja e prender no barbante). "Conferir ordem" fecha o
+ * caso: o carimbo mostra quantas estão no lugar e a tela segue para o resultado.
+ * Pistas que ficam na bandeja contam como "fora da história".
+ */
 export function ResolutionView({ caseData }: { caseData: PublicCase }) {
   const [progress, update] = useProgress(caseData.slug);
   const hydrated = useHydrated();
   const game = useGameState(caseData.slug);
-  const [confirming, setConfirming] = useState(false);
+  const router = useRouter();
   const [pending, startTransition] = useTransition();
+  const [step, setStep] = useState<"epoch" | "order">("epoch");
+  const [held, setHeld] = useState<string | null>(null);
+  const [lane, setLane] = useState<(string | null)[] | null>(null);
+  const [tally, setTally] = useState<{ inPlace: number; total: number } | null>(null);
   const [notice, setNotice] = useState("");
-  const resultRef = useRef<HTMLDivElement>(null);
-  const answerId = useId();
-
-  if (!hydrated || (!game.state && !game.failed)) return <Loading dark />;
-
-  const title = (id: string) => caseData.evidence.find((e) => e.id === id)?.title ?? id;
-  const slots = progress.timeline.slots.map((s) => s.filter((id) => caseData.evidence.some((e) => e.id === id))).filter((s) => s.length);
+  const blocks = useRef<(HTMLButtonElement | null)[]>([]);
   const state = game.state;
-  const closed = Boolean(state?.outcome);
-  const last = progress.attempts.at(-1);
-  const draft = progress.draft;
-  const timelineHref = `/casos/${caseData.slug}/linha-do-tempo`;
+  if (!hydrated || !state) return <Loading dark />;
 
-  function setDraft(patch: Partial<CaseProgress["draft"]>) {
-    update((p) => ({ ...p, draft: { ...p.draft, ...patch } }));
+  const slotsCount = caseData.evidence.length;
+  const collected = caseData.evidence.filter((e) => progress.cards[e.id]).map((e) => e.id);
+  // A linha começa com a ordem que o jogador já montou (na linha do tempo ou numa visita anterior).
+  const placedBefore = progress.timeline.slots.flat().filter((id) => collected.includes(id));
+  const current: (string | null)[] = lane ?? Array.from({ length: slotsCount }, (_, i) => placedBefore[i] ?? null);
+  const tray = collected.filter((id) => !current.includes(id));
+  const placedCount = current.filter(Boolean).length;
+  const selected = progress.draft.epochIndex;
+  const evidence = (id: string) => caseData.evidence.find((e) => e.id === id)!;
+  const closed = Boolean(state.outcome);
+  const sceneHref = `/casos/${caseData.slug}/cena/${progress.lastSceneId ?? caseData.startSceneId}`;
+
+  const choose = (i: number) => update((p) => ({ ...p, draft: { epochIndex: i } }));
+
+  // Grupo de rádio: as setas andam pelos blocos e já escolhem (padrão ARIA).
+  function onKeyDown(e: KeyboardEvent<HTMLDivElement>) {
+    const dir = e.key === "ArrowRight" || e.key === "ArrowDown" ? 1 : e.key === "ArrowLeft" || e.key === "ArrowUp" ? -1 : 0;
+    if (!dir) return;
+    e.preventDefault();
+    // Parte do bloco com foco (ou do escolhido): com o foco no A e nada escolhido, → vai para o B.
+    const focused = blocks.current.findIndex((el) => el === document.activeElement);
+    const from = focused >= 0 ? focused : (selected ?? 0);
+    const next = (from + dir + LETTERS.length) % LETTERS.length;
+    choose(next);
+    blocks.current[next]?.focus();
   }
 
-  function send() {
-    setConfirming(false);
-    setNotice("");
+  // Grava a ordem no progresso, para a linha do tempo e as próximas visitas.
+  function commit(next: (string | null)[]) {
+    setLane(next);
+    update((p) => ({
+      ...p,
+      timeline: {
+        ...p.timeline,
+        slots: next.filter((id): id is string => Boolean(id)).map((id) => [id]),
+        outside: p.timeline.outside.filter((id) => !next.includes(id)),
+      },
+    }));
+  }
+
+  function clickSlot(i: number) {
+    const next = [...current];
+    if (held) {
+      const from = next.indexOf(held);
+      const prev = next[i];
+      if (from >= 0) next[from] = null;
+      next[i] = held;
+      setHeld(prev && prev !== held ? prev : null);
+      commit(next);
+    } else if (next[i]) {
+      setHeld(next[i]);
+      next[i] = null;
+      commit(next);
+    }
+  }
+
+  function check() {
+    if (selected === null) return setStep("epoch");
     startTransition(async () => {
       try {
-        const r = await submitAnswer(caseData.slug, {
-          answer: draft.answer,
-          order: { slots: progress.timeline.slots, outside: progress.timeline.outside },
-          supporting: draft.supporting,
+        const r = await submitVerdict(caseData.slug, {
+          epochIndex: selected,
+          order: { slots: current.filter((id): id is string => Boolean(id)).map((id) => [id]), outside: tray },
         });
         game.setState(r.state);
-        if (!r.ok) {
-          setNotice(r.error === "empty" ? t.tooShort : r.error === "locked" ? t.locked(caseData.minCardsToResolve) : "");
-          return;
-        }
-        const record: AttemptRecord = {
-          answer: draft.answer.trim(),
-          supporting: draft.supporting,
-          verdict: r.verdict,
-          feedback: r.feedback,
-          at: new Date().toISOString(),
-        };
-        const outcome = r.state.outcome;
+        if (!r.ok) return setNotice(r.error === "locked" ? t.locked(caseData.minCardsToResolve) : "");
+        setTally({ inPlace: Math.round((r.result.breakdown.order / ORDER_POINTS) * slotsCount), total: slotsCount });
         update((p) => ({
           ...p,
-          attempts: [...p.attempts, record],
-          status: outcome === "solved" ? "solved" : outcome === "failed" ? "failed" : p.status,
+          timeline: { ...p.timeline, outside: [...new Set([...p.timeline.outside, ...tray])] },
+          status: r.state.outcome === "solved" ? "solved" : "failed",
+          official: r.state.official ?? p.official,
         }));
-        requestAnimationFrame(() => resultRef.current?.focus());
+        setTimeout(() => router.push(`/casos/${caseData.slug}/encerramento`), 1400);
       } catch {
         setNotice(t.error);
       }
     });
   }
 
-  return (
-    <div className="flex min-h-dvh flex-col bg-wood text-on-wood">
-      <header className="mx-auto flex w-full max-w-7xl flex-wrap items-center gap-x-6 gap-y-2 px-4 py-3 sm:px-6">
-        <Link href={timelineHref} className="px-btn px-btn-paper text-base">
-          <svg aria-hidden viewBox="0 0 8 8" className="size-4" fill="currentColor" shapeRendering="crispEdges">
-            <path d="M5 1h1v1H5zM4 2h1v1H4zM3 3h1v2H3zM4 5h1v1H4zM5 6h1v1H5z" />
-          </svg>
-          {t.back}
+  const hud = (label: string) => (
+    <header className="flex flex-wrap items-center justify-between gap-4">
+      <div className="flex flex-wrap items-center gap-4">
+        <Link href={sceneHref} className="px-btn px-btn-paper text-base">
+          <span aria-hidden>←</span>
+          {t.backToScene}
         </Link>
-        <p className="font-pixel text-lg font-semibold sm:text-xl">{caseData.title}</p>
-      </header>
+        <span className="font-pixel text-2xl text-bone sm:text-3xl">{label}</span>
+      </div>
+      <span className="flex items-center gap-2 font-pixel text-3xl tabular-nums">
+        <PixelSprite name="coin" className="coin-spin w-7" />
+        <span aria-hidden>
+          {collected.length}/{slotsCount}
+        </span>
+        <span className="sr-only">{strings.scene.sourcesFound(collected.length, slotsCount)}</span>
+      </span>
+    </header>
+  );
 
-      <main id="conteudo" className="mx-auto w-full max-w-7xl flex-1 px-4 pb-16 sm:px-6">
-        <h1 className="px-title mt-4 text-[clamp(2.25rem,6vw,3.25rem)] leading-none text-[#f0d9a0]">{t.title}</h1>
-
-        <section aria-labelledby="res-q" className="doc-sheet mt-6 max-w-3xl px-6 py-5 text-doc-ink">
-          <h2 id="res-q" className="font-pixel text-sm font-bold text-doc-faint">
-            {t.question}
-          </h2>
-          <p className="mt-1 font-typed text-lg leading-8">{caseData.question}</p>
-        </section>
-
-        {!canResolve(caseData, progress) && !closed ? (
-          <div className="mt-8 max-w-xl bg-paper-0 p-5 text-ink px-frame">
-            <p>{t.locked(caseData.minCardsToResolve)}</p>
-            <ButtonLink href={timelineHref} className="mt-4">
-              {t.lockedAction}
-            </ButtonLink>
-          </div>
-        ) : (
-          <div className="mt-8 grid gap-8 lg:grid-cols-[22rem_minmax(0,1fr)]">
-            <section aria-labelledby="res-tl" className="self-start bg-manila p-4 text-ink px-frame lg:sticky lg:top-4">
-              <h2 id="res-tl" className="font-pixel text-lg font-bold">
-                {t.yourTimeline}
-              </h2>
-              <p className="text-sm">{t.timelineHint}</p>
-              <ol className="mt-3 flex flex-col gap-2">
-                {slots.map((slot, i) => (
-                  <li key={slot.join("+")} className="flex gap-3">
-                    <span aria-hidden className="mt-2 font-pixel text-sm font-bold">
-                      {i + 1}
+  return (
+    <main id="conteudo" className="game-world iris-open flex min-h-dvh flex-1 flex-col text-bone">
+      <NightSky moon={step === "epoch"} rain={false} />
+      <div className="relative z-10 mx-auto w-full max-w-6xl flex-1 px-4 pb-24 pt-5 sm:px-8">
+        {closed && !tally ? (
+          <>
+            {hud(caseData.title)}
+            <div className="mt-10 max-w-xl bg-paper-0 p-5 text-ink px-frame">
+              <p className="font-title text-3xl text-stamp">{t.closedTitle}</p>
+              <Link href={`/casos/${caseData.slug}/encerramento`} className="px-btn px-btn-ink mt-4">
+                {t.closure}
+              </Link>
+            </div>
+          </>
+        ) : collected.length < caseData.minCardsToResolve ? (
+          <>
+            {hud(caseData.title)}
+            <div className="mt-10 max-w-xl bg-paper-0 p-5 text-ink px-frame">
+              <p>{t.needSources(caseData.minCardsToResolve)}</p>
+              <Link href={sceneHref} className="px-btn mt-4">
+                {t.backToScene}
+              </Link>
+            </div>
+          </>
+        ) : step === "epoch" ? (
+          <section key="epoch" aria-labelledby="epoca" className="iris-open">
+            {hud(t.epochStep)}
+            <div className="mt-8 text-center">
+              <h1 id="epoca" className="px-title text-4xl leading-none sm:text-6xl">
+                {t.epochTitle}
+              </h1>
+              <p className="mx-auto mt-3 max-w-prose font-semibold text-mist">{t.epochHint}</p>
+            </div>
+            <div role="radiogroup" aria-label={t.epochGroup} onKeyDown={onKeyDown} className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
+              {caseData.epochOptions.map((o, i) => (
+                <button
+                  key={o.title}
+                  ref={(el) => {
+                    blocks.current[i] = el;
+                  }}
+                  type="button"
+                  role="radio"
+                  aria-checked={selected === i}
+                  aria-label={t.epochOption(LETTERS[i], o.title, o.years)}
+                  tabIndex={selected === i || (selected === null && i === 0) ? 0 : -1}
+                  onClick={() => choose(i)}
+                  className="group grid min-h-touch grid-cols-[4.5rem_1fr] items-center gap-4 text-left lg:grid-cols-1 lg:justify-items-center lg:text-center"
+                >
+                  <span aria-hidden className="epoch-block relative grid size-[4.5rem] place-items-center font-pixel text-5xl lg:size-28 lg:text-7xl" style={{ animationDelay: `${-i * 0.5}s` }}>
+                    {LETTERS[i]}
+                  </span>
+                  <span className="block w-full bg-paper-0 p-3 text-ink px-frame-flat group-aria-checked:bg-amber">
+                    <span className="block font-pixel text-2xl leading-none text-stamp">
+                      {LETTERS[i]}) {o.years}
                     </span>
-                    <ul className="flex flex-1 flex-col gap-1">
-                      {slot.map((id) => (
-                        <li key={id}>
-                          <label className="flex min-h-touch cursor-pointer items-center gap-3 bg-paper-0 px-3 py-1.5 px-frame-flat [--px:2px] has-focus-visible:outline-3 has-focus-visible:outline-offset-3 has-focus-visible:outline-carbon">
-                            <input
-                              type="checkbox"
-                              disabled={closed}
-                              checked={draft.supporting.includes(id)}
-                              aria-label={t.supports(title(id))}
-                              onChange={(e) =>
-                                setDraft({
-                                  supporting: e.target.checked
-                                    ? [...draft.supporting, id]
-                                    : draft.supporting.filter((x) => x !== id),
-                                })
-                              }
-                              className="size-5 accent-ink"
-                            />
-                            <span className="text-sm font-semibold">{title(id)}</span>
-                          </label>
-                        </li>
-                      ))}
-                    </ul>
-                  </li>
-                ))}
+                    <span className="mt-1 block text-sm font-bold leading-snug">{o.title}</span>
+                  </span>
+                </button>
+              ))}
+            </div>
+            <div className="mt-12 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+              <Rules />
+              <Button className="px-btn-call text-2xl" disabled={selected === null} onClick={() => setStep("order")}>
+                {t.confirmEpoch}
+              </Button>
+            </div>
+          </section>
+        ) : (
+          <section key="order" aria-labelledby="ordem" className="iris-open">
+            {hud(t.orderStep)}
+            <h1 id="ordem" className="px-title mt-8 text-4xl leading-none sm:text-5xl">
+              {t.orderTitle}
+            </h1>
+            <p className="mt-2 max-w-prose font-semibold text-mist">{t.orderHint}</p>
+
+            <div className="relative mt-8">
+              <div className="mb-3 flex justify-between font-pixel text-xl text-mist">
+                <span>{strings.timeline.start}</span>
+                <span>{strings.timeline.end}</span>
+              </div>
+              <ol className="relative grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3 lg:grid-cols-6 lg:before:absolute lg:before:-inset-x-3 lg:before:top-1/2 lg:before:h-1 lg:before:bg-blood-hi">
+                {current.map((id, i) => {
+                  const ev = id ? evidence(id) : null;
+                  return (
+                    <li key={i} className="relative">
+                      <button
+                        type="button"
+                        onClick={() => clickSlot(i)}
+                        aria-label={ev ? t.slotFilled(i + 1, ev.title) : t.slotEmpty(i + 1)}
+                        className={`relative block min-h-36 w-full p-2 text-left text-ink ${
+                          ev ? "pop-in bg-paper-0 px-frame [--px:2px]" : held ? "slot-ready" : "bg-white/5 shadow-[inset_0_0_0_2px_rgb(241_230_200/0.35)]"
+                        }`}
+                      >
+                        <span className="absolute -left-2 -top-3 z-10 min-w-8 bg-blood px-1.5 pb-0.5 text-center font-pixel text-xl leading-tight text-bone">{i + 1}</span>
+                        {ev && (
+                          <>
+                            <span className="relative block aspect-[4/3] overflow-hidden bg-paper-2">
+                              <Image src={ev.image.src} alt="" fill unoptimized sizes="12rem" className="pixelated object-cover" />
+                            </span>
+                            <span className="mt-1 block truncate text-sm font-bold">{ev.title}</span>
+                          </>
+                        )}
+                      </button>
+                    </li>
+                  );
+                })}
               </ol>
-              {progress.timeline.outside.length > 0 && (
-                <p className="mt-3 text-sm">
-                  <span className="font-pixel font-bold">{strings.timeline.outside}:</span>{" "}
-                  {progress.timeline.outside.map(title).join(", ")}
+              {tally && (
+                <p
+                  role="status"
+                  className={`stamp-drop absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -rotate-6 whitespace-nowrap border-[5px] border-current bg-paper-1 px-6 pb-2 font-pixel text-4xl shadow-[0_12px_24px_rgb(0_0_0/0.5)] sm:text-6xl ${
+                    tally.inPlace === tally.total ? "text-[#23774a]" : "text-stamp"
+                  }`}
+                >
+                  {strings.check.tally(tally.inPlace, tally.total)}
                 </p>
               )}
-            </section>
+            </div>
 
-            <div>
-              {closed ? (
-                <div ref={resultRef} tabIndex={-1} role="status" className="bg-paper-0 p-5 text-ink px-frame focus:outline-none">
-                  <p className="font-pixel text-xl font-bold">
-                    {state?.outcome === "solved" ? t.verdict.accepted : strings.closure.failed}
-                  </p>
-                  <p className="mt-2 max-w-prose">{state?.outcome === "solved" ? t.acceptedText : t.failedText}</p>
-                  <ButtonLink href={`/casos/${caseData.slug}/encerramento`} className="mt-4">
-                    {t.closure}
-                  </ButtonLink>
-                </div>
-              ) : (
-                <form
-                  className="bg-paper-0 p-5 text-ink px-frame"
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    if (pending) return;
-                    // Mesma regra do servidor: menos de 3 palavras não chega a pedir confirmação.
-                    if (draft.answer.trim().split(/\s+/).filter(Boolean).length < 3) return setNotice(t.tooShort);
-                    setNotice("");
-                    setConfirming(true);
+            <div className="mt-10 grid gap-4 bg-paper-0 p-5 text-ink px-frame">
+              <div className="flex flex-wrap items-center gap-4">
+                <h2 className="font-title text-3xl text-stamp">{t.trayTitle}</h2>
+                <p aria-live="polite" className="min-w-48 flex-1 font-semibold text-paper-5">
+                  {held ? t.holding(evidence(held).title) : placedCount >= caseData.minCardsToResolve ? t.readyToCheck : t.pickHint}
+                </p>
+                <Button
+                  variant="secondary"
+                  className="text-base"
+                  onClick={() => {
+                    setHeld(null);
+                    commit(Array(slotsCount).fill(null));
                   }}
                 >
-                  <label htmlFor={answerId} className="font-pixel text-lg font-bold">
-                    {t.answer}
-                  </label>
-                  <p id={`${answerId}-hint`} className="text-sm text-paper-5">
-                    {t.answerHint}
-                  </p>
-                  <textarea
-                    id={answerId}
-                    rows={7}
-                    maxLength={3000}
-                    value={draft.answer}
-                    aria-describedby={`${answerId}-hint`}
-                    onChange={(e) => setDraft({ answer: e.target.value })}
-                    className="mt-2 block w-full resize-y bg-paper-1 bg-[repeating-linear-gradient(transparent,transparent_calc(1.75rem-1px),var(--paper-3)_calc(1.75rem-1px),var(--paper-3)_1.75rem)] px-3 py-1 font-hand text-lg leading-7 text-graphite px-frame-flat [--px-line:var(--paper-4)] focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-carbon"
-                  />
-                  <p className="mt-3 font-pixel text-base font-semibold">
-                    {state ? t.attemptsLeft(state.attemptsLeft, state.maxAttempts) : " "}
-                  </p>
-
-                  {confirming ? (
-                    <div className="mt-4 border-l-4 border-ribbon bg-paper-1 p-3">
-                      <p className="font-semibold">{t.confirm(state?.attemptsLeft ?? 0)}</p>
-                      <div className="mt-3 flex flex-wrap gap-2">
-                        <Button type="button" onClick={send}>
-                          {t.yes}
-                        </Button>
-                        <Button type="button" variant="secondary" autoFocus onClick={() => setConfirming(false)}>
-                          {t.no}
-                        </Button>
-                      </div>
-                    </div>
-                  ) : (
-                    <Button type="submit" className="mt-4" aria-disabled={pending || undefined}>
-                      {pending ? t.sending : t.submit}
-                    </Button>
-                  )}
-                  <p role="status" className="mt-3 font-semibold text-ribbon">
-                    {notice}
-                  </p>
-                </form>
-              )}
-
-              {last && !(closed && last.verdict === "accepted") && (
-                <div
-                  ref={closed ? undefined : resultRef}
-                  tabIndex={-1}
-                  role="status"
-                  className={`mt-6 border-l-4 p-4 text-ink focus:outline-none ${verdictStyle[last.verdict]}`}
-                >
-                  <p className="font-pixel text-lg font-bold">{t.verdict[last.verdict]}</p>
-                  {last.verdict === "accepted" ? (
-                    <p className="mt-1">{t.acceptedText}</p>
-                  ) : (
-                    <>
-                      {last.feedback && <p className="mt-1">{last.feedback}</p>}
-                      {!closed && <p className="mt-2 text-sm">{t.keepGoing}</p>}
-                    </>
-                  )}
-                </div>
-              )}
-
-              {progress.attempts.length > 0 && (
-                <section aria-labelledby="res-hist" className="mt-8">
-                  <h2 id="res-hist" className="font-pixel text-lg font-bold">
-                    {t.history}
-                  </h2>
-                  <ol className="mt-3 flex flex-col gap-3">
-                    {progress.attempts.map((a, i) => (
-                      <li key={a.at} className="bg-paper-0 p-4 text-ink px-frame-flat [--px:2px]">
-                        <p className="font-pixel text-sm font-bold text-paper-5">
-                          {t.attemptN(i + 1)} · {t.verdict[a.verdict]}
-                        </p>
-                        <p className="mt-1 whitespace-pre-wrap font-hand text-lg leading-7 text-graphite">{a.answer}</p>
-                        {a.supporting.length > 0 && (
-                          <p className="mt-1 text-sm text-paper-5">
-                            {t.supportingCards}: {a.supporting.map(title).join(", ")}
-                          </p>
-                        )}
-                        {a.feedback && <p className="mt-2 text-sm">{a.feedback}</p>}
-                      </li>
-                    ))}
-                  </ol>
-                </section>
-              )}
+                  {t.restart}
+                </Button>
+                <Button className="px-btn-call text-2xl" disabled={pending || Boolean(tally) || placedCount < caseData.minCardsToResolve} onClick={check}>
+                  {pending ? t.sending : t.checkOrder}
+                </Button>
+              </div>
+              <p className="text-sm text-paper-5">{t.outsideHint}</p>
+              <ul className="grid min-h-16 grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+                {tray.map((id) => {
+                  const ev = evidence(id);
+                  return (
+                    <li key={id}>
+                      <button
+                        type="button"
+                        aria-pressed={held === id}
+                        onClick={() => setHeld(held === id ? null : id)}
+                        className={`grid w-full grid-cols-[45%_1fr] items-center gap-2 bg-[#fbf4df] p-2 text-left px-frame-flat [--px:2px] transition-transform hover:-translate-y-1 hover:-rotate-1 aria-pressed:-translate-y-1.5 aria-pressed:bg-amber ${held === id ? "card-held" : ""}`}
+                      >
+                        <span className="relative block aspect-[4/3] overflow-hidden bg-paper-2">
+                          <Image src={ev.image.src} alt="" fill unoptimized sizes="6rem" className="pixelated object-cover" />
+                        </span>
+                        <span className="text-sm font-bold leading-tight">{ev.title}</span>
+                      </button>
+                    </li>
+                  );
+                })}
+                {held && !tray.includes(held) && (
+                  <li>
+                    <button type="button" onClick={() => setHeld(null)} className="px-btn px-btn-paper w-full text-base">
+                      {t.putBack}
+                    </button>
+                  </li>
+                )}
+              </ul>
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <button type="button" onClick={() => setStep("epoch")} className="px-btn px-btn-paper text-base">
+                  {t.changeEpoch(selected === null ? "?" : LETTERS[selected])}
+                </button>
+                <Link href={`/casos/${caseData.slug}/linha-do-tempo`} className="font-semibold text-carbon underline underline-offset-4">
+                  {t.fullTimeline}
+                </Link>
+              </div>
+              <p role="status" aria-live="polite" className="font-semibold text-ribbon">
+                {notice}
+              </p>
             </div>
-          </div>
+          </section>
         )}
-      </main>
+      </div>
+    </main>
+  );
+}
+
+function Rules() {
+  return (
+    <div className="w-full max-w-md bg-paper-0 p-5 text-ink px-frame">
+      <h2 className="font-title text-2xl text-stamp">{t.rulesTitle}</h2>
+      <dl className="mt-2 grid grid-cols-[1fr_auto] gap-x-6 gap-y-1">
+        {t.rules.map((r, i) => (
+          <div key={r.label} className={`contents ${i === t.rules.length - 1 ? "text-stamp" : ""}`}>
+            <dt className="font-semibold">{r.label}</dt>
+            <dd className="text-right font-pixel text-2xl leading-none">{r.points}</dd>
+          </div>
+        ))}
+      </dl>
     </div>
   );
 }

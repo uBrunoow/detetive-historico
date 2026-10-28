@@ -1,4 +1,5 @@
 {
+  "epochAnswer": 1,
   "timelineReference": [
     {
       "evidenceId": "oficio-prefeitura",
@@ -259,5 +260,8 @@
     ],
     "defaultPartialFeedback": "Você está no caminho. Sua resposta explica parte do que aconteceu; use a linha do tempo para completar o raciocínio.",
     "defaultRejectedFeedback": "Sua resposta ainda não explica o que aconteceu com o livro. Volte à linha do tempo e veja o que aconteceu logo depois da visita registrada no livro de visitas."
+  },
+  "codes": {
+    "gaveta-mesa": "9"
   }
 }

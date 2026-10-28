@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { startTransition, useEffect, useState, type ReactNode } from "react";
+import { useRouter } from "next/navigation";
 import { ButtonLink } from "@/components/ui/Button";
 import { Loading } from "@/components/ui/Loading";
 import type { PublicCase } from "@/lib/content/schema";
@@ -11,15 +12,20 @@ import { compareTimelines, type CardOutcome } from "@/lib/game/closure";
 import { earnedMedals, MEDALS } from "@/lib/game/medals";
 import { updateProgress, useHydrated, useProgress } from "@/lib/progress/store";
 import { strings } from "@/lib/strings/pt-BR";
+import { getResult, restartCase } from "@/lib/game/actions";
+import { NightSky } from "@/components/pixel/NightSky";
+import { PixelSprite } from "@/components/pixel/PixelSprite";
+import { Scoreboard } from "./Scoreboard";
+import { resetProgress } from "@/lib/progress/store";
 
 const t = strings.closure;
 
 const outcomeStyle: Record<CardOutcome, string> = {
-  ordered: "bg-[#e4efdc] text-[#1f3d1c] dark:bg-[#22331f] dark:text-[#d4ecca]",
-  correctlyOutside: "bg-[#e4efdc] text-[#1f3d1c] dark:bg-[#22331f] dark:text-[#d4ecca]",
-  diverges: "bg-[#f6e3c4] text-[#5a3a0c] dark:bg-[#3a2c14] dark:text-[#f2d9a8]",
-  wronglyOutside: "bg-[#f6e3c4] text-[#5a3a0c] dark:bg-[#3a2c14] dark:text-[#f2d9a8]",
-  shouldBeOutside: "bg-[#f6e3c4] text-[#5a3a0c] dark:bg-[#3a2c14] dark:text-[#f2d9a8]",
+  ordered: "bg-[#e4efdc] text-[#1f3d1c]",
+  correctlyOutside: "bg-[#e4efdc] text-[#1f3d1c]",
+  diverges: "bg-[#f6e3c4] text-[#5a3a0c]",
+  wronglyOutside: "bg-[#f6e3c4] text-[#5a3a0c]",
+  shouldBeOutside: "bg-[#f6e3c4] text-[#5a3a0c]",
   missing: "bg-paper-2 text-paper-6",
   notPlaced: "bg-paper-2 text-paper-6",
 };
@@ -30,12 +36,17 @@ export function ClosureView({ caseData }: { caseData: PublicCase }) {
   const hydrated = useHydrated();
   const [data, setData] = useState<ClosureData | null | undefined>(undefined);
   const [failed, setFailed] = useState(false);
+  const [result, setResult] = useState<Awaited<ReturnType<typeof getResult>> | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     startTransition(async () => {
       try {
         const d = await getClosure(caseData.slug);
+        const r = await getResult(caseData.slug);
         setData(d);
+        setResult(r);
+        if (r.official) updateProgress(caseData.slug, (p) => ({ ...p, official: { stars: r.official!.stars, points: r.official!.points }, practice: r.practice }));
         if (d) updateProgress(caseData.slug, (p) => (p.status === d.outcome ? p : { ...p, status: d.outcome }));
       } catch {
         setFailed(true);
@@ -72,8 +83,14 @@ export function ClosureView({ caseData }: { caseData: PublicCase }) {
   const notPlaced = data.reference.filter(
     (r) => !order.slots.flat().includes(r.evidenceId) && !order.outside.includes(r.evidenceId),
   );
-  const lastAnswer = progress.attempts.at(-1)?.answer;
   const medals = earnedMedals(caseData, progress);
+
+  async function playAgain() {
+    if (!window.confirm(t.playAgainConfirm)) return;
+    await restartCase(caseData.slug);
+    resetProgress(caseData.slug, true);
+    router.push(`/casos/${caseData.slug}`);
+  }
 
   const Tag = ({ id }: { id: string }) => (
     <span className={`mt-1 inline-block px-1.5 py-0.5 font-pixel text-xs font-bold ${outcomeStyle[outcomes[id]]}`}>
@@ -101,19 +118,34 @@ export function ClosureView({ caseData }: { caseData: PublicCase }) {
 
   return (
     <Shell caseData={caseData}>
-      <div className="mt-6 max-w-3xl bg-paper-0 p-5 text-ink px-frame">
-        <p className="font-pixel text-2xl font-bold">{data.outcome === "solved" ? t.solved : t.failed}</p>
-        <p className="mt-2">{data.outcome === "solved" ? t.solvedText : t.failedText}</p>
+      <div className="relative mx-auto mt-10 max-w-4xl">
+        {result?.current && (
+          <Scoreboard
+            result={result.current}
+            training={result.practice}
+            official={result.official}
+            epoch={data.epoch}
+            actions={
+              <>
+                <a href="#solucao" className="px-btn text-xl">
+                  {t.seeSolution}
+                </a>
+                <button type="button" className="px-btn px-btn-paper text-xl" onClick={playAgain}>
+                  {t.playAgain}
+                </button>
+                <Link href="/fases" className="px-btn px-btn-paper text-xl">
+                  {t.backToMap}
+                </Link>
+              </>
+            }
+          />
+        )}
+        <PixelSprite name="detective" className="sprite-breathe pointer-events-none absolute -right-44 bottom-0 hidden w-40 xl:block" />
       </div>
 
+      <span id="solucao" className="block scroll-mt-6" />
       <Section title={t.problem}>
         <p className="font-typed text-lg leading-8">{caseData.question}</p>
-        {lastAnswer && (
-          <>
-            <h3 className="mt-4 font-pixel text-sm font-bold text-paper-5">{t.yourAnswer}</h3>
-            <p className="mt-1 whitespace-pre-wrap font-hand text-lg leading-7 text-graphite">{lastAnswer}</p>
-          </>
-        )}
       </Section>
 
       <Section title={t.whatHappened}>
@@ -122,7 +154,7 @@ export function ClosureView({ caseData }: { caseData: PublicCase }) {
             <p key={p}>{p}</p>
           ))}
         </div>
-        <div className="mt-5 max-w-prose border-l-4 border-stamp bg-paper-1 p-4">
+        <div className="mt-5 max-w-prose bg-paper-1 p-4 px-frame-flat [--px:2px] [--px-line:var(--stamp)]">
           <h3 className="font-pixel text-sm font-bold text-stamp">{t.referenceAnswer}</h3>
           <p className="mt-1">{data.referenceAnswer}</p>
         </div>
@@ -279,9 +311,8 @@ export function ClosureView({ caseData }: { caseData: PublicCase }) {
             </li>
           ))}
         </ul>
-        <ButtonLink href="/fases" className="mt-6">
-          {t.again}
-        </ButtonLink>
+        <button type="button" className="px-btn px-btn-ink px-btn-call mt-6" onClick={playAgain}>{t.playAgain}</button>
+        <ButtonLink href="/fases" className="ml-3 mt-6">{t.again}</ButtonLink>
       </Section>
     </Shell>
   );
@@ -289,18 +320,19 @@ export function ClosureView({ caseData }: { caseData: PublicCase }) {
 
 function Shell({ caseData, children }: { caseData: PublicCase; children: ReactNode }) {
   return (
-    <div className="flex min-h-dvh flex-col bg-wood text-on-wood">
-      <header className="mx-auto flex w-full max-w-6xl flex-wrap items-center gap-x-6 gap-y-2 px-4 py-3 sm:px-6">
+    <div className="game-world iris-open flex min-h-dvh flex-col text-bone">
+      <NightSky moon flash />
+      <header className="relative z-10 mx-auto flex w-full max-w-6xl flex-wrap items-center gap-x-6 gap-y-2 px-4 py-3 sm:px-6">
         <Link href="/fases" className="px-btn px-btn-paper text-base">
           <svg aria-hidden viewBox="0 0 8 8" className="size-4" fill="currentColor" shapeRendering="crispEdges">
             <path d="M5 1h1v1H5zM4 2h1v1H4zM3 3h1v2H3zM4 5h1v1H4zM5 6h1v1H5z" />
           </svg>
           {t.back}
         </Link>
-        <p className="font-pixel text-lg font-semibold sm:text-xl">{caseData.title}</p>
+        <p className="font-pixel text-2xl text-mist">{caseData.title}</p>
       </header>
-      <main id="conteudo" className="mx-auto w-full max-w-6xl flex-1 px-4 pb-16 sm:px-6">
-        <h1 className="px-title mt-4 text-[clamp(2.25rem,6vw,3.25rem)] leading-none text-[#f0d9a0]">{t.title}</h1>
+      <main id="conteudo" className="relative z-10 mx-auto w-full max-w-6xl flex-1 px-4 pb-16 sm:px-6">
+        <h1 className="px-title mt-4 text-5xl leading-none sm:text-6xl">{t.title}</h1>
         {children}
       </main>
     </div>

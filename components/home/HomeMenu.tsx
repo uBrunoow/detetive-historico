@@ -1,8 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
-import { useMemo, type KeyboardEvent } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useMemo } from "react";
 import { findContinueTarget } from "@/lib/progress/continue";
 import { useHydrated } from "@/lib/progress/store";
 import { strings } from "@/lib/strings/pt-BR";
@@ -11,52 +11,57 @@ type CaseRef = { slug: string; title: string; startSceneId: string; sceneIds: st
 
 const t = strings.home;
 
-/** Menu principal; setas para cima e para baixo também percorrem as opções. */
+/** Ação da tela de título, como no mockup: "Começar investigação" e "aperte Enter" (que funciona). */
 export function HomeMenu({ cases }: { cases: CaseRef[] }) {
   const hydrated = useHydrated();
+  const router = useRouter();
   const target = useMemo(() => (hydrated ? findContinueTarget(cases) : null), [hydrated, cases]);
 
-  function onKeyDown(e: KeyboardEvent<HTMLUListElement>) {
-    if (e.key !== "ArrowDown" && e.key !== "ArrowUp") return;
-    const links = [...e.currentTarget.querySelectorAll<HTMLAnchorElement>("a")];
-    const i = links.indexOf(document.activeElement as HTMLAnchorElement);
-    const next = e.key === "ArrowDown" ? (i + 1) % links.length : (i - 1 + links.length) % links.length;
-    links[next]?.focus();
-    e.preventDefault();
-  }
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      // Só quando nada tem foco: Enter num link ou botão segue o comportamento normal.
+      if (e.key !== "Enter" || (document.activeElement && document.activeElement !== document.body)) return;
+      router.push("/fases");
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [router]);
 
+  return (
+    <div className="flex flex-wrap items-center gap-x-5 gap-y-4">
+      <Link href="/fases" className="px-btn px-btn-ink px-btn-call text-3xl">
+        {t.start}
+      </Link>
+      {target && (
+        <Link href={target.href} aria-label={t.continueCase(target.title)} className="px-btn px-btn-paper text-xl">
+          {t.continue}
+        </Link>
+      )}
+      <span aria-hidden className="blink-slow font-pixel text-2xl text-mist">
+        {t.pressStart}
+      </span>
+    </div>
+  );
+}
+
+/** Links do topo da tela de título; setas para os lados também andam entre eles. */
+export function HomeNav() {
   const items = [
-    { href: "/fases", label: t.play, primary: true },
-    ...(target ? [{ href: target.href, label: t.continue, sub: target.title }] : []),
+    { href: "/fases", label: t.play },
     { href: "/como-jogar", label: t.howTo },
     { href: "/opcoes", label: t.options },
     { href: "/creditos", label: t.credits },
   ];
-
   return (
     <nav aria-label={t.menuLabel}>
-      <ul onKeyDown={onKeyDown} className="flex flex-col gap-4">
+      <ul className="flex flex-wrap gap-x-7 gap-y-2">
         {items.map((item) => (
           <li key={item.href}>
             <Link
               href={item.href}
-              aria-label={"sub" in item && item.sub ? strings.home.continueCase(item.sub) : undefined}
-              className={`px-btn group w-full justify-start ${item.primary ? "" : "px-btn-paper"}`}
+              className="font-pixel text-2xl text-bone decoration-[3px] underline-offset-[6px] hover:text-amber-hi hover:underline sm:text-3xl"
             >
-              <Image
-                src="/art/ui/lupa.png"
-                alt=""
-                width={24}
-                height={24}
-                unoptimized
-                className="pixelated opacity-0 transition-opacity duration-75 group-hover:opacity-100 group-focus-visible:opacity-100"
-              />
-              <span className="flex flex-col items-start">
-                {item.label}
-                {"sub" in item && item.sub && (
-                  <span className="mt-0.5 font-sans text-xs font-normal normal-case tracking-normal">{item.sub}</span>
-                )}
-              </span>
+              {item.label}
             </Link>
           </li>
         ))}

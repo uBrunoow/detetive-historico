@@ -1,6 +1,6 @@
 # Detetive Histórico
 
-Jogo web 2D de investigação histórica: o jogador explora uma cena, coleta evidências que viram cartas, organiza as cartas numa linha do tempo e escreve uma conclusão em texto livre. Requisitos em [`PRD.md`](PRD.md).
+Jogo web 2D de investigação histórica: o jogador explora uma cena, coleta evidências que viram cartas, organiza as cartas numa linha do tempo, resolve enigmas opcionais e dá o veredito: a época da história (A a E) e a ordem dos fatos. Época certa vale 400 pontos, a ordem até 600; 100% só com as duas. O encerramento preserva o primeiro resultado e permite treinar novamente. Requisitos em [`PRD.md`](PRD.md).
 
 MVP propositalmente simples: **sem banco de dados**. Os casos são arquivos no repositório e o progresso do jogador fica no navegador (ver [`DECISOES.md`](DECISOES.md)).
 

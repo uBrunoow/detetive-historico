@@ -1,5 +1,7 @@
 # Jogo colorido, enigmas e pontuação: plano de implementação
 
+> **Substituído em 28/10/2026** nas Tasks 5 a 10 (visual colorido e pontuação D20) por `2026-10-28-noir-veredito-epoca-ordem.md` (noir 16-bit e veredito por época e ordem, D21).
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Transformar o beta num jogo 2D em pixel colorido e consistente, com quatro tipos de enigma, conclusão por escolha com justificativa opcional, pontos e estrelas, e "jogar de novo" que preserva o primeiro resultado.
@@ -12,6 +14,8 @@
 **Tech Stack:** Next.js 16.4.3 (App Router, Server Actions, `"use cache"`), React 19, TypeScript strict, Tailwind 4, zod 4, vitest. Arte por script em Node (`scripts/pixel-art/`).
 
 **Spec:** `docs/superpowers/specs/2026-10-27-jogo-colorido-enigmas-pontos-design.md`
+
+**Status:** Implementação das Tasks 1–11 concluída. A validação automatizada passou; permanecem apenas a revisão manual no navegador, uma nova crítica visual opcional e o deploy, que não foram executados nesta sessão.
 
 ## Global Constraints
 
@@ -89,7 +93,7 @@
   - `choiceAnswer: { correctId: string; wrongFeedback: Record<choiceId, string> }`.
 - Produces: tipos exportados `EpochGuess`, `CodeUnlock`, `Quiz`, `ConclusionChoice`.
 
-- [ ] **Step 1: Write the failing tests** em `tests/unit/puzzles-schema.test.ts`, usando `checkCaseBundle` sobre cópias de `demo-biblioteca` alteradas em memória:
+- [x] **Step 1: Write the failing tests** em `tests/unit/puzzles-schema.test.ts`, usando `checkCaseBundle` sobre cópias de `demo-biblioteca` alteradas em memória:
   - `epochGuess sem epochAnswer` → problemas contêm `"epochGuess sem epochAnswer"`;
   - `objeto com code sem entrada em codes` → `"<scene>/<obj>: cadeado sem código"`;
   - `quiz sem quizAnswers` → `"<ev>: pergunta sem resposta"`;
@@ -97,11 +101,11 @@
   - `choiceAnswer.correctId inexistente` → `"alternativa certa inexistente"`;
   - `alternativa errada sem feedback` → `"alternativa <id> sem feedback"`;
   - schema público rejeita `choices` com 3 itens.
-- [ ] **Step 2:** `pnpm vitest run tests/unit/puzzles-schema.test.ts`. Esperado: FAIL.
-- [ ] **Step 3:** Implementar os schemas e as regras novas em `checkCaseBundle`, com as mensagens exatas acima. Ajustar `isUnlocked` em `lib/game/scene.ts` para o novo tipo de `unlock`: com `requiresExamined`, a regra de hoje; com `code`, fica destrancado se `unlocked.includes(obj.id)`. Na assinatura `isUnlocked(obj, examined, unlocked = [])`, o parâmetro novo é opcional para não quebrar quem chama.
-- [ ] **Step 4:** Conteúdo provisório para o build passar. Acrescentar `conclusion` (4 alternativas) e `choiceAnswer` nos 6 casos, com texto final. Escrever cada alternativa errada a partir dos `commonErrors`/`partialAnswers` existentes do caso, e a certa a partir do `referenceAnswer` resumido em uma frase. Remover `maxAttempts` dos `case.json`.
-- [ ] **Step 5:** `pnpm test`. Esperado: PASS.
-- [ ] **Step 6:** Commit `Formato do caso: enigmas opcionais e alternativas da conclusão`.
+- [x] **Step 2:** `pnpm vitest run tests/unit/puzzles-schema.test.ts`. Esperado: FAIL.
+- [x] **Step 3:** Implementar os schemas e as regras novas em `checkCaseBundle`, com as mensagens exatas acima. Ajustar `isUnlocked` em `lib/game/scene.ts` para o novo tipo de `unlock`: com `requiresExamined`, a regra de hoje; com `code`, fica destrancado se `unlocked.includes(obj.id)`. Na assinatura `isUnlocked(obj, examined, unlocked = [])`, o parâmetro novo é opcional para não quebrar quem chama.
+- [x] **Step 4:** Conteúdo provisório para o build passar. Acrescentar `conclusion` (4 alternativas) e `choiceAnswer` nos 6 casos, com texto final. Escrever cada alternativa errada a partir dos `commonErrors`/`partialAnswers` existentes do caso, e a certa a partir do `referenceAnswer` resumido em uma frase. Remover `maxAttempts` dos `case.json`.
+- [x] **Step 5:** `pnpm test`. Esperado: PASS.
+- [x] **Step 6:** Commit `Formato do caso: enigmas opcionais e alternativas da conclusão`.
 
 ### Task 2: Pontuação pura e estado assinado v2
 
@@ -143,7 +147,7 @@
   export function computeResult(input: { state: GameState; reference: PrivateCase["timelineReference"]; player: PlayerOrder }): Result;
   ```
 
-- [ ] **Step 1: Write failing tests** `tests/unit/score.test.ts`, com a referência do caso `caminha`:
+- [x] **Step 1: Write failing tests** `tests/unit/score.test.ts`, com a referência do caso `caminha`:
   - `orderRatio` com a linha de referência completa e `tordesilhas` fora → `1`;
   - só `partida` e `monte-pascoal` na ordem → `2/6`;
   - resolvido na 1ª, ordem 1, justificativa "partial", época certa, 1 cadeado aberto, peças "solved", 2 perguntas certas, 1 conferência → `points` = 500+300+75+100+50+50+50−25 = **1100**, `stars` = 3;
@@ -152,10 +156,10 @@
   - `outcome: "failed"` → `stars` = 0, `answer` = 0, os demais itens somam normalmente;
   - muitas conferências → `points` nunca abaixo de 0;
   - caso sem enigmas (`puzzles` vazio) → `epoch/codes/pieces/quiz` = 0, sem erro.
-- [ ] **Step 2:** Rodar. Esperado: FAIL.
-- [ ] **Step 3:** Implementar. `order` = `Math.round(300 * ratio)`; ratio = (ordered + correctlyOutside) ÷ `reference.length`. Estrelas pelas regras das Global Constraints.
-- [ ] **Step 4: Test** `signed-state.test.ts`: um token v1 assinado decodifica como v2, com `official` preenchido quando `outcome` era `"solved"`. Rodar: PASS.
-- [ ] **Step 5:** Commit `Pontuação e estado assinado v2`.
+- [x] **Step 2:** Rodar. Esperado: FAIL.
+- [x] **Step 3:** Implementar. `order` = `Math.round(300 * ratio)`; ratio = (ordered + correctlyOutside) ÷ `reference.length`. Estrelas pelas regras das Global Constraints.
+- [x] **Step 4: Test** `signed-state.test.ts`: um token v1 assinado decodifica como v2, com `official` preenchido quando `outcome` era `"solved"`. Rodar: PASS.
+- [x] **Step 5:** Commit `Pontuação e estado assinado v2`.
 
 ### Task 3: Server Actions dos enigmas, da escolha e do recomeço
 
@@ -181,14 +185,14 @@
   - `getResult(slug)` → `{ official: Result | null; current: Result | null; practice: boolean }`. `current` só depois do encerramento.
   - `restartCase(slug)` → grava `freshState`, mas mantém `official` e põe `practice: true`.
   - `PublicGameState` ganha `choicesLeft`, `maxChoices`, `practice`, `official: { stars; points } | null`, `epochAnswered: boolean` e `openedCodes: string[]`.
-- [ ] **Step 1: Write failing tests** em `tests/unit/puzzles.test.ts`:
+- [x] **Step 1: Write failing tests** em `tests/unit/puzzles.test.ts`:
   - `normalizeCode(" 01500 ") === "1500"`;
   - `applyCodeTry` com "1499", "1498", "1497": `showHint` só a partir da 2ª tentativa e `canSkip` só na 3ª;
   - `applyQuiz` duas vezes na mesma evidência, a primeira errada e a segunda certa: `state.quiz[ev]` continua `false`;
   - `applyEpochGuess` errado e depois certo: `firstTryCorrect === false`.
-- [ ] **Step 2:** Rodar: FAIL. **Step 3:** Implementar `puzzles.ts` e as actions. **Step 4:** Rodar: PASS.
-- [ ] **Step 5:** Teste de integração em `tests/unit/casos-beta.test.ts`: substituir as asserções de `evaluateAnswer` por `choiceAnswer.correctId` existente entre as 4 `choices` de cada caso, e por `wrongFeedback` para cada alternativa errada.
-- [ ] **Step 6:** `pnpm test && pnpm check:leaks` (depois de `pnpm build`): PASS. Commit `Server Actions: enigmas, escolha final e jogar de novo`.
+- [x] **Step 2:** Rodar: FAIL. **Step 3:** Implementar `puzzles.ts` e as actions. **Step 4:** Rodar: PASS.
+- [x] **Step 5:** Teste de integração em `tests/unit/casos-beta.test.ts`: substituir as asserções de `evaluateAnswer` por `choiceAnswer.correctId` existente entre as 4 `choices` de cada caso, e por `wrongFeedback` para cada alternativa errada.
+- [x] **Step 6:** `pnpm test && pnpm check:leaks` (depois de `pnpm build`): PASS. Commits `f717cab`, `406b5e0` e `931e5a5` (`Server Actions: enigmas, escolha final e jogar de novo` e correções de recomeço).
 
 ### Task 4: Progresso local v2 e o bug do contador
 
@@ -204,11 +208,11 @@
   - `readProgress` migra a v1: copia os campos que ainda existem e põe `unlocked: []`, `official: null`, `practice: false`; `attempts` e `draft` antigos são descartados.
   - `undiscoveredCount(c, p)` = fontes sem carta coletada (`!p.cards[e.id]`). O texto "todas as fontes" do caderno usa só isso.
   - `resetProgress(slug, keepOfficial)` em `store.ts`, para "Jogar de novo".
-- [ ] **Step 1: Failing test** em `scene.test.ts`:
+- [x] **Step 1: Failing test** em `scene.test.ts`:
   - com a gaveta examinada enquanto trancada e o chaveiro examinado depois, sem coletar o bilhete, `undiscoveredCount` é ≥ 1;
   - um progresso v1 salvo migra sem perder `cards` e `timeline`.
-- [ ] **Step 2–4:** FAIL, implementar, PASS.
-- [ ] **Step 5:** Commit `Progresso v2 e contador de fontes corrigido`.
+- [x] **Step 2–4:** FAIL, implementar, PASS.
+- [x] **Step 5:** Commit `Progresso v2 e contador de fontes corrigido`.
 
 ### Task 5: Sistema visual colorido e quadro de jogo
 
@@ -436,6 +440,20 @@
 - [ ] **Step 1:** `DECISOES.md`: nova decisão "D15 — Escolha com justificativa e pontuação (27/10/2026)", com o porquê, a tabela de pontos, as estrelas e "jogar de novo vale a 1ª".
 - [ ] **Step 2:** `PRODUCT.md`: troca o diferencial (ver spec, "Documentos do projeto") e acrescenta a referência visual (jogos 2D coloridos, arte original).
 - [ ] **Step 3:** `PROGRESSO.md`: nova seção com o que foi feito e o roteiro de teste manual.
-- [ ] **Step 4:** `pnpm verify`. Esperado: lint, tipos, testes, build e "Nenhum vazamento".
+- [x] **Step 4:** `pnpm verify`. Esperado: lint, tipos, testes, build e "Nenhum vazamento".
 - [ ] **Step 5:** Rodar `/impeccable critique` de novo (opcional) e comparar com 22/40.
 - [ ] **Step 6:** Commit `Documentos do jogo colorido com enigmas e pontos` e deploy com `vercel deploy --prod --yes`. O `GAME_SECRET` precisa existir na Vercel; se não existir, avisar o dono antes.
+
+## Encerramento do plano
+
+Implementação do plano concluída em 27/10/2026. As Tasks 1–11 foram implementadas, incluindo o sistema visual colorido, arte e cadeados com código, catálogo e briefing, enigmas da cena, linha do tempo em tabuleiro, conclusão por alternativas, placar, modo treino e documentação.
+
+Validação executada:
+
+- `pnpm lint`
+- `pnpm typecheck`
+- `pnpm test` — 146 testes aprovados
+- `pnpm build`
+- `pnpm check:leaks` — nenhum vazamento
+
+Não foram executados teste manual no navegador, nova crítica visual nem deploy. O build mantém somente o aviso conhecido de fallback da fonte Atkinson Hyperlegible Next.

@@ -10,24 +10,40 @@
     "src": "/cases/revolucao-industrial/cover.png",
     "alt": "Chaminés de fábrica soltando fumaça sobre telhados, com uma máquina a vapor na frente."
   },
-  "period": "1769 a 1842",
   "place": "Grã-Bretanha (Inglaterra)",
   "audience": "Anos finais do Ensino Fundamental e Ensino Médio",
   "question": "O que estava acontecendo na Grã-Bretanha, e como isso mudou a vida dos trabalhadores?",
   "briefing": [
     "Versão beta: o conteúdo ainda está em revisão. A sala é uma reconstrução; os documentos são reais, e cada um indica de onde veio. As fontes estão em inglês: os trechos foram traduzidos pela equipe.",
     "Manchester, Inglaterra, hoje. No arquivo de uma biblioteca, alguém juntou papéis de uma época em que a cidade se encheu de fumaça, de gente e de máquinas.",
-    "Há uma patente de máquina, cartas ameaçadoras, depoimentos de operários e leis do Parlamento. Examine a sala, colete as fontes, ponha-as em ordem e explique o que estava acontecendo e como isso mudou a vida de quem trabalhava."
+    "Há uma patente de máquina, cartas ameaçadoras, depoimentos de operários e leis do Parlamento. Examine a sala, colete as fontes, descubra em que época da história tudo isso aconteceu e ponha os fatos na ordem certa."
   ],
   "difficulty": "medium",
   "durationMinutes": 25,
-  "timeline": {
-    "startLabel": "1769 — uma nova máquina a vapor",
-    "endLabel": "1842 — um relatório sobre as cidades operárias"
-  },
   "minCardsToResolve": 4,
   "maxTimelineChecks": 3,
-  "maxAttempts": 5,
+  "epochOptions": [
+    {
+      "title": "Renascimento",
+      "years": "séculos XIV a XVI"
+    },
+    {
+      "title": "Grandes Navegações",
+      "years": "séculos XV e XVI"
+    },
+    {
+      "title": "Primeira Revolução Industrial",
+      "years": "1760 a 1850"
+    },
+    {
+      "title": "Primeira Guerra Mundial",
+      "years": "1914 a 1918"
+    },
+    {
+      "title": "Guerra Fria",
+      "years": "1947 a 1991"
+    }
+  ],
   "startSceneId": "biblioteca",
   "scenes": [
     {
@@ -42,63 +58,92 @@
           "id": "papeis-mesa",
           "type": "evidence",
           "label": "Papéis com perguntas e respostas",
-          "hotspot": { "x": 16.25, "y": 53, "w": 11.25, "h": 12 },
+          "hotspot": {
+            "x": 16.25,
+            "y": 53,
+            "w": 11.25,
+            "h": 12
+          },
           "evidenceId": "sadler"
         },
         {
           "id": "livro-relatorio",
           "type": "evidence",
           "label": "Livro grosso de relatório",
-          "hotspot": { "x": 28.75, "y": 54, "w": 11.25, "h": 11 },
+          "hotspot": {
+            "x": 28.75,
+            "y": 54,
+            "w": 11.25,
+            "h": 11
+          },
           "evidenceId": "chadwick"
         },
         {
           "id": "quadro-maquina",
           "type": "evidence",
           "label": "Quadro com o desenho de uma máquina",
-          "hotspot": { "x": 32.5, "y": 12, "w": 20, "h": 24 },
+          "hotspot": {
+            "x": 32.5,
+            "y": 12,
+            "w": 20,
+            "h": 24
+          },
           "evidenceId": "watt-patente"
         },
         {
           "id": "caixote-pastas",
           "type": "evidence",
           "label": "Caixote com pastas de leis",
-          "hotspot": { "x": 55, "y": 58, "w": 15, "h": 26 },
+          "hotspot": {
+            "x": 55,
+            "y": 58,
+            "w": 15,
+            "h": 26
+          },
           "evidenceId": "factory-act"
         },
         {
           "id": "pasta-azul",
           "type": "evidence",
           "label": "Pasta azul esquecida por outro pesquisador",
-          "hotspot": { "x": 75, "y": 10, "w": 15, "h": 26 },
+          "hotspot": {
+            "x": 75,
+            "y": 10,
+            "w": 15,
+            "h": 26
+          },
           "evidenceId": "clt-brasil"
         },
         {
           "id": "gaveta-arquivo",
           "type": "locked",
           "label": "Gaveta trancada da mesa",
-          "hotspot": { "x": 11.25, "y": 73, "w": 13.75, "h": 9 },
+          "hotspot": {
+            "x": 11.25,
+            "y": 73,
+            "w": 13.75,
+            "h": 9
+          },
           "evidenceId": "ludd",
           "unlock": {
-            "requiresExamined": ["chave-bibliotecaria"],
-            "lockedMessage": "A gaveta está trancada. A bibliotecária deve ter deixado a chave por perto."
-          }
-        },
-        {
-          "id": "chave-bibliotecaria",
-          "type": "context",
-          "label": "Chave pendurada na parede",
-          "hotspot": { "x": 61.25, "y": 18, "w": 7.5, "h": 16 },
-          "content": {
-            "title": "A chave da gaveta",
-            "text": "Uma chave com a etiqueta “cartas de 1812”. Agora você pode abrir a gaveta da mesa."
+            "code": {
+              "prompt": "O cadeado pede o ano da patente da máquina a vapor.",
+              "hint": "Veja o quadro com o desenho da máquina.",
+              "inputMode": "numeric"
+            },
+            "lockedMessage": "O cadeado está trancado. Resolva o enigma para abrir."
           }
         },
         {
           "id": "janela-chamines",
           "type": "context",
           "label": "Janela com chaminés lá fora",
-          "hotspot": { "x": 5, "y": 10, "w": 20, "h": 30 },
+          "hotspot": {
+            "x": 5,
+            "y": 10,
+            "w": 20,
+            "h": 30
+          },
           "content": {
             "title": "A cidade das chaminés",
             "text": "No século XIX, Manchester ficou conhecida pelas fábricas de tecidos de algodão. Muita gente saiu do campo para trabalhar nelas, e a cidade cresceu muito depressa."
@@ -108,7 +153,12 @@
           "id": "maquete-tear",
           "type": "decorative",
           "label": "Maquete de um tear",
-          "hotspot": { "x": 73.75, "y": 40, "w": 22.5, "h": 48 }
+          "hotspot": {
+            "x": 73.75,
+            "y": 40,
+            "w": 22.5,
+            "h": 48
+          }
         }
       ]
     }
@@ -119,89 +169,166 @@
       "code": "MA-01",
       "title": "Patente de James Watt",
       "sourceType": "Patente (título traduzido)",
-      "image": { "src": "/cases/revolucao-industrial/ev-watt-patente.png", "alt": "Desenho de uma máquina com caldeira, cilindro e um saco de carvão." },
+      "image": {
+        "src": "/cases/revolucao-industrial/ev-watt-patente.png",
+        "alt": "Desenho de uma máquina com caldeira, cilindro e um saco de carvão."
+      },
       "description": "Patente dada ao engenheiro escocês James Watt para uma melhoria na máquina a vapor: um “condensador separado”, onde o vapor esfriava fora do cilindro.",
       "transcription": "Um novo método de diminuir o consumo de vapor e de combustível nas máquinas a fogo.\n(Título da patente, traduzido do inglês pela equipe: “A new method of lessening the consumption of steam and fuel in fire-engines”.)",
       "provenance": "Patente nº 913, de James Watt. Informações do Science Museum (Londres).",
       "author": "James Watt",
-      "date": { "iso": "1769-01-05", "label": "5 de janeiro de 1769" },
+      "date": {
+        "iso": "1769-01-05",
+        "label": "5 de janeiro de 1769"
+      },
       "back": "As máquinas a vapor antigas gastavam muito carvão e eram usadas quase só para tirar água das minas. A máquina de Watt gastava muito menos, e por isso pôde mover fábricas longe dos rios.",
-      "presentation": { "style": "drawing" }
+      "presentation": {
+        "style": "drawing"
+      }
     },
     {
       "id": "ludd",
       "code": "MA-02",
       "title": "Cartas do “General Ludd”",
       "sourceType": "Cartas ameaçadoras (resumo da equipe)",
-      "image": { "src": "/cases/revolucao-industrial/ev-ludd.png", "alt": "Bilhete amassado com um martelo desenhado ao lado." },
+      "image": {
+        "src": "/cases/revolucao-industrial/ev-ludd.png",
+        "alt": "Bilhete amassado com um martelo desenhado ao lado."
+      },
       "description": "Na região de Nottingham e em outras partes da Inglaterra, grupos de trabalhadores quebravam à noite as máquinas de tecer. Deixavam cartas ameaçando os donos das fábricas, assinadas por um “General Ludd” ou “Ned Ludd”.",
       "provenance": "Cartas e relatos de magistrados guardados no The National Archives (Reino Unido). Esta carta resume os documentos.",
       "author": "“General Ludd” (nome inventado)",
-      "date": { "label": "1812" },
+      "date": {
+        "label": "1812"
+      },
       "back": "Os luditas eram artesãos que faziam tecidos à mão. Eles protestavam contra salários baixos e contra o desemprego trazido pelas máquinas. “Ned Ludd” era um líder imaginário: ninguém assinava com o próprio nome.",
-      "presentation": { "style": "handwritten", "paper": "lined" }
+      "presentation": {
+        "style": "handwritten",
+        "paper": "lined"
+      }
     },
     {
       "id": "sadler",
       "code": "MA-03",
       "title": "Depoimento de um operário",
       "sourceType": "Depoimento ao Parlamento (tradução da equipe)",
-      "image": { "src": "/cases/revolucao-industrial/ev-sadler.png", "alt": "Folha impressa com perguntas e respostas, e dois relógios desenhados." },
+      "image": {
+        "src": "/cases/revolucao-industrial/ev-sadler.png",
+        "alt": "Folha impressa com perguntas e respostas, e dois relógios desenhados."
+      },
       "description": "Perguntas e respostas de Matthew Crabtree, fabricante de cobertores de 22 anos, a uma comissão do Parlamento que discutia se a lei devia limitar as horas de trabalho das crianças nas fábricas. A página não traz a data.",
       "transcription": "— Com que idade você começou a trabalhar numa fábrica?\n— Oito.\n— Quando começou, qual era o seu horário em tempos normais?\n— Das 6 da manhã às 8 da noite.",
       "provenance": "Depoimentos à comissão de Michael Sadler, Parliamentary Papers, vol. XV. Trecho reproduzido pelo Victorian Web; tradução da equipe.",
       "author": "Matthew Crabtree, em depoimento",
       "back": "Uma criança de 8 anos trabalhava 14 horas por dia. A comissão ouviu dezenas de testemunhas, e algumas foram demitidas por depor. As perguntas eram feitas para chegar a certas respostas: vale desconfiar e comparar. Quando será que isso foi dito?",
-      "presentation": { "style": "printed", "paper": "newsprint", "heading": "Comissão do Parlamento" }
+      "presentation": {
+        "style": "printed",
+        "paper": "newsprint",
+        "heading": "Comissão do Parlamento"
+      }
     },
     {
       "id": "factory-act",
       "code": "MA-04",
       "title": "Lei das Fábricas",
       "sourceType": "Lei (resumo da equipe)",
-      "image": { "src": "/cases/revolucao-industrial/ev-factory-act.png", "alt": "Folha de lei com um brasão e um fiscal de chapéu segurando uma prancheta." },
+      "image": {
+        "src": "/cases/revolucao-industrial/ev-factory-act.png",
+        "alt": "Folha de lei com um brasão e um fiscal de chapéu segurando uma prancheta."
+      },
       "description": "Lei do Parlamento britânico para as fábricas de tecidos. Proibia o trabalho de crianças com menos de 9 anos, limitava o das crianças de 9 a 13 anos a 9 horas por dia, exigia 2 horas de escola por dia e criava inspetores do governo para fiscalizar as fábricas.",
       "provenance": "Factory Act de 1833. Resumo a partir dos materiais do The National Archives (Reino Unido).",
       "author": "Parlamento britânico",
-      "date": { "label": "1833" },
+      "date": {
+        "label": "1833"
+      },
       "back": "É considerada o começo das leis trabalhistas modernas no Reino Unido. Mas só havia 4 inspetores para o país inteiro, e o abuso contra as crianças não acabou de um dia para o outro.",
-      "presentation": { "style": "typed", "paper": "office", "heading": "Factory Act" }
+      "presentation": {
+        "style": "typed",
+        "paper": "office",
+        "heading": "Factory Act"
+      }
     },
     {
       "id": "chadwick",
       "code": "MA-05",
       "title": "Relatório sobre as cidades operárias",
       "sourceType": "Relatório (resumo da equipe)",
-      "image": { "src": "/cases/revolucao-industrial/ev-chadwick.png", "alt": "Rua estreita com casas amontoadas e chaminés soltando fumaça." },
+      "image": {
+        "src": "/cases/revolucao-industrial/ev-chadwick.png",
+        "alt": "Rua estreita com casas amontoadas e chaminés soltando fumaça."
+      },
       "description": "Relatório de Edwin Chadwick sobre as condições de saúde da população trabalhadora das cidades: casas apertadas, sem água limpa nem esgoto, e muitas mortes por doenças.",
       "provenance": "Report on the Sanitary Condition of the Labouring Population of Great Britain (Relatório Chadwick). Esta carta resume o relatório.",
       "author": "Edwin Chadwick",
-      "date": { "label": "1842" },
+      "date": {
+        "label": "1842"
+      },
       "back": "Gente demais chegou às cidades depressa demais. Os bairros operários cresceram sem planejamento, e as epidemias matavam muito mais ali do que nos bairros ricos.",
-      "presentation": { "style": "printed", "paper": "aged", "heading": "Relatório Chadwick" }
+      "presentation": {
+        "style": "printed",
+        "paper": "aged",
+        "heading": "Relatório Chadwick"
+      }
     },
     {
       "id": "clt-brasil",
       "code": "MA-06",
       "title": "Uma lei do Brasil",
       "sourceType": "Decreto-lei",
-      "image": { "src": "/cases/revolucao-industrial/ev-clt-brasil.png", "alt": "Uma carteira de trabalho azul ao lado de uma folha impressa." },
+      "image": {
+        "src": "/cases/revolucao-industrial/ev-clt-brasil.png",
+        "alt": "Uma carteira de trabalho azul ao lado de uma folha impressa."
+      },
       "description": "Decreto-lei brasileiro que juntou num só texto as leis sobre o trabalho, como jornada, férias e carteira de trabalho.",
       "transcription": "Art. 1º Fica aprovada a Consolidação das Leis do Trabalho, que a este decreto-lei acompanha […]\nRio de Janeiro, 1 de maio de 1943, 122º da Independência e 55º da República.",
       "provenance": "Decreto-Lei nº 5.452, de 1º de maio de 1943 (Brasil). Texto disponível no site da Presidência da República (Planalto).",
       "author": "Getúlio Vargas, presidente do Brasil",
-      "date": { "iso": "1943-05-01", "label": "1º de maio de 1943" },
+      "date": {
+        "iso": "1943-05-01",
+        "label": "1º de maio de 1943"
+      },
       "back": "A CLT brasileira também protege quem trabalha, mas foi feita em outro país e mais de cem anos depois. Compare com a lei inglesa de 1833.",
-      "presentation": { "style": "typed", "paper": "office", "heading": "Decreto-Lei nº 5.452" }
+      "presentation": {
+        "style": "typed",
+        "paper": "office",
+        "heading": "Decreto-Lei nº 5.452"
+      }
     }
   ],
   "references": [
-    { "kind": "source", "text": "WATT, James. Patente nº 913, 5 de janeiro de 1769. Science Museum, “James Watt and the separate condenser”.", "url": "https://blog.sciencemuseum.org.uk/james-watt-and-the-separate-condenser" },
-    { "kind": "source", "text": "The National Archives (UK). Why did the Luddites protest?", "url": "https://www.nationalarchives.gov.uk/education/resources/why-did-the-luddites-protest/" },
-    { "kind": "source", "text": "Evidence given before the Sadler Committee, Parliamentary Papers, 1831–1832, vol. XV. The Victorian Web.", "url": "https://victorianweb.org/history/workers1.html" },
-    { "kind": "source", "text": "The National Archives (UK). 1833 Factory Act.", "url": "https://www.nationalarchives.gov.uk/education/resources/1833-factory-act/" },
-    { "kind": "source", "text": "CHADWICK, Edwin. Report on the Sanitary Condition of the Labouring Population of Great Britain, 1842." },
-    { "kind": "source", "text": "Decreto-Lei nº 5.452, de 1º de maio de 1943 (CLT).", "url": "https://www.planalto.gov.br/ccivil_03/decreto-lei/del5452.htm" },
-    { "kind": "credit", "text": "Ilustrações em pixel e traduções feitas pela equipe." }
+    {
+      "kind": "source",
+      "text": "WATT, James. Patente nº 913, 5 de janeiro de 1769. Science Museum, “James Watt and the separate condenser”.",
+      "url": "https://blog.sciencemuseum.org.uk/james-watt-and-the-separate-condenser"
+    },
+    {
+      "kind": "source",
+      "text": "The National Archives (UK). Why did the Luddites protest?",
+      "url": "https://www.nationalarchives.gov.uk/education/resources/why-did-the-luddites-protest/"
+    },
+    {
+      "kind": "source",
+      "text": "Evidence given before the Sadler Committee, Parliamentary Papers, 1831–1832, vol. XV. The Victorian Web.",
+      "url": "https://victorianweb.org/history/workers1.html"
+    },
+    {
+      "kind": "source",
+      "text": "The National Archives (UK). 1833 Factory Act.",
+      "url": "https://www.nationalarchives.gov.uk/education/resources/1833-factory-act/"
+    },
+    {
+      "kind": "source",
+      "text": "CHADWICK, Edwin. Report on the Sanitary Condition of the Labouring Population of Great Britain, 1842."
+    },
+    {
+      "kind": "source",
+      "text": "Decreto-Lei nº 5.452, de 1º de maio de 1943 (CLT).",
+      "url": "https://www.planalto.gov.br/ccivil_03/decreto-lei/del5452.htm"
+    },
+    {
+      "kind": "credit",
+      "text": "Ilustrações em pixel e traduções feitas pela equipe."
+    }
   ]
 }

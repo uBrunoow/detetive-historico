@@ -89,3 +89,23 @@ Os contadores de conferências e tentativas e o resultado do caso ficam num cook
 
 Se nenhum marco falta, nenhuma carta de fora da história está entre eles e a ordem relativa dos marcos bate, a conferência diz isso, avisando que não fala das outras cartas. Ficar em silêncio nesse caso faria a conferência parecer quebrada. Marcos postos no mesmo momento (simultâneos) contam como fora de ordem, porque a referência os separa.
 
+## D20 — Escolha com justificativa e pontuação (27/10/2026)
+
+A conclusão passou a usar quatro alternativas, em vez de exigir uma resposta livre para cada tentativa. Isso reduz a barreira de escrita para estudantes de 11 anos, mantém a decisão histórica baseada nas fontes e permite feedback específico para cada alternativa. A justificativa livre continua opcional e só pontua quando a escolha está certa (a melhor avaliação vale).
+
+Pontuação: escolha certa na primeira tentativa vale 500 pontos (250 na segunda); a ordem vale até 300; justificativa aceita/parcial vale 150/75; época correta na primeira, cadeados abertos sem pular, peças montadas e perguntas certas valem 100, 50, 50 e 25 por item; cada conferência usada desconta 25. O total nunca fica abaixo de zero.
+
+Estrelas: uma estrela significa caso resolvido; duas exigem ordem acima de 70%; três exigem primeira escolha, ordem perfeita e justificativa aceita ou parcial. “Jogar de novo” inicia uma partida de treino, mas Fases e HUD preservam estrelas e pontos da primeira conclusão.
+
+## D21 — Veredito por época e ordem, e visual noir (28/10/2026)
+
+Substitui a D20. O dono do projeto pediu que o centro do jogo fosse descobrir **em que época** a história aconteceu e **em que ordem** os fatos se deram, com 100% só para quem acerta as duas coisas. A conclusão por quatro alternativas e a justificativa saíram.
+
+- O veredito tem duas partes, como no mockup aprovado, e é dado uma vez por partida. Parte 1: a época, entre cinco alternativas (A a E, em ordem cronológica). Parte 2: a ordem, pegando cada pista na bandeja e prendendo no barbante (uma casa por fonte do caso). As pistas que ficam na bandeja contam como "fora da história". "Conferir ordem" fecha o caso: um carimbo mostra quantas cartas estão no lugar (nunca quais) e a tela segue para o resultado.
+- A linha do tempo completa (certeza, justificativas, ligações e conferências com pista) continua disponível e usa a mesma ordem. Cada conferência ali também mostra quantas cartas estão no lugar, sem dizer quais.
+- Pontos: época certa vale 400; a ordem vale até 600 (`round(600 × ordem)`, com a mesma medida de antes: cartas "em ordem" mais cartas "bem descartadas", dividido pelo total da referência). Total 1000 = 100%.
+- Estrelas: três com 1000; duas com 600 ou mais; uma com qualquer ponto. O caso conta como resolvido a partir de 600. Abaixo disso, a fala é "o caso continua em aberto", nunca "você falhou".
+- Enigmas (cadeados, peças, perguntas sobre a fonte) continuam opcionais e não valem pontos. A conferência da linha do tempo continua dando só pistas e não desconta pontos.
+- A época certa fica no arquivo privado (`epochAnswer`). Saíram do arquivo público os campos que a entregavam: `period` e os rótulos de começo e fim da linha do tempo. O último parágrafo dos briefings deixou de citar o intervalo de datas.
+- O estado assinado passou para a versão 3 e o progresso local também. Partidas e resultados das versões anteriores recomeçam (as cartas e a linha do tempo guardadas no navegador ficam), porque foram pontuados pela regra antiga.
+- Visual: noir 16-bit, aprovado no mockup `public/mockup/index.html`. Detalhes em `DESIGN.md`.

@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { Notebook } from "@/components/notebook/Notebook";
+import { NightSky } from "@/components/pixel/NightSky";
 import { CheckPanel } from "@/components/timeline/CheckPanel";
 import { LinksPanel } from "@/components/timeline/LinksPanel";
 import { PlacedCard } from "@/components/timeline/PlacedCard";
@@ -46,6 +47,8 @@ export function TimelineView({ caseData }: { caseData: PublicCase }) {
   const hydrated = useHydrated();
   const [message, setMessage] = useState("");
   const [notebookOpen, setNotebookOpen] = useState(false);
+  const [openCard, setOpenCard] = useState<string | null>(null);
+  const [tab, setTab] = useState<"order" | "links">("order");
   const notebookTitleId = useId();
   const focusNext = useRef<string | null>(null);
   const game = useGameState(caseData.slug);
@@ -97,8 +100,9 @@ export function TimelineView({ caseData }: { caseData: PublicCase }) {
   }
 
   return (
-    <div className="flex min-h-dvh flex-col bg-wood">
-      <header className="text-on-wood">
+    <div className="game-world iris-open flex min-h-dvh flex-col text-bone">
+      <NightSky rain={false} ground={false} />
+      <header className="relative z-10 text-on-wood">
         <div className="mx-auto flex w-full max-w-7xl flex-wrap items-center gap-x-6 gap-y-2 px-4 py-3 sm:px-6">
           <Link href={`/casos/${caseData.slug}/cena/${sceneId}`} className="px-btn px-btn-paper text-base">
             <svg aria-hidden viewBox="0 0 8 8" className="size-4" fill="currentColor" shapeRendering="crispEdges">
@@ -106,7 +110,7 @@ export function TimelineView({ caseData }: { caseData: PublicCase }) {
             </svg>
             {t.backToScene}
           </Link>
-          <p className="order-last basis-full font-pixel text-lg font-semibold leading-snug sm:order-none sm:min-w-0 sm:flex-1 sm:basis-auto sm:truncate sm:text-xl">
+          <p className="order-last basis-full font-sans text-lg font-semibold leading-snug sm:order-none sm:min-w-0 sm:flex-1 sm:basis-auto sm:truncate sm:text-xl">
             {caseData.title}
           </p>
           <button
@@ -121,7 +125,7 @@ export function TimelineView({ caseData }: { caseData: PublicCase }) {
         </div>
       </header>
 
-      <main id="conteudo" className="mx-auto w-full max-w-7xl flex-1 px-4 pb-16 sm:px-6">
+      <main id="conteudo" className="relative z-10 mx-auto w-full max-w-7xl flex-1 px-4 pb-16 sm:px-6">
         <h1 className="px-title mt-4 text-[clamp(2.25rem,6vw,3.25rem)] leading-none text-[#f0d9a0]">{t.title}</h1>
         <p className="mt-4 max-w-2xl text-on-wood">{t.intro}</p>
         <p className="mt-2 max-w-2xl text-sm text-on-wood/85">{t.yours}</p>
@@ -131,7 +135,7 @@ export function TimelineView({ caseData }: { caseData: PublicCase }) {
             {t.resolveProgress(placed, caseData.minCardsToResolve)}
           </p>
           {placed >= caseData.minCardsToResolve && (
-            <Link href={`/casos/${caseData.slug}/conclusao`} className="px-btn px-btn-ink text-base">
+            <Link href={`/casos/${caseData.slug}/conclusao`} className="px-btn px-btn-ink px-btn-call text-base">
               {strings.resolution.open}
             </Link>
           )}
@@ -142,32 +146,41 @@ export function TimelineView({ caseData }: { caseData: PublicCase }) {
         </p>
 
         {!collectedAny ? (
-          <p className="mt-10 max-w-xl bg-paper-0 p-5 text-ink px-frame">{t.noCards}</p>
+          <div className="mt-10 max-w-prose bg-paper-0 p-5 text-ink px-frame">
+            <p>{t.noCards}</p>
+            <Link href={`/casos/${caseData.slug}/cena/${sceneId}`} className="px-btn px-btn-ink mt-4">{t.goToScene}</Link>
+          </div>
         ) : (
           <div className="mt-10 grid gap-10 lg:grid-cols-[minmax(0,1fr)_22rem]">
+            <div className="flex gap-2 lg:col-span-2" role="tablist" aria-label={t.tabs}>
+              <button type="button" role="tab" aria-selected={tab === "order"} onClick={() => setTab("order")} className="px-btn px-btn-paper">{t.orderTab}</button>
+              {inPlay.length >= 2 && <button type="button" role="tab" aria-selected={tab === "links"} onClick={() => setTab("links")} className="px-btn px-btn-paper">{t.linksTab}</button>}
+            </div>
+            {tab === "links" ? <div className="lg:col-span-2"><LinksPanel cards={inPlay} links={links} titleOf={titleOf} onAdd={(link) => { const next = addLink(progress, link); if (next === progress) return false; update(() => next); setMessage(t.announce.linked); return true; }} onExplain={(id, text) => update((p) => updateLinkExplanation(p, id, text))} onRemove={(id) => { update((p) => removeLink(p, id)); setMessage(t.announce.unlinked); }} /></div> : null}
+            {tab === "links" ? null : <>
             <section aria-labelledby="tl-strip">
               <h2 id="tl-strip" className="sr-only">
                 {t.strip}
               </h2>
-              <p className="inline-block bg-ribbon px-3 py-1 font-pixel text-base font-bold text-paper-0">
-                {t.start}: {caseData.timeline.startLabel}
+              <p className="inline-block bg-sky-deep px-3 py-1 font-sans text-base font-bold text-paper-0">
+                {t.start}
               </p>
               {slots.length === 0 ? (
-                <p className="my-4 border-l-4 border-dashed border-manila py-6 pl-6 text-on-wood">{t.emptyStrip}</p>
+                <p className="my-4 border-l-4 border-dashed border-blood-hi py-6 pl-6 text-on-wood">{t.emptyStrip}</p>
               ) : (
-                <ol className="my-2 border-l-4 border-manila">
+                <ol className="my-2 border-l-4 border-blood-hi">
                   {slots.map((slot, i) => (
                     <li key={slot.join("+")} className="relative py-4 pl-6 sm:pl-10">
                       <span
                         aria-hidden
-                        className="absolute -left-[0.95rem] top-7 grid size-7 place-items-center bg-manila font-pixel text-sm font-bold text-ink px-frame-flat [--px:2px]"
+                        className="absolute -left-[1.05rem] top-7 grid size-8 place-items-center bg-blood font-pixel text-xl text-bone px-frame-flat [--px:2px]"
                       >
                         {i + 1}
                       </span>
                       <span className="sr-only">{t.position(i + 1)}</span>
                       {slot.length > 1 ? (
-                        <div className="border-4 border-dashed border-manila p-3 sm:p-4">
-                          <p className="mb-3 font-pixel text-base font-bold text-[#f0d9a0]">{t.simultaneous}</p>
+                        <div className="border-4 border-dashed border-blood-hi p-3 sm:p-4">
+                          <p className="mb-3 font-pixel text-xl text-amber">{t.simultaneous}</p>
                           <ul className="flex flex-col gap-6">
                             {slot.map((id) => (
                               <li key={id}>{renderCard(id, i, true)}</li>
@@ -181,8 +194,8 @@ export function TimelineView({ caseData }: { caseData: PublicCase }) {
                   ))}
                 </ol>
               )}
-              <p className="inline-block bg-ribbon px-3 py-1 font-pixel text-base font-bold text-paper-0">
-                {t.end}: {caseData.timeline.endLabel}
+              <p className="inline-block bg-sky-deep px-3 py-1 font-sans text-base font-bold text-paper-0">
+                {t.end}
               </p>
             </section>
 
@@ -206,38 +219,11 @@ export function TimelineView({ caseData }: { caseData: PublicCase }) {
                             {e.title}
                           </h3>
                         </div>
-                        <form
-                          className="mt-3 flex flex-wrap items-end gap-2"
-                          onSubmit={(ev) => {
-                            ev.preventDefault();
-                            const where = new FormData(ev.currentTarget).get("at");
-                            const at = where === "end" ? Number.POSITIVE_INFINITY : Number(where);
-                            act(e.id, (p) => placeCard(p, e.id, at), `tl-${e.id}-title`);
-                          }}
-                        >
-                          <label className="min-w-0 flex-1">
-                            <span className="sr-only">{t.placeWhere(e.title)}</span>
-                            <select name="at" defaultValue="end" className={field}>
-                              <option value="end">{t.atEnd}</option>
-                              {slots.length > 0 && <option value="0">{t.atStart}</option>}
-                              {slots.map((s, i) => (
-                                <option key={s.join("+")} value={i + 1}>
-                                  {t.after_(s.map(titleOf).join(" + "))}
-                                </option>
-                              ))}
-                            </select>
-                          </label>
-                          <button type="submit" className="px-btn px-btn-ink text-base">
-                            {t.place}
-                          </button>
-                        </form>
-                        <button
-                          type="button"
-                          onClick={() => act(e.id, (p) => moveToOutside(p, e.id), `tl-${e.id}-out`)}
-                          className="px-btn px-btn-paper mt-3 text-base"
-                        >
-                          {t.toOutside}
-                        </button>
+                        <div className="mt-3 flex flex-wrap gap-2">
+                          <button type="button" className="px-btn px-btn-ink text-base" onClick={() => act(e.id, (p) => placeCard(p, e.id), `tl-${e.id}-title`)}>{t.atEnd}</button>
+                          <button type="button" className="px-btn px-btn-paper text-base" onClick={() => act(e.id, (p) => placeCard(p, e.id, 0), `tl-${e.id}-title`)}>{t.atStart}</button>
+                          <button type="button" onClick={() => act(e.id, (p) => moveToOutside(p, e.id), `tl-${e.id}-out`)} className="px-btn px-btn-paper text-base">{t.toOutside}</button>
+                        </div>
                       </li>
                     ))}
                   </ul>
@@ -318,6 +304,7 @@ export function TimelineView({ caseData }: { caseData: PublicCase }) {
                 }}
               />
             </div>
+            </>}
           </div>
         )}
       </main>
@@ -355,6 +342,9 @@ export function TimelineView({ caseData }: { caseData: PublicCase }) {
         onNotebook={() => act(id, (p) => returnToNotebook(p, id), `tl-${id}-nb`)}
         onCertainty={(c) => update((p) => setCertainty(p, id, c))}
         onReason={(reason) => update((p) => setPlacementReason(p, id, reason))}
+        open={openCard === id}
+        onToggle={() => setOpenCard(openCard === id ? null : id)}
+        position={slotIndex + 1}
       />
     );
   }

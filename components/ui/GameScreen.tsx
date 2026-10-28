@@ -1,28 +1,30 @@
-import Link from "next/link";
 import type { ReactNode } from "react";
+import { NightSky } from "@/components/pixel/NightSky";
+import { GameHud } from "./GameHud";
 
-/** Moldura das telas de menu: tampo de madeira, título pixel e botão de voltar. */
+/** Moldura das telas: a noite do noir atrás, título pixel e botão de voltar. A tela abre em íris. */
 export function GameScreen({
   title,
   backHref = "/",
   backLabel,
+  hud,
+  width = "stage",
+  sky,
   children,
 }: {
-  title: string;
+  title?: string;
   backHref?: string;
-  backLabel: string;
+  backLabel?: string;
+  hud?: ReactNode;
+  width?: "stage" | "narrow" | "full";
+  sky?: Parameters<typeof NightSky>[0];
   children: ReactNode;
 }) {
   return (
-    <main id="conteudo" className="doc-shadow-desk flex min-h-dvh flex-1 flex-col text-on-wood">
-      <div className="mx-auto w-full max-w-5xl px-4 pb-16 pt-6 sm:px-8 sm:pt-10">
-        <Link href={backHref} className="px-btn px-btn-paper text-base">
-          <svg aria-hidden viewBox="0 0 8 8" className="pixelated size-4" fill="currentColor" shapeRendering="crispEdges">
-            <path d="M5 1h1v1H5zM4 2h1v1H4zM3 3h1v2H3zM4 5h1v1H4zM5 6h1v1H5z" />
-          </svg>
-          {backLabel}
-        </Link>
-        <h1 className="px-title mt-8 text-[clamp(2.25rem,6vw,3.5rem)] leading-none text-[#f0d9a0]">{title}</h1>
+    <main id="conteudo" className="game-world iris-open flex min-h-dvh flex-1 flex-col text-bone">
+      <NightSky {...sky} />
+      <div className={`relative z-10 mx-auto flex w-full flex-1 flex-col px-4 pb-16 pt-5 sm:px-8 sm:pt-8 ${width === "full" ? "max-w-7xl" : width === "narrow" ? "max-w-3xl" : "max-w-6xl"}`}>
+        {hud ?? (title && backLabel ? <GameHud backHref={backHref} backLabel={backLabel} title={title} /> : null)}
         {children}
       </div>
     </main>

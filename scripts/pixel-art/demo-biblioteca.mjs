@@ -123,16 +123,7 @@ function arquivo() {
   for (let k = 0; k < 5; k++) c.hline(130, 39 + k * 5, 30 - (k % 2) * 6, "wallDark");
   for (const [x, y] of [[128, 28], [161, 28], [128, 62], [161, 62]]) c.rect(x, y, 2, 2, "redLight");
 
-  // chaveiro (62%..70% x, 16%..32% y) → x 198..224, y 32..64
-  c.box(200, 34, 22, 4, "woodLight");
-  c.set(211, 35, "ink");
-  for (const [x, len] of [[204, 18], [211, 22], [218, 14]]) {
-    c.ring(x, 42, 2, "manila");
-    c.vline(x, 44, len, "manila");
-    c.hline(x, 44 + len - 4, 3, "manila");
-    c.hline(x, 44 + len - 1, 2, "manila");
-  }
-  c.box(207, 60, 9, 5, "paper");
+  // Parede livre: o cadeado é uma interação, não uma chave desenhada.
 
   // mesa com croqui (26%..48% x, 58%..72% y) → x 83..154, y 116..144
   c.box(80, 140, 78, 5, "woodLight");
@@ -242,10 +233,10 @@ function evidenceThumbs() {
 
 // ---------------------------------------------------------------- Tela inicial (320×200)
 function title() {
-  const c = new Canvas(320, 200, "night");
+  const c = new Canvas(320, 200, "sky");
   // céu com estrelas
-  c.dither(0, 0, 320, 70, "night", "nightLight");
-  c.rect(0, 0, 320, 40, "night");
+  c.dither(0, 0, 320, 70, "sky", "skyDeep");
+  c.rect(0, 0, 320, 40, "skyDeep");
   for (const [x, y] of [[20, 12], [64, 30], [140, 8], [210, 22], [260, 10], [300, 34], [95, 50], [180, 44]]) c.set(x, y, "paper");
   c.disc(270, 26, 9, "lamp");
   c.disc(274, 23, 8, "night");
@@ -274,8 +265,8 @@ function title() {
   c.set(164, 160, "manila");
   c.rect(140, 178, 40, 4, "khaki");
   // chão / rua
-  c.rect(0, 180, 320, 20, "nightLight");
-  c.dither(0, 182, 320, 18, "nightLight", "night");
+  c.rect(0, 180, 320, 20, "grass");
+  c.dither(0, 182, 320, 18, "grass", "grassDeep");
   // poste
   c.rect(36, 110, 3, 72, "ink");
   c.box(31, 102, 13, 9, "lamp");

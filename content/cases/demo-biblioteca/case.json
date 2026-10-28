@@ -10,7 +10,6 @@
     "src": "/cases/demo-biblioteca/cover.png",
     "alt": "Ilustração de uma estante de biblioteca com um espaço vazio entre os livros, iluminada por uma luminária de mesa."
   },
-  "period": "Março de 1923",
   "place": "Vila Serena, cidade fictícia",
   "audience": "Anos finais do Ensino Fundamental e Ensino Médio",
   "question": "O que aconteceu com o Livro de Registro de Terras da Biblioteca Municipal, e por quê?",
@@ -18,17 +17,34 @@
     "Caso de demonstração — conteúdo fictício para testes. As pessoas, os lugares e os documentos deste caso foram inventados.",
     "Vila Serena, março de 1923. Na sessão de 20 de março, a Câmara Municipal pediu o Livro de Registro de Terras para decidir uma disputa sobre a divisa da Fazenda Boa Vista. O livro não estava na estante.",
     "Uns falam em roubo. O bibliotecário está viajando e não pode ser ouvido. Sobraram os papéis da biblioteca: registros, recibos, bilhetes e anotações.",
-    "Sua investigação vai de 2 de março, quando chegou o ofício da Prefeitura, até 20 de março, quando a Câmara deu falta do livro. Explore a biblioteca, colete as evidências, organize-as no tempo e explique o que aconteceu."
+    "Explore a biblioteca e colete as evidências. Depois, descubra em que época da história isso aconteceu e ponha os fatos na ordem certa."
   ],
   "difficulty": "easy",
   "durationMinutes": 30,
-  "timeline": {
-    "startLabel": "2 de março de 1923 — chega o ofício da Prefeitura",
-    "endLabel": "20 de março de 1923 — a Câmara dá falta do livro"
-  },
   "minCardsToResolve": 4,
   "maxTimelineChecks": 3,
-  "maxAttempts": 5,
+  "epochOptions": [
+    {
+      "title": "Império",
+      "years": "1822 a 1889"
+    },
+    {
+      "title": "Primeira República",
+      "years": "1889 a 1930"
+    },
+    {
+      "title": "Era Vargas",
+      "years": "1930 a 1945"
+    },
+    {
+      "title": "Ditadura militar",
+      "years": "1964 a 1985"
+    },
+    {
+      "title": "Nova República",
+      "years": "1985 até hoje"
+    }
+  ],
   "startSceneId": "sala-leitura",
   "scenes": [
     {
@@ -63,10 +79,12 @@
           },
           "evidenceId": "bilhete",
           "unlock": {
-            "requiresExamined": [
-              "chaveiro"
-            ],
-            "lockedMessage": "A gaveta está trancada. Talvez a chave esteja em algum lugar da biblioteca."
+            "code": {
+              "prompt": "O cadeado pede o dia em que a agrimensora visitou a biblioteca.",
+              "hint": "Procure no livro de visitas.",
+              "inputMode": "numeric"
+            },
+            "lockedMessage": "O cadeado está trancado. Resolva o enigma para abrir."
           }
         },
         {
@@ -138,7 +156,7 @@
       "name": "Arquivo dos fundos",
       "image": {
         "src": "/cases/demo-biblioteca/scene-arquivo.png",
-        "alt": "Sala de arquivo com prateleiras de pastas à esquerda, um quadro de avisos e um chaveiro na parede, uma mesa com um mapa enrolado e uma escrivaninha com papéis, e uma pilha de jornais velhos no canto direito."
+        "alt": "Sala de arquivo com prateleiras de pastas à esquerda, um quadro de avisos, uma mesa com um mapa enrolado e uma escrivaninha com papéis, e uma pilha de jornais velhos no canto direito."
       },
       "objects": [
         {
@@ -171,21 +189,6 @@
               "style": "typed",
               "paper": "office"
             }
-          }
-        },
-        {
-          "id": "chaveiro",
-          "type": "context",
-          "label": "Chaveiro pendurado na parede",
-          "hotspot": {
-            "x": 62,
-            "y": 16,
-            "w": 8,
-            "h": 16
-          },
-          "content": {
-            "title": "Chaveiro",
-            "text": "Três chaves penduradas num prego. Uma delas tem uma etiqueta: “gaveta da sala de leitura”. Agora você pode abrir a gaveta da mesa do bibliotecário."
           }
         },
         {

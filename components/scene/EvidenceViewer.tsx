@@ -3,6 +3,8 @@
 import { useEffect, useId, useRef, useState } from "react";
 import { DocumentSheet } from "@/components/document/DocumentSheet";
 import { Button } from "@/components/ui/Button";
+import { PiecesPuzzle } from "@/components/puzzles/PiecesPuzzle";
+import { SourceQuiz } from "@/components/puzzles/SourceQuiz";
 import type { Evidence } from "@/lib/content/schema";
 import { useSettings } from "@/lib/settings/store";
 import { strings } from "@/lib/strings/pt-BR";
@@ -11,6 +13,11 @@ type Props = {
   evidence: Evidence;
   collected: boolean;
   onCollect: () => void;
+  quizAnswered?: boolean;
+  onQuizAnswer?: (index: number) => Promise<{ correct: boolean; explanation: string }>;
+  onQuizLater?: () => void;
+  piecesDone?: boolean;
+  onPiecesFinish?: (how: "solved" | "skipped") => Promise<void>;
   onClose: () => void;
   titleId: string;
 };
@@ -18,7 +25,7 @@ type Props = {
 const t = strings.viewer;
 
 /** A fonte em cima da mesa, à esquerda; a ficha de catálogo, à direita. */
-export function EvidenceViewer({ evidence, collected, onCollect, onClose, titleId }: Props) {
+export function EvidenceViewer({ evidence, collected, onCollect, quizAnswered = false, onQuizAnswer, onQuizLater, piecesDone = false, onPiecesFinish, onClose, titleId }: Props) {
   const [settings] = useSettings();
   const [plain, setPlain] = useState(settings.plainLetters);
   const [justCollected, setJustCollected] = useState(false);
@@ -90,6 +97,12 @@ export function EvidenceViewer({ evidence, collected, onCollect, onClose, titleI
         <p className="mt-1 max-w-prose">{evidence.description}</p>
 
         <p className="mt-5 border-t border-dashed border-paper-4 pt-3 text-sm text-paper-5">{t.caution}</p>
+        {collected && evidence.quiz && onQuizAnswer && onQuizLater && (
+          <SourceQuiz quiz={evidence.quiz} answered={quizAnswered} onAnswer={onQuizAnswer} onLater={onQuizLater} />
+        )}
+        {collected && evidence.puzzle === "pieces" && !piecesDone && onPiecesFinish && (
+          <PiecesPuzzle image={evidence.image} onFinish={onPiecesFinish} />
+        )}
 
         <div className="mt-auto flex flex-col gap-3 pt-6 sm:flex-row sm:flex-wrap">
           {collected ? (

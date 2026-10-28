@@ -6,6 +6,13 @@ export function wall(c, h, base = "wall") {
   c.speckle(0, 0, c.w, h, "wallDark", 6);
 }
 
+export function skyGround(c, horizon = 140) {
+  c.rect(0, 0, c.w, horizon, "sky");
+  c.rect(0, horizon, c.w, c.h - horizon, "grass");
+  c.hline(0, horizon, c.w, "grassDeep");
+  for (let x = 4; x < c.w; x += 16) c.rect(x, horizon + 3 + (x % 5), 2, 5, "grassDeep");
+}
+
 export function floorBoards(c, y) {
   c.rect(0, y, c.w, c.h - y, "wood");
   for (let row = y; row < c.h; row += 8) {

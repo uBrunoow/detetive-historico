@@ -10,24 +10,40 @@
     "src": "/cases/caminha/cover.png",
     "alt": "Uma carta antiga dobrada sobre uma mesa, com um mapa e uma caravela desenhados ao fundo."
   },
-  "period": "1500 a 1519",
   "place": "Lisboa e litoral da atual Bahia",
   "audience": "Anos finais do Ensino Fundamental e Ensino Médio",
   "question": "Quem escreveu a carta, para quem, e o que ela conta?",
   "briefing": [
     "Versão beta: o conteúdo ainda está em revisão. O lugar é uma reconstrução; os trechos da carta são reais e cada fonte indica de onde veio.",
     "Lisboa, 1773. No arquivo da Torre do Tombo, um guarda encontra numa gaveta uma carta de 27 páginas, esquecida por mais de dois séculos. Quem a escreveu nunca voltou para casa.",
-    "Recolha os trechos da carta e os outros papéis da sala, ponha tudo em ordem e explique quem escreveu, para quem, e o que a carta conta."
+    "Recolha os trechos da carta e os outros papéis da sala. Depois, descubra em que época da história a carta foi escrita e ponha os fatos na ordem certa."
   ],
   "difficulty": "easy",
   "durationMinutes": 20,
-  "timeline": {
-    "startLabel": "Março de 1500 — uma frota parte de Lisboa",
-    "endLabel": "Por volta de 1519 — um mapa da nova terra"
-  },
   "minCardsToResolve": 4,
   "maxTimelineChecks": 3,
-  "maxAttempts": 5,
+  "epochOptions": [
+    {
+      "title": "Antes da chegada dos europeus",
+      "years": "até 1500"
+    },
+    {
+      "title": "Grandes Navegações e chegada dos portugueses",
+      "years": "1494 a 1530"
+    },
+    {
+      "title": "Ciclo do ouro em Minas Gerais",
+      "years": "1690 a 1780"
+    },
+    {
+      "title": "Corte no Rio e Independência",
+      "years": "1808 a 1831"
+    },
+    {
+      "title": "Primeira República",
+      "years": "1889 a 1930"
+    }
+  ],
   "startSceneId": "arquivo",
   "scenes": [
     {
@@ -42,63 +58,92 @@
           "id": "folhas-mesa",
           "type": "evidence",
           "label": "Folhas manuscritas sobre a mesa",
-          "hotspot": { "x": 16.25, "y": 53, "w": 11.25, "h": 12 },
+          "hotspot": {
+            "x": 16.25,
+            "y": 53,
+            "w": 11.25,
+            "h": 12
+          },
           "evidenceId": "monte-pascoal"
         },
         {
           "id": "caderno-mesa",
           "type": "evidence",
           "label": "Primeira folha da carta",
-          "hotspot": { "x": 28.75, "y": 54, "w": 11.25, "h": 11 },
+          "hotspot": {
+            "x": 28.75,
+            "y": 54,
+            "w": 11.25,
+            "h": 11
+          },
           "evidenceId": "partida"
         },
         {
           "id": "mapa-parede",
           "type": "evidence",
           "label": "Mapa colorido na parede",
-          "hotspot": { "x": 32.5, "y": 12, "w": 20, "h": 24 },
+          "hotspot": {
+            "x": 32.5,
+            "y": 12,
+            "w": 20,
+            "h": 24
+          },
           "evidenceId": "terra-brasilis"
         },
         {
           "id": "arca",
           "type": "evidence",
           "label": "Arca de madeira",
-          "hotspot": { "x": 55, "y": 58, "w": 15, "h": 26 },
+          "hotspot": {
+            "x": 55,
+            "y": 58,
+            "w": 15,
+            "h": 26
+          },
           "evidenceId": "habitantes"
         },
         {
           "id": "pergaminho-selo",
           "type": "evidence",
           "label": "Pergaminho com selo vermelho",
-          "hotspot": { "x": 75, "y": 10, "w": 15, "h": 26 },
+          "hotspot": {
+            "x": 75,
+            "y": 10,
+            "w": 15,
+            "h": 26
+          },
           "evidenceId": "tordesilhas"
         },
         {
           "id": "gaveta-arquivo",
           "type": "locked",
           "label": "Gaveta trancada da mesa",
-          "hotspot": { "x": 11.25, "y": 73, "w": 13.75, "h": 9 },
+          "hotspot": {
+            "x": 11.25,
+            "y": 73,
+            "w": 13.75,
+            "h": 9
+          },
           "evidenceId": "missa-cruz",
           "unlock": {
-            "requiresExamined": ["molho-chaves"],
-            "lockedMessage": "A gaveta está trancada. O guarda deve ter deixado as chaves em algum lugar da sala."
-          }
-        },
-        {
-          "id": "molho-chaves",
-          "type": "context",
-          "label": "Molho de chaves na parede",
-          "hotspot": { "x": 61.25, "y": 18, "w": 7.5, "h": 16 },
-          "content": {
-            "title": "As chaves do guarda",
-            "text": "Um molho de chaves de ferro. Uma delas tem uma etiqueta: “gaveta da mesa”. Agora você pode abrir a gaveta."
+            "code": {
+              "prompt": "O cadeado pede o dia de abril em que avistaram terra.",
+              "hint": "Leia as folhas sobre a mesa.",
+              "inputMode": "numeric"
+            },
+            "lockedMessage": "O cadeado está trancado. Resolva o enigma para abrir."
           }
         },
         {
           "id": "janela-tejo",
           "type": "context",
           "label": "Janela para o rio",
-          "hotspot": { "x": 5, "y": 10, "w": 20, "h": 30 },
+          "hotspot": {
+            "x": 5,
+            "y": 10,
+            "w": 20,
+            "h": 30
+          },
           "content": {
             "title": "O rio Tejo",
             "text": "Pela janela se vê o rio Tejo. Do porto de Lisboa, perto da praia de Belém, partiam as frotas portuguesas que iam para a Índia buscar especiarias, como pimenta e canela."
@@ -108,7 +153,12 @@
           "id": "estante",
           "type": "decorative",
           "label": "Estante com livros de registro",
-          "hotspot": { "x": 73.75, "y": 40, "w": 22.5, "h": 48 }
+          "hotspot": {
+            "x": 73.75,
+            "y": 40,
+            "w": 22.5,
+            "h": 48
+          }
         }
       ]
     }
@@ -119,88 +169,159 @@
       "code": "TT-01",
       "title": "Tratado entre Portugal e Castela",
       "sourceType": "Tratado (resumo da equipe)",
-      "image": { "src": "/cases/caminha/ev-tordesilhas.png", "alt": "Pergaminho enrolado com um selo vermelho." },
+      "image": {
+        "src": "/cases/caminha/ev-tordesilhas.png",
+        "alt": "Pergaminho enrolado com um selo vermelho."
+      },
       "description": "Acordo entre os reis de Portugal e de Castela (Espanha). Uma linha imaginária, a 370 léguas a oeste das ilhas de Cabo Verde, dividia as terras encontradas e por encontrar: o lado leste ficava para Portugal, o oeste para Castela.",
       "provenance": "Tratado de Tordesilhas. O original português está no Arquivo Nacional da Torre do Tombo; esta carta resume o que ele diz.",
       "author": "Reis de Portugal e de Castela",
-      "date": { "iso": "1494-06-07", "label": "7 de junho de 1494" },
+      "date": {
+        "iso": "1494-06-07",
+        "label": "7 de junho de 1494"
+      },
       "back": "O tratado dividia o mundo entre dois reinos antes mesmo de os europeus conhecerem essas terras. Ninguém perguntou nada aos povos que já viviam nelas.",
-      "presentation": { "style": "typed", "paper": "aged", "heading": "Tratado de Tordesilhas", "stamp": { "text": "Selo real" } }
+      "presentation": {
+        "style": "typed",
+        "paper": "aged",
+        "heading": "Tratado de Tordesilhas",
+        "stamp": {
+          "text": "Selo real"
+        }
+      }
     },
     {
       "id": "partida",
       "code": "TT-02",
       "title": "A partida",
       "sourceType": "Trecho de carta",
-      "image": { "src": "/cases/caminha/ev-partida.png", "alt": "Folha manuscrita com uma caravela desenhada no canto." },
+      "image": {
+        "src": "/cases/caminha/ev-partida.png",
+        "alt": "Folha manuscrita com uma caravela desenhada no canto."
+      },
       "description": "Começo de uma carta escrita à mão ao rei de Portugal, contando a viagem de uma frota.",
       "transcription": "A partida de Belém foi, como Vossa Alteza sabe, segunda-feira 9 de Março. E sábado, 14 do dito mês, entre as 8 e 9 horas, nos achamos entre as Canárias, mais perto da Grande Canária.",
       "provenance": "Carta de Pero Vaz de Caminha ao rei D. Manuel I. Original no Arquivo Nacional da Torre do Tombo; texto em ortografia atualizada (Wikisource).",
       "author": "Pero Vaz de Caminha",
-      "date": { "iso": "1500-03-09", "label": "9 de março de 1500" },
+      "date": {
+        "iso": "1500-03-09",
+        "label": "9 de março de 1500"
+      },
       "back": "Em português de hoje: a frota saiu da praia de Belém, em Lisboa, numa segunda-feira, 9 de março. Ela ia para Calicute, na Índia. O autor escreve para o rei (“Vossa Alteza”).",
-      "presentation": { "style": "handwritten", "paper": "aged" }
+      "presentation": {
+        "style": "handwritten",
+        "paper": "aged"
+      }
     },
     {
       "id": "monte-pascoal",
       "code": "TT-03",
       "title": "Vista de terra!",
       "sourceType": "Trecho de carta",
-      "image": { "src": "/cases/caminha/ev-monte-pascoal.png", "alt": "Um monte alto e redondo visto do mar, com uma caravela na frente." },
+      "image": {
+        "src": "/cases/caminha/ev-monte-pascoal.png",
+        "alt": "Um monte alto e redondo visto do mar, com uma caravela na frente."
+      },
       "description": "Trecho da mesma carta, no dia em que os navegantes avistaram terra.",
       "transcription": "E assim seguimos nosso caminho, por este mar de longo, até que terça-feira das Oitavas de Páscoa, que foram 21 dias de abril, topamos alguns sinais de terra. E quarta-feira seguinte, pela manhã, topamos aves a que chamam furabuchos.\nNeste mesmo dia, a horas de véspera, houvemos vista de terra! A saber, primeiramente de um grande monte, muito alto e redondo; e de outras serras mais baixas ao sul dele; e de terra chã, com grandes arvoredos; ao qual monte alto o capitão pôs o nome de O Monte Pascoal e à terra A Terra de Vera Cruz!",
       "provenance": "Carta de Pero Vaz de Caminha ao rei D. Manuel I. Original no Arquivo Nacional da Torre do Tombo; texto em ortografia atualizada (Wikisource).",
       "author": "Pero Vaz de Caminha",
-      "date": { "iso": "1500-04-22", "label": "22 de abril de 1500" },
+      "date": {
+        "iso": "1500-04-22",
+        "label": "22 de abril de 1500"
+      },
       "back": "Em português de hoje: no dia 22 de abril, à tarde, eles viram um monte alto e redondo. O capitão, Pedro Álvares Cabral, chamou o monte de Monte Pascoal e a terra de Terra de Vera Cruz. Fica no litoral da atual Bahia.",
-      "presentation": { "style": "handwritten", "paper": "aged" }
+      "presentation": {
+        "style": "handwritten",
+        "paper": "aged"
+      }
     },
     {
       "id": "habitantes",
       "code": "TT-04",
       "title": "Gente na praia",
       "sourceType": "Trecho de carta",
-      "image": { "src": "/cases/caminha/ev-habitantes.png", "alt": "Folha manuscrita com um arco, flechas e uma pena vermelha desenhados." },
+      "image": {
+        "src": "/cases/caminha/ev-habitantes.png",
+        "alt": "Folha manuscrita com um arco, flechas e uma pena vermelha desenhados."
+      },
       "description": "Trecho da mesma carta sobre o primeiro encontro com as pessoas que viviam na terra. Esta página não traz o dia.",
       "transcription": "Pardos, nus, sem coisa alguma que lhes cobrisse suas vergonhas. Traziam arcos nas mãos, e suas setas. Vinham todos rijamente em direção ao batel. E Nicolau Coelho lhes fez sinal que pousassem os arcos. E eles os depuseram.",
       "provenance": "Carta de Pero Vaz de Caminha ao rei D. Manuel I. Original no Arquivo Nacional da Torre do Tombo; texto em ortografia atualizada (Wikisource).",
       "author": "Pero Vaz de Caminha",
       "back": "Em português de hoje: os homens que estavam na praia tinham arcos e flechas e vieram até o barco. Quando Nicolau Coelho pediu, baixaram os arcos. Eram povos tupis, que viviam ali havia muito tempo. Em que momento da viagem isso pode ter acontecido?",
-      "presentation": { "style": "handwritten", "paper": "aged" }
+      "presentation": {
+        "style": "handwritten",
+        "paper": "aged"
+      }
     },
     {
       "id": "missa-cruz",
       "code": "TT-05",
       "title": "A cruz e a missa",
       "sourceType": "Trecho de carta",
-      "image": { "src": "/cases/caminha/ev-missa-cruz.png", "alt": "Uma grande cruz de madeira na praia, com árvores ao fundo." },
+      "image": {
+        "src": "/cases/caminha/ev-missa-cruz.png",
+        "alt": "Uma grande cruz de madeira na praia, com árvores ao fundo."
+      },
       "description": "Trecho final da carta, com o lugar e o dia em que ela foi escrita.",
       "transcription": "E hoje que é sexta-feira, primeiro dia de maio, pela manhã, saímos em terra com nossa bandeira; e fomos desembarcar acima do rio, contra o sul onde nos pareceu que seria melhor arvorar a cruz, para melhor ser vista. […] Plantada a cruz, com as armas e a divisa de Vossa Alteza, que primeiro lhe haviam pregado, armaram altar ao pé dela. Ali disse missa o padre frei Henrique.\n[…]\nBeijo as mãos de Vossa Alteza.\nDeste Porto Seguro, da Vossa Ilha da Vera Cruz, hoje, sexta-feira, primeiro dia de Maio de 1500.",
       "provenance": "Carta de Pero Vaz de Caminha ao rei D. Manuel I. Original no Arquivo Nacional da Torre do Tombo; texto em ortografia atualizada (Wikisource).",
       "author": "Pero Vaz de Caminha",
-      "date": { "iso": "1500-05-01", "label": "1º de maio de 1500" },
+      "date": {
+        "iso": "1500-05-01",
+        "label": "1º de maio de 1500"
+      },
       "back": "Em português de hoje: os portugueses ergueram uma cruz com o brasão do rei e rezaram uma missa. A cruz marcava que, para eles, a terra passava a pertencer ao rei de Portugal. A carta foi escrita nesse mesmo dia, em Porto Seguro.",
-      "presentation": { "style": "handwritten", "paper": "aged" }
+      "presentation": {
+        "style": "handwritten",
+        "paper": "aged"
+      }
     },
     {
       "id": "terra-brasilis",
       "code": "TT-06",
       "title": "Mapa da Terra Brasilis",
       "sourceType": "Ilustração da equipe",
-      "image": { "src": "/cases/caminha/ev-terra-brasilis.png", "alt": "Ilustração em pixel de um mapa com árvores, papagaios e pessoas cortando troncos." },
+      "image": {
+        "src": "/cases/caminha/ev-terra-brasilis.png",
+        "alt": "Ilustração em pixel de um mapa com árvores, papagaios e pessoas cortando troncos."
+      },
       "description": "Ilustração feita pela equipe, inspirada no mapa “Terra Brasilis” do Atlas Miller (Biblioteca Nacional da França). O mapa mostra a costa da nova terra com papagaios e indígenas cortando troncos de árvores.",
       "provenance": "Ilustração da equipe. O mapa original faz parte do Atlas Miller, feito em Portugal por volta de 1519, e está na Biblioteca Nacional da França (Gallica).",
       "author": "Equipe do jogo (inspirada no Atlas Miller)",
-      "date": { "label": "Por volta de 1519" },
+      "date": {
+        "label": "Por volta de 1519"
+      },
       "back": "As árvores cortadas são de pau-brasil, uma madeira que dava tinta vermelha. Foi a primeira riqueza que os portugueses exploraram na terra, e acabou dando nome a ela: Brasil.",
-      "presentation": { "style": "drawing" }
+      "presentation": {
+        "style": "drawing"
+      }
     }
   ],
   "references": [
-    { "kind": "source", "text": "CAMINHA, Pero Vaz de. Carta a El-Rei D. Manuel, 1º de maio de 1500. Arquivo Nacional da Torre do Tombo.", "url": "https://digitarq.arquivos.pt/details?id=4185836" },
-    { "kind": "source", "text": "Carta a El Rei D. Manuel (ortografia atualizada). Wikisource.", "url": "https://pt.wikisource.org/wiki/Carta_a_El_Rei_D._Manuel_(ortografia_atualizada)" },
-    { "kind": "source", "text": "Atlas Miller, mapa “Terra Brasilis”, c. 1519. Biblioteca Nacional da França (Gallica).", "url": "https://gallica.bnf.fr/ark:/12148/btv1b55002607s" },
-    { "kind": "source", "text": "Tratado de Tordesilhas, 7 de junho de 1494. Arquivo Nacional da Torre do Tombo." },
-    { "kind": "credit", "text": "Ilustrações em pixel feitas pela equipe; o mapa é inspirado no Atlas Miller (BnF)." }
+    {
+      "kind": "source",
+      "text": "CAMINHA, Pero Vaz de. Carta a El-Rei D. Manuel, 1º de maio de 1500. Arquivo Nacional da Torre do Tombo.",
+      "url": "https://digitarq.arquivos.pt/details?id=4185836"
+    },
+    {
+      "kind": "source",
+      "text": "Carta a El Rei D. Manuel (ortografia atualizada). Wikisource.",
+      "url": "https://pt.wikisource.org/wiki/Carta_a_El_Rei_D._Manuel_(ortografia_atualizada)"
+    },
+    {
+      "kind": "source",
+      "text": "Atlas Miller, mapa “Terra Brasilis”, c. 1519. Biblioteca Nacional da França (Gallica).",
+      "url": "https://gallica.bnf.fr/ark:/12148/btv1b55002607s"
+    },
+    {
+      "kind": "source",
+      "text": "Tratado de Tordesilhas, 7 de junho de 1494. Arquivo Nacional da Torre do Tombo."
+    },
+    {
+      "kind": "credit",
+      "text": "Ilustrações em pixel feitas pela equipe; o mapa é inspirado no Atlas Miller (BnF)."
+    }
   ]
 }

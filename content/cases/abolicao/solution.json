@@ -1,6 +1,12 @@
 {
+  "epochAnswer": 3,
   "timelineReference": [
-    { "evidenceId": "ventre-livre", "referenceOrder": 1, "belongsToStory": true, "isKeyMilestone": true },
+    {
+      "evidenceId": "ventre-livre",
+      "referenceOrder": 1,
+      "belongsToStory": true,
+      "isKeyMilestone": true
+    },
     {
       "evidenceId": "nabuco",
       "referenceOrder": 2,
@@ -8,10 +14,30 @@
       "isKeyMilestone": false,
       "datingClueExplanation": "O trecho cita a lei de 28 de setembro de 1871 como algo que já existe, então foi escrito depois de 1871. Ele fala da escravidão como algo que ainda acontece, então foi escrito antes de 13 de maio de 1888. E não menciona a libertação dos maiores de 60 anos, o que sugere que veio antes da lei de 1885. De fato, o livro O Abolicionismo, de Joaquim Nabuco, foi publicado em Londres em 1883."
     },
-    { "evidenceId": "sexagenarios", "referenceOrder": 3, "belongsToStory": true, "isKeyMilestone": true },
-    { "evidenceId": "clube-militar", "referenceOrder": 4, "belongsToStory": true, "isKeyMilestone": false },
-    { "evidenceId": "lei-aurea", "referenceOrder": 5, "belongsToStory": true, "isKeyMilestone": true },
-    { "evidenceId": "missa-campal", "referenceOrder": 6, "belongsToStory": true, "isKeyMilestone": false },
+    {
+      "evidenceId": "sexagenarios",
+      "referenceOrder": 3,
+      "belongsToStory": true,
+      "isKeyMilestone": true
+    },
+    {
+      "evidenceId": "clube-militar",
+      "referenceOrder": 4,
+      "belongsToStory": true,
+      "isKeyMilestone": false
+    },
+    {
+      "evidenceId": "lei-aurea",
+      "referenceOrder": 5,
+      "belongsToStory": true,
+      "isKeyMilestone": true
+    },
+    {
+      "evidenceId": "missa-campal",
+      "referenceOrder": 6,
+      "belongsToStory": true,
+      "isKeyMilestone": false
+    },
     {
       "evidenceId": "lei-1850",
       "referenceOrder": null,
@@ -21,17 +47,75 @@
     }
   ],
   "timelineHints": [
-    { "level": 1, "condition": { "type": "milestone_missing" }, "text": "Uma das leis que mudaram a vida das pessoas escravizadas ainda não está na sua linha." },
-    { "level": 1, "condition": { "type": "irrelevant_between_milestones" }, "text": "Uma das cartas é de antes do período desta investigação. Confira as datas." },
-    { "level": 1, "condition": { "type": "milestones_inverted", "pair": ["ventre-livre", "sexagenarios"] }, "text": "Compare as datas das leis assinadas em 28 de setembro. Elas são de anos diferentes." },
-    { "level": 2, "condition": { "type": "milestones_inverted", "pair": ["ventre-livre", "sexagenarios"] }, "text": "A lei do Ventre Livre veio primeiro: ela pensava nas crianças que iam nascer." },
-    { "level": 1, "condition": { "type": "default" }, "text": "Releia as datas no cabeçalho de cada lei." }
+    {
+      "level": 1,
+      "condition": {
+        "type": "milestone_missing"
+      },
+      "text": "Uma das leis que mudaram a vida das pessoas escravizadas ainda não está na sua linha."
+    },
+    {
+      "level": 1,
+      "condition": {
+        "type": "irrelevant_between_milestones"
+      },
+      "text": "Uma das cartas é de antes do período desta investigação. Confira as datas."
+    },
+    {
+      "level": 1,
+      "condition": {
+        "type": "milestones_inverted",
+        "pair": [
+          "ventre-livre",
+          "sexagenarios"
+        ]
+      },
+      "text": "Compare as datas das leis assinadas em 28 de setembro. Elas são de anos diferentes."
+    },
+    {
+      "level": 2,
+      "condition": {
+        "type": "milestones_inverted",
+        "pair": [
+          "ventre-livre",
+          "sexagenarios"
+        ]
+      },
+      "text": "A lei do Ventre Livre veio primeiro: ela pensava nas crianças que iam nascer."
+    },
+    {
+      "level": 1,
+      "condition": {
+        "type": "default"
+      },
+      "text": "Releia as datas no cabeçalho de cada lei."
+    }
   ],
   "evidenceRelations": [
-    { "from": "sexagenarios", "to": "ventre-livre", "type": "consequence_of", "explanation": "A libertação foi feita aos poucos: primeiro as crianças que iam nascer (1871), depois as pessoas idosas (1885)." },
-    { "from": "nabuco", "to": "ventre-livre", "type": "mentions", "explanation": "Nabuco cita a lei de 1871 e mostra que ela quase não abria caminhos para a liberdade." },
-    { "from": "clube-militar", "to": "lei-aurea", "type": "caused", "explanation": "As fugas em massa e a recusa do Exército em caçar quem fugia tornaram a escravidão impossível de manter." },
-    { "from": "missa-campal", "to": "lei-aurea", "type": "consequence_of", "explanation": "A missa ao ar livre comemorou a lei, quatro dias depois." }
+    {
+      "from": "sexagenarios",
+      "to": "ventre-livre",
+      "type": "consequence_of",
+      "explanation": "A libertação foi feita aos poucos: primeiro as crianças que iam nascer (1871), depois as pessoas idosas (1885)."
+    },
+    {
+      "from": "nabuco",
+      "to": "ventre-livre",
+      "type": "mentions",
+      "explanation": "Nabuco cita a lei de 1871 e mostra que ela quase não abria caminhos para a liberdade."
+    },
+    {
+      "from": "clube-militar",
+      "to": "lei-aurea",
+      "type": "caused",
+      "explanation": "As fugas em massa e a recusa do Exército em caçar quem fugia tornaram a escravidão impossível de manter."
+    },
+    {
+      "from": "missa-campal",
+      "to": "lei-aurea",
+      "type": "consequence_of",
+      "explanation": "A missa ao ar livre comemorou a lei, quatro dias depois."
+    }
   ],
   "solution": {
     "referenceAnswer": "A escravidão terminou aos poucos, com leis que adiavam a liberdade: a do Ventre Livre, em 1871, e a dos Sexagenários, em 1885. O fim veio em 13 de maio de 1888, com a Lei Áurea, depois de anos de pressão dos abolicionistas (muitos deles negros, como Luiz Gama, André Rebouças e José do Patrocínio), da imprensa e das fugas em massa de pessoas escravizadas.",
@@ -53,37 +137,98 @@
       {
         "id": "gradual",
         "label": "A abolição foi gradual, com leis anteriores",
-        "synonyms": ["aos poucos", "gradual", "gradualmente", "lento", "lentamente", "leis anteriores", "ventre livre", "sexagenarios", "1871", "1885"]
+        "synonyms": [
+          "aos poucos",
+          "gradual",
+          "gradualmente",
+          "lento",
+          "lentamente",
+          "leis anteriores",
+          "ventre livre",
+          "sexagenarios",
+          "1871",
+          "1885"
+        ]
       },
       {
         "id": "pressao",
         "label": "Houve pressão: abolicionistas, fugas, imprensa",
-        "synonyms": ["abolicionistas", "abolicionista", "pressao", "pressionaram", "luta", "lutaram", "fugas", "fugiram", "fuga", "quilombos", "resistencia", "campanha", "jornais", "imprensa", "movimento"]
+        "synonyms": [
+          "abolicionistas",
+          "abolicionista",
+          "pressao",
+          "pressionaram",
+          "luta",
+          "lutaram",
+          "fugas",
+          "fugiram",
+          "fuga",
+          "quilombos",
+          "resistencia",
+          "campanha",
+          "jornais",
+          "imprensa",
+          "movimento"
+        ]
       },
       {
         "id": "lei-final",
         "label": "A Lei Áurea encerrou a escravidão em 1888",
-        "synonyms": ["lei aurea", "13 de maio", "1888", "princesa isabel", "abolicao"]
+        "synonyms": [
+          "lei aurea",
+          "13 de maio",
+          "1888",
+          "princesa isabel",
+          "abolicao"
+        ]
       }
     ],
     "minGroupsToAccept": 2,
     "acceptedVariants": [],
     "partialAnswers": [
-      { "requiredGroups": ["lei-final"], "feedback": "Você encontrou a lei que encerrou a escravidão. Mas por que ela veio só em 1888? Olhe as leis anteriores e o pedido do Clube Militar." },
-      { "requiredGroups": ["gradual"], "feedback": "Você viu que foi aos poucos. O que fez o governo finalmente acabar com a escravidão?" },
-      { "requiredGroups": ["pressao"], "feedback": "Você viu a pressão. E o que o governo fez antes, aos poucos, e no fim?" }
+      {
+        "requiredGroups": [
+          "lei-final"
+        ],
+        "feedback": "Você encontrou a lei que encerrou a escravidão. Mas por que ela veio só em 1888? Olhe as leis anteriores e o pedido do Clube Militar."
+      },
+      {
+        "requiredGroups": [
+          "gradual"
+        ],
+        "feedback": "Você viu que foi aos poucos. O que fez o governo finalmente acabar com a escravidão?"
+      },
+      {
+        "requiredGroups": [
+          "pressao"
+        ],
+        "feedback": "Você viu a pressão. E o que o governo fez antes, aos poucos, e no fim?"
+      }
     ],
     "commonErrors": [
       {
-        "triggers": ["bondade", "presente", "boazinha", "bondosa", "generosa", "generosidade"],
+        "triggers": [
+          "bondade",
+          "presente",
+          "boazinha",
+          "bondosa",
+          "generosa",
+          "generosidade"
+        ],
         "feedback": "A princesa assinou a lei, mas ela veio depois de muita pressão. Quem pressionou?"
       },
       {
-        "triggers": ["libertou todos", "libertou todo mundo"],
+        "triggers": [
+          "libertou todos",
+          "libertou todo mundo"
+        ],
         "feedback": "Releia o artigo 1º da lei de 1871: quem ela tornou livre?"
       }
     ],
     "defaultPartialFeedback": "Você está no caminho. Olhe de novo as datas das leis e pense em quem pressionou o governo.",
     "defaultRejectedFeedback": "Revise as cartas na sua linha do tempo: o que mudou em 1871, em 1885 e em 1888? E quem lutou para que isso mudasse?"
+  },
+  "codes": {
+    "gaveta-redacao": "1871"
   }
 }

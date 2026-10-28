@@ -1,6 +1,12 @@
 {
+  "epochAnswer": 2,
   "timelineReference": [
-    { "evidenceId": "quinto", "referenceOrder": 1, "belongsToStory": true, "isKeyMilestone": true },
+    {
+      "evidenceId": "quinto",
+      "referenceOrder": 1,
+      "belongsToStory": true,
+      "isKeyMilestone": true
+    },
     {
       "evidenceId": "cartas-chilenas",
       "referenceOrder": 2,
@@ -8,9 +14,24 @@
       "isKeyMilestone": false,
       "datingClueExplanation": "O poema critica o governador Luís da Cunha Meneses, que governou Minas de 1783 a 1788. Então foi escrito durante ou logo depois do governo dele, muito depois da lei de 1750 e antes da denúncia de 1789, que levou à prisão o provável autor, o poeta Tomás Antônio Gonzaga. Os estudiosos datam as cartas de cerca de 1787 a 1789."
     },
-    { "evidenceId": "bandeira-plano", "referenceOrder": 2, "belongsToStory": true, "isKeyMilestone": false },
-    { "evidenceId": "denuncia", "referenceOrder": 3, "belongsToStory": true, "isKeyMilestone": true },
-    { "evidenceId": "sentenca", "referenceOrder": 4, "belongsToStory": true, "isKeyMilestone": true },
+    {
+      "evidenceId": "bandeira-plano",
+      "referenceOrder": 2,
+      "belongsToStory": true,
+      "isKeyMilestone": false
+    },
+    {
+      "evidenceId": "denuncia",
+      "referenceOrder": 3,
+      "belongsToStory": true,
+      "isKeyMilestone": true
+    },
+    {
+      "evidenceId": "sentenca",
+      "referenceOrder": 4,
+      "belongsToStory": true,
+      "isKeyMilestone": true
+    },
     {
       "evidenceId": "bandeira-mg",
       "referenceOrder": null,
@@ -20,17 +41,75 @@
     }
   ],
   "timelineHints": [
-    { "level": 1, "condition": { "type": "milestone_missing" }, "text": "Uma fonte importante, com data, ainda não está na sua linha. Já abriu a gaveta da vitrine?" },
-    { "level": 1, "condition": { "type": "irrelevant_between_milestones" }, "text": "Uma das cartas é muito mais recente que as outras. Confira os anos." },
-    { "level": 1, "condition": { "type": "milestones_inverted", "pair": ["denuncia", "sentenca"] }, "text": "Para alguém ser julgado, primeiro alguém precisa contar o que ele fez." },
-    { "level": 2, "condition": { "type": "milestones_inverted", "pair": ["quinto", "denuncia"] }, "text": "O que deixou a população com medo veio antes da conspiração. Confira o ano da lei do ouro." },
-    { "level": 1, "condition": { "type": "default" }, "text": "Releia as datas: a lei do ouro, a denúncia e a sentença estão a anos de distância." }
+    {
+      "level": 1,
+      "condition": {
+        "type": "milestone_missing"
+      },
+      "text": "Uma fonte importante, com data, ainda não está na sua linha. Já abriu a gaveta da vitrine?"
+    },
+    {
+      "level": 1,
+      "condition": {
+        "type": "irrelevant_between_milestones"
+      },
+      "text": "Uma das cartas é muito mais recente que as outras. Confira os anos."
+    },
+    {
+      "level": 1,
+      "condition": {
+        "type": "milestones_inverted",
+        "pair": [
+          "denuncia",
+          "sentenca"
+        ]
+      },
+      "text": "Para alguém ser julgado, primeiro alguém precisa contar o que ele fez."
+    },
+    {
+      "level": 2,
+      "condition": {
+        "type": "milestones_inverted",
+        "pair": [
+          "quinto",
+          "denuncia"
+        ]
+      },
+      "text": "O que deixou a população com medo veio antes da conspiração. Confira o ano da lei do ouro."
+    },
+    {
+      "level": 1,
+      "condition": {
+        "type": "default"
+      },
+      "text": "Releia as datas: a lei do ouro, a denúncia e a sentença estão a anos de distância."
+    }
   ],
   "evidenceRelations": [
-    { "from": "quinto", "to": "bandeira-plano", "type": "caused", "explanation": "O medo da derrama, a cobrança à força do ouro que faltava, levou os conjurados a planejar a revolta." },
-    { "from": "cartas-chilenas", "to": "quinto", "type": "mentions", "explanation": "O poema critica os abusos do governo das Minas, onde a Coroa cobrava o ouro." },
-    { "from": "sentenca", "to": "denuncia", "type": "consequence_of", "explanation": "A denúncia levou às prisões, ao processo e à sentença." },
-    { "from": "bandeira-mg", "to": "bandeira-plano", "type": "mentions", "explanation": "A bandeira de Minas de 1963 usa o lema e o triângulo planejados pelos conjurados." }
+    {
+      "from": "quinto",
+      "to": "bandeira-plano",
+      "type": "caused",
+      "explanation": "O medo da derrama, a cobrança à força do ouro que faltava, levou os conjurados a planejar a revolta."
+    },
+    {
+      "from": "cartas-chilenas",
+      "to": "quinto",
+      "type": "mentions",
+      "explanation": "O poema critica os abusos do governo das Minas, onde a Coroa cobrava o ouro."
+    },
+    {
+      "from": "sentenca",
+      "to": "denuncia",
+      "type": "consequence_of",
+      "explanation": "A denúncia levou às prisões, ao processo e à sentença."
+    },
+    {
+      "from": "bandeira-mg",
+      "to": "bandeira-plano",
+      "type": "mentions",
+      "explanation": "A bandeira de Minas de 1963 usa o lema e o triângulo planejados pelos conjurados."
+    }
   ],
   "solution": {
     "referenceAnswer": "Eles planejavam a Inconfidência Mineira (ou Conjuração Mineira): uma revolta para separar Minas Gerais de Portugal e formar uma república, aproveitando a revolta contra a derrama, a cobrança à força do ouro que a capitania devia à Coroa. Em 1789, Joaquim Silvério dos Reis denunciou o grupo, e todos foram presos. Em 1792, só Tiradentes foi executado; os outros foram mandados para o exílio na África.",
@@ -51,37 +130,98 @@
       {
         "id": "conspiracao",
         "label": "Uma conspiração para separar Minas de Portugal",
-        "synonyms": ["inconfidencia", "conjuracao", "conspiracao", "conspiraram", "conspirar", "revolta", "rebeliao", "levante", "republica", "separar", "independente", "independencia"]
+        "synonyms": [
+          "inconfidencia",
+          "conjuracao",
+          "conspiracao",
+          "conspiraram",
+          "conspirar",
+          "revolta",
+          "rebeliao",
+          "levante",
+          "republica",
+          "separar",
+          "independente",
+          "independencia"
+        ]
       },
       {
         "id": "ouro",
         "label": "Contra os impostos sobre o ouro e a derrama",
-        "synonyms": ["quinto", "derrama", "impostos", "imposto", "ouro", "cobranca", "tributos"]
+        "synonyms": [
+          "quinto",
+          "derrama",
+          "impostos",
+          "imposto",
+          "ouro",
+          "cobranca",
+          "tributos"
+        ]
       },
       {
         "id": "fim",
         "label": "A denúncia e a execução de Tiradentes",
-        "synonyms": ["tiradentes", "forca", "enforcado", "executado", "execucao", "denuncia", "denunciados", "silverio", "traidos", "presos"]
+        "synonyms": [
+          "tiradentes",
+          "forca",
+          "enforcado",
+          "executado",
+          "execucao",
+          "denuncia",
+          "denunciados",
+          "silverio",
+          "traidos",
+          "presos"
+        ]
       }
     ],
     "minGroupsToAccept": 2,
-    "acceptedVariants": ["inconfidencia mineira", "conjuracao mineira"],
+    "acceptedVariants": [
+      "inconfidencia mineira",
+      "conjuracao mineira"
+    ],
     "partialAnswers": [
-      { "requiredGroups": ["fim"], "feedback": "Você sabe como terminou. Mas o que eles planejavam, e por quê? Olhe a lei do ouro e o desenho da bandeira." },
-      { "requiredGroups": ["ouro"], "feedback": "Você encontrou o problema do ouro. O que os homens de Vila Rica planejaram fazer contra isso?" },
-      { "requiredGroups": ["conspiracao"], "feedback": "Você viu o plano. Por que eles estavam revoltados, e o que aconteceu com eles?" }
+      {
+        "requiredGroups": [
+          "fim"
+        ],
+        "feedback": "Você sabe como terminou. Mas o que eles planejavam, e por quê? Olhe a lei do ouro e o desenho da bandeira."
+      },
+      {
+        "requiredGroups": [
+          "ouro"
+        ],
+        "feedback": "Você encontrou o problema do ouro. O que os homens de Vila Rica planejaram fazer contra isso?"
+      },
+      {
+        "requiredGroups": [
+          "conspiracao"
+        ],
+        "feedback": "Você viu o plano. Por que eles estavam revoltados, e o que aconteceu com eles?"
+      }
     ],
     "commonErrors": [
       {
-        "triggers": ["1822", "dom pedro", "grito do ipiranga"],
+        "triggers": [
+          "1822",
+          "dom pedro",
+          "grito do ipiranga"
+        ],
         "feedback": "A independência do Brasil só veio em 1822. Releia a sentença: o que os conjurados de Minas queriam separar de Portugal?"
       },
       {
-        "triggers": ["roubaram", "roubo", "ladroes"],
+        "triggers": [
+          "roubaram",
+          "roubo",
+          "ladroes"
+        ],
         "feedback": "Ninguém roubou o ouro. Releia a lei de 1750: quem ficava com uma parte de todo ouro, e o que acontecia se faltasse?"
       }
     ],
     "defaultPartialFeedback": "Você está no caminho. O que o grupo planejava, por que, e o que aconteceu depois da denúncia?",
     "defaultRejectedFeedback": "Revise as cartas na sua linha do tempo: o que a Coroa exigia em 1750, o que o grupo planejava e o que aconteceu em 1789 e 1792?"
+  },
+  "codes": {
+    "gaveta-vitrine": "1750"
   }
 }

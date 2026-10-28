@@ -2,15 +2,24 @@
 
 import { DocumentSheet } from "@/components/document/DocumentSheet";
 import { Button } from "@/components/ui/Button";
+import { CodeLock } from "@/components/puzzles/CodeLock";
 import type { SceneObject } from "@/lib/content/schema";
 import { strings } from "@/lib/strings/pt-BR";
 
 const t = strings.viewer;
 
-type Props = { object: SceneObject; locked: boolean; onClose: () => void; titleId: string };
+type Props = {
+  object: SceneObject;
+  locked: boolean;
+  opened?: boolean;
+  onTryCode?: (input: string) => Promise<{ opened: boolean; showHint: boolean; hint?: string; canSkip: boolean }>;
+  onSkipCode?: () => Promise<void>;
+  onClose: () => void;
+  titleId: string;
+};
 
 /** Conteúdo de objetos que não são evidência: leitura, contexto, decorativo, trancado. */
-export function ObjectPanel({ object, locked, onClose, titleId }: Props) {
+export function ObjectPanel({ object, locked, opened = false, onTryCode, onSkipCode, onClose, titleId }: Props) {
   const c = object.content;
 
   if (locked) {
@@ -21,6 +30,9 @@ export function ObjectPanel({ object, locked, onClose, titleId }: Props) {
           {object.label}
         </h2>
         <p className="mt-3 max-w-prose">{object.unlock?.lockedMessage}</p>
+        {object.unlock && "code" in object.unlock && onTryCode && onSkipCode && (
+          <CodeLock unlock={object.unlock} opened={opened} onTry={onTryCode} onSkip={onSkipCode} />
+        )}
         <Button variant="secondary" className="mt-6" onClick={onClose}>
           {t.close}
         </Button>

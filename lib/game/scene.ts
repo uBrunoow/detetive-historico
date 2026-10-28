@@ -3,9 +3,11 @@ import type { PublicCase, SceneObject } from "@/lib/content/schema";
 
 /** Regras puras de exploração da cena (sem React). */
 
-export function isUnlocked(obj: SceneObject, examined: readonly string[]): boolean {
+export function isUnlocked(obj: SceneObject, examined: readonly string[], unlocked: readonly string[] = []): boolean {
   if (obj.type !== "locked") return true;
-  return (obj.unlock?.requiresExamined ?? []).every((id) => examined.includes(id));
+  if (obj.unlock && "code" in obj.unlock) return unlocked.includes(obj.id);
+  const requires = obj.unlock && "requiresExamined" in obj.unlock ? obj.unlock.requiresExamined : [];
+  return requires.every((id) => examined.includes(id));
 }
 
 export function markExamined(progress: CaseProgress, objectId: string, sceneId: string): CaseProgress {
@@ -32,17 +34,9 @@ export function startCase(progress: CaseProgress): CaseProgress {
 }
 
 /**
- * Fontes ainda não descobertas: nem coletadas, nem vistas (objeto que a contém examinado
- * e destrancado). Conta todas as fontes, não só as relevantes: ver DECISOES.md, D4.
+ * Fontes ainda sem carta no caderno. Ver uma fonte não basta: só conta quando o jogador a guarda.
+ * Conta todas as fontes, não só as relevantes: ver DECISOES.md, D4.
  */
 export function undiscoveredCount(c: PublicCase, progress: CaseProgress): number {
-  const seen = new Set<string>();
-  for (const scene of c.scenes) {
-    for (const obj of scene.objects) {
-      if (obj.evidenceId && progress.examined.includes(obj.id) && isUnlocked(obj, progress.examined)) {
-        seen.add(obj.evidenceId);
-      }
-    }
-  }
-  return c.evidence.filter((e) => !progress.cards[e.id] && !seen.has(e.id)).length;
+  return c.evidence.filter((e) => !progress.cards[e.id]).length;
 }
