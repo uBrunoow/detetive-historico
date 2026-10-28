@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { applyCodeTry, applyEpochGuess, applyPieces, applyQuiz, applySkipCode, normalizeCode } from "@/lib/game/puzzles";
+import { applyCodeTry, applyPieces, applyQuiz, applySkipCode, normalizeCode } from "@/lib/game/puzzles";
 import { freshState } from "@/lib/game/signed-state";
 
 const s0 = () => freshState("x");
@@ -49,15 +49,6 @@ describe("applyQuiz", () => {
   });
 });
 
-describe("applyEpochGuess", () => {
-  it("errado e depois certo: firstTryCorrect continua false", () => {
-    const a = applyEpochGuess(s0(), 0, 2);
-    expect(a.correct).toBe(false);
-    const b = applyEpochGuess(a.state, 2, 2);
-    expect(b.correct).toBe(true);
-    expect(b.state.puzzles.epoch).toEqual({ tries: 2, firstTryCorrect: false });
-  });
-});
 
 describe("applyPieces", () => {
   it("o primeiro resultado vence", () => {

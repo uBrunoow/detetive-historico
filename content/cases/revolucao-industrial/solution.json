@@ -1,15 +1,18 @@
 {
-  "choiceAnswer": {
-    "correctId": "industrial-reacao",
-    "wrongFeedback": {
-      "brasil-clt": "A CLT é do Brasil, de 1943. Este caso se passa em outro país e em outra época: revise o lugar de cada fonte.",
-      "trabalho-leve": "Observe o depoimento e o relatório: quantas horas as pessoas, inclusive crianças, passavam nas fábricas? Revise.",
-      "sem-reacao": "Observe os luditas e a Lei das Fábricas: o que as pessoas fizeram diante dessas condições? Revise o depoimento."
-    }
-  },
+  "epochAnswer": 2,
   "timelineReference": [
-    { "evidenceId": "watt-patente", "referenceOrder": 1, "belongsToStory": true, "isKeyMilestone": true },
-    { "evidenceId": "ludd", "referenceOrder": 2, "belongsToStory": true, "isKeyMilestone": true },
+    {
+      "evidenceId": "watt-patente",
+      "referenceOrder": 1,
+      "belongsToStory": true,
+      "isKeyMilestone": true
+    },
+    {
+      "evidenceId": "ludd",
+      "referenceOrder": 2,
+      "belongsToStory": true,
+      "isKeyMilestone": true
+    },
     {
       "evidenceId": "sadler",
       "referenceOrder": 3,
@@ -17,8 +20,18 @@
       "isKeyMilestone": false,
       "datingClueExplanation": "A comissão discutia se a lei devia limitar as horas de trabalho das crianças. A Lei das Fábricas de 1833 fez exatamente isso, então o depoimento veio antes dela. E ele fala de fábricas onde crianças trabalhavam o dia todo, o que já supõe as máquinas e fábricas que vieram depois de 1769. A comissão de Michael Sadler ouviu os depoimentos em 1832."
     },
-    { "evidenceId": "factory-act", "referenceOrder": 4, "belongsToStory": true, "isKeyMilestone": true },
-    { "evidenceId": "chadwick", "referenceOrder": 5, "belongsToStory": true, "isKeyMilestone": false },
+    {
+      "evidenceId": "factory-act",
+      "referenceOrder": 4,
+      "belongsToStory": true,
+      "isKeyMilestone": true
+    },
+    {
+      "evidenceId": "chadwick",
+      "referenceOrder": 5,
+      "belongsToStory": true,
+      "isKeyMilestone": false
+    },
     {
       "evidenceId": "clt-brasil",
       "referenceOrder": null,
@@ -28,17 +41,75 @@
     }
   ],
   "timelineHints": [
-    { "level": 1, "condition": { "type": "milestone_missing" }, "text": "Uma fonte importante ainda não está na sua linha. Já abriu a gaveta da mesa?" },
-    { "level": 1, "condition": { "type": "irrelevant_between_milestones" }, "text": "Uma das cartas é de outro país e de outro século. Confira o lugar e o ano." },
-    { "level": 1, "condition": { "type": "milestones_inverted", "pair": ["watt-patente", "ludd"] }, "text": "Os trabalhadores quebravam máquinas. As máquinas já precisavam existir." },
-    { "level": 2, "condition": { "type": "milestones_inverted", "pair": ["ludd", "factory-act"] }, "text": "Confira os anos: os protestos com martelos vieram antes ou depois da lei que criou os inspetores?" },
-    { "level": 1, "condition": { "type": "default" }, "text": "Releia os anos de cada fonte: 1769, 1812, 1833, 1842." }
+    {
+      "level": 1,
+      "condition": {
+        "type": "milestone_missing"
+      },
+      "text": "Uma fonte importante ainda não está na sua linha. Já abriu a gaveta da mesa?"
+    },
+    {
+      "level": 1,
+      "condition": {
+        "type": "irrelevant_between_milestones"
+      },
+      "text": "Uma das cartas é de outro país e de outro século. Confira o lugar e o ano."
+    },
+    {
+      "level": 1,
+      "condition": {
+        "type": "milestones_inverted",
+        "pair": [
+          "watt-patente",
+          "ludd"
+        ]
+      },
+      "text": "Os trabalhadores quebravam máquinas. As máquinas já precisavam existir."
+    },
+    {
+      "level": 2,
+      "condition": {
+        "type": "milestones_inverted",
+        "pair": [
+          "ludd",
+          "factory-act"
+        ]
+      },
+      "text": "Confira os anos: os protestos com martelos vieram antes ou depois da lei que criou os inspetores?"
+    },
+    {
+      "level": 1,
+      "condition": {
+        "type": "default"
+      },
+      "text": "Releia os anos de cada fonte: 1769, 1812, 1833, 1842."
+    }
   ],
   "evidenceRelations": [
-    { "from": "ludd", "to": "watt-patente", "type": "consequence_of", "explanation": "As máquinas nas fábricas tiraram o trabalho de artesãos, que reagiram quebrando-as." },
-    { "from": "factory-act", "to": "sadler", "type": "consequence_of", "explanation": "Os depoimentos sobre crianças trabalhando 14 horas por dia pressionaram o Parlamento a fazer a lei de 1833." },
-    { "from": "chadwick", "to": "watt-patente", "type": "consequence_of", "explanation": "As fábricas atraíram tanta gente para as cidades que os bairros operários cresceram sem água limpa nem esgoto." },
-    { "from": "clt-brasil", "to": "factory-act", "type": "mentions", "explanation": "As duas leis protegem quem trabalha, em países e épocas diferentes." }
+    {
+      "from": "ludd",
+      "to": "watt-patente",
+      "type": "consequence_of",
+      "explanation": "As máquinas nas fábricas tiraram o trabalho de artesãos, que reagiram quebrando-as."
+    },
+    {
+      "from": "factory-act",
+      "to": "sadler",
+      "type": "consequence_of",
+      "explanation": "Os depoimentos sobre crianças trabalhando 14 horas por dia pressionaram o Parlamento a fazer a lei de 1833."
+    },
+    {
+      "from": "chadwick",
+      "to": "watt-patente",
+      "type": "consequence_of",
+      "explanation": "As fábricas atraíram tanta gente para as cidades que os bairros operários cresceram sem água limpa nem esgoto."
+    },
+    {
+      "from": "clt-brasil",
+      "to": "factory-act",
+      "type": "mentions",
+      "explanation": "As duas leis protegem quem trabalha, em países e épocas diferentes."
+    }
   ],
   "solution": {
     "referenceAnswer": "Era a Revolução Industrial na Grã-Bretanha. Máquinas a vapor, como a de James Watt (1769), e as fábricas de tecidos aumentaram muito a produção. Mas os trabalhadores, inclusive crianças, enfrentavam jornadas de 14 horas, salários baixos e cidades sujas e lotadas. Houve reação: os luditas quebravam máquinas (1812), o Parlamento ouviu operários e criou a Lei das Fábricas de 1833, que limitou o trabalho infantil e criou inspetores.",
@@ -59,37 +130,99 @@
       {
         "id": "industria",
         "label": "A Revolução Industrial: máquinas a vapor e fábricas",
-        "synonyms": ["revolucao industrial", "industrializacao", "industrial", "industria", "fabricas", "fabrica", "maquinas", "maquina", "vapor"]
+        "synonyms": [
+          "revolucao industrial",
+          "industrializacao",
+          "industrial",
+          "industria",
+          "fabricas",
+          "fabrica",
+          "maquinas",
+          "maquina",
+          "vapor"
+        ]
       },
       {
         "id": "trabalho",
         "label": "Trabalho pesado, inclusive de crianças",
-        "synonyms": ["criancas", "trabalho infantil", "jornadas", "jornada", "14 horas", "exploracao", "explorados", "trabalhadores", "operarios", "salarios"]
+        "synonyms": [
+          "criancas",
+          "trabalho infantil",
+          "jornadas",
+          "jornada",
+          "14 horas",
+          "exploracao",
+          "explorados",
+          "trabalhadores",
+          "operarios",
+          "salarios"
+        ]
       },
       {
         "id": "reacao",
         "label": "Protestos e as primeiras leis",
-        "synonyms": ["luditas", "ludd", "protestos", "protestavam", "quebravam", "lei de 1833", "lei das fabricas", "factory act", "inspetores", "parlamento", "leis"]
+        "synonyms": [
+          "luditas",
+          "ludd",
+          "protestos",
+          "protestavam",
+          "quebravam",
+          "lei de 1833",
+          "lei das fabricas",
+          "factory act",
+          "inspetores",
+          "parlamento",
+          "leis"
+        ]
       }
     ],
     "minGroupsToAccept": 2,
-    "acceptedVariants": ["revolucao industrial", "primeira revolucao industrial"],
+    "acceptedVariants": [
+      "revolucao industrial",
+      "primeira revolucao industrial"
+    ],
     "partialAnswers": [
-      { "requiredGroups": ["industria"], "feedback": "Você viu as máquinas e as fábricas. Como isso mudou a vida de quem trabalhava nelas? Olhe o depoimento e o relatório." },
-      { "requiredGroups": ["trabalho"], "feedback": "Você viu o trabalho pesado. O que estava mudando na produção, e como as pessoas reagiram?" },
-      { "requiredGroups": ["reacao"], "feedback": "Você viu os protestos e as leis. Contra o que as pessoas reagiam?" }
+      {
+        "requiredGroups": [
+          "industria"
+        ],
+        "feedback": "Você viu as máquinas e as fábricas. Como isso mudou a vida de quem trabalhava nelas? Olhe o depoimento e o relatório."
+      },
+      {
+        "requiredGroups": [
+          "trabalho"
+        ],
+        "feedback": "Você viu o trabalho pesado. O que estava mudando na produção, e como as pessoas reagiram?"
+      },
+      {
+        "requiredGroups": [
+          "reacao"
+        ],
+        "feedback": "Você viu os protestos e as leis. Contra o que as pessoas reagiam?"
+      }
     ],
     "commonErrors": [
       {
-        "triggers": ["brasil", "getulio", "vargas"],
+        "triggers": [
+          "brasil",
+          "getulio",
+          "vargas"
+        ],
         "feedback": "A CLT é do Brasil, de 1943. Este caso se passa em outro país e em outra época: releia o lugar de cada fonte."
       },
       {
-        "triggers": ["computador", "internet", "eletricidade"],
+        "triggers": [
+          "computador",
+          "internet",
+          "eletricidade"
+        ],
         "feedback": "Ainda não havia eletricidade nas fábricas. Releia a patente de 1769: que máquina movia as fábricas?"
       }
     ],
     "defaultPartialFeedback": "Você está no caminho. O que mudou na produção, como era o trabalho nas fábricas e como as pessoas reagiram?",
     "defaultRejectedFeedback": "Revise as cartas na sua linha do tempo: o que a patente de 1769 trouxe, o que os operários contaram e o que a lei de 1833 mudou?"
+  },
+  "codes": {
+    "gaveta-arquivo": "1769"
   }
 }

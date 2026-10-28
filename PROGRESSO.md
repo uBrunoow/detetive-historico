@@ -112,11 +112,11 @@
   - olha só os marcos-chave e devolve uma pista pelas regras da D6 (marco faltando → carta estranha entre marcos → par invertido → padrão), com o nível da dica subindo a cada conferência;
   - se os marcos estão coerentes, diz isso sem falar das outras cartas;
   - as pistas anteriores ficam no histórico.
-- **Tela da conclusão** (`/casos/[slug]/conclusao`): pergunta, linha do tempo como painel de consulta com seleção das cartas que sustentam a resposta, texto livre (rascunho salvo), contador de tentativas, aviso antes de gastar uma tentativa (e aviso especial na última), resultado com feedback orientador e histórico das tentativas.
-  - Menos de 3 palavras não gasta tentativa.
+- **Tela da conclusão** (`/casos/[slug]/conclusao`): pergunta, linha do tempo compacta como consulta, quatro escolhas em cartões de rádio, justificativa opcional, contador de escolhas e aviso antes de gastar a última escolha.
   - O servidor confere de novo o mínimo de cartas posicionadas.
 - **Avaliação da resposta** (`lib/game/answer.ts`): variantes aceitas e grupos de conceitos, sem acentos, maiúsculas nem pontuação. Termos de 5 letras ou mais casam com o começo da palavra ("agrimensor" → "agrimensora"). Os erros comuns ignoram negações ("não foi roubado" não dispara o erro "roubo"). Depois vêm as respostas parciais previstas e os feedbacks padrão.
 - **Encerramento** (`/casos/[slug]/encerramento`): resultado; pergunta e última conclusão; o que aconteceu e a resposta de referência; **linha de referência lado a lado com a do jogador**, com marcas para "em ordem coerente", "a ordem diverge", "bem descartada", "fazia parte da história" e "não posicionada"; como situar as cartas sem data; cartas fora da história e por quê; relações entre as fontes; limites das fontes; referências; medalhas. O tom é de aprendizado, não de correção.
+- **Placar e treino**: estrelas, pontos e detalhamento dos itens aparecem no topo do encerramento. “Jogar de novo” preserva o resultado oficial e marca a nova partida como treino. O tom é de aprendizado, não de correção.
 - O status local (catálogo, medalha Detetive) acompanha o resultado do servidor, mesmo se o caso foi encerrado em outra aba.
 - Testes: avaliação de respostas, conferência, comparação no encerramento e assinatura do estado (`tests/unit/resolution.test.ts`, `tests/unit/signed-state.test.ts`).
 
@@ -131,6 +131,14 @@
 - Em produção, defina `GAME_SECRET` (veja `.env.example`).
 - Hipóteses ainda não se ligam a cartas nem a trechos da linha (PRD §5.8): fica para uma próxima etapa.
 - Sem painel do professor nem métricas (fora do MVP, D1).
+
+## Verificação manual atualizada
+
+1. Inicie o tutorial e examine as cenas apenas com teclado; guarde as fontes.
+2. Na linha do tempo, posicione cartas no começo e no fim, abra uma carta por vez, justifique e crie uma ligação na aba correspondente.
+3. Resolva os enigmas opcionais, posicione o mínimo de cartas e abra a conclusão.
+4. Escolha uma alternativa errada, confira o feedback e escolha a correta; observe o placar e o detalhamento dos pontos.
+5. Em Encerramento, escolha “Jogar de novo”, confirme, termine novamente e verifique o rótulo “Treino” e o primeiro resultado preservado em Fases.
 
 ## Caso real 1 — "A lei de dois artigos" (abolição) ✅ (aguardando revisão de História)
 
@@ -168,6 +176,31 @@
 **Pendente / observações**
 - Revisão de conteúdo pela professora / alguém de História. Várias cartas resumem documentos em vez de transcrever (quinto, denúncia, bandeira, Ludd, Factory Act, Chadwick).
 - Versões Fundamental/Médio, distintivos por caso e dicas dentro do cenário ficaram para depois.
+
+## Noir 16-bit e veredito por época e ordem ✅ (aguardando revisão)
+
+**Feito** (decisão D21, plano `docs/superpowers/plans/2026-10-28-noir-veredito-epoca-ordem.md`)
+- Veredito novo em `/casos/[slug]/conclusao`, igual ao mockup: parte 1, época de A a E (blocos navegáveis por setas) e "Confirmar época"; parte 2, "Ponha os fatos em ordem" (bandeja de pistas e barbante), "Conferir ordem" com carimbo "X de Y no lugar" e envio único (`submitVerdict`). Época 400 + ordem até 600; 1000 = 100%.
+- Cena igual ao mockup: HUD com lupas (conferências) e moeda (fontes), título do lugar, sala na moldura preta com a lanterna, painel "Pistas" com espaços de "?" e "Abrir o veredito", fala do detetive embaixo.
+- Tela de título igual ao mockup: links no topo, lupas, "Começar investigação" e "aperte Enter" (funciona).
+- Resultado com o detetive ao lado e os botões "Ver solução comentada", "Jogar de novo (treino)" e "Voltar ao mapa".
+- Encerramento com placar animado (estrelas, total, barras de época e ordem, carimbo) e a época certa ao lado da escolhida.
+- Os 6 casos têm `epochOptions` (público) e `epochAnswer` (privado). Saíram `period`, rótulos da linha do tempo, alternativas da conclusão e palpite de época na cena.
+- Estado assinado v3 e progresso local v3 (partidas antigas recomeçam, cartas e linha ficam).
+- Cena: sala mais escura com a lanterna, brilhos nos objetos não examinados, a sala acende com todas as fontes, fala do detetive datilografada.
+- Clima na frente do cenário (chuva, neblina, poças, relâmpago na tela inicial, em Fases e no encerramento), filtro de monitor velho e íris fechando no clique.
+- Visual noir em todas as telas: tokens, Jersey 10 e Jacquard 24, céu com estrelas, chuva, neblina e chão (`NightSky`), sprites em SVG (`PixelSprite`), abertura em íris, tela inicial com a rua do arquivo, Fases como quadro de alfinetes com barbante (cards no celular).
+
+**Roteiro de teste manual**
+1. Início → Jogar → escolher um alfinete → Abrir o caso → examinar a cena com a lanterna e guardar as fontes.
+2. Linha do tempo: pôr as cartas em ordem → Dar o veredito.
+3. Veredito: escolher a época (setas também funcionam) → Confirmar época → pegar cada pista e prender numa casa (deixar na bandeja a que não pertence) → Conferir ordem.
+4. Encerramento: conferir pontos, estrelas e a época certa; Jogar de novo (treino) mantém o resultado oficial em Fases.
+5. Repetir com "Reduzir movimento" ligado em Opções: nada pisca nem se move.
+
+**Pendente**
+- Revisão de História das cinco épocas de cada caso.
+- Verificação manual com leitor de tela no veredito.
 
 ## Critérios de aceitação do PRD (§12)
 

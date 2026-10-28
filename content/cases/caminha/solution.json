@@ -1,15 +1,18 @@
 {
-  "choiceAnswer": {
-    "correctId": "carta-caminha",
-    "wrongFeedback": {
-      "colombo": "Colombo chegou à América em 1492, por outra rota e a serviço da Espanha. Releia quem é o capitão nesta carta.",
-      "terra-vazia": "Revise o trecho “Gente na praia”: quem os portugueses encontraram quando chegaram?",
-      "so-frota": "Observe com calma: a carta fala só dos navios, ou também do que foi visto em terra? Revise os trechos com data."
-    }
-  },
+  "epochAnswer": 1,
   "timelineReference": [
-    { "evidenceId": "partida", "referenceOrder": 1, "belongsToStory": true, "isKeyMilestone": true },
-    { "evidenceId": "monte-pascoal", "referenceOrder": 2, "belongsToStory": true, "isKeyMilestone": true },
+    {
+      "evidenceId": "partida",
+      "referenceOrder": 1,
+      "belongsToStory": true,
+      "isKeyMilestone": true
+    },
+    {
+      "evidenceId": "monte-pascoal",
+      "referenceOrder": 2,
+      "belongsToStory": true,
+      "isKeyMilestone": true
+    },
     {
       "evidenceId": "habitantes",
       "referenceOrder": 3,
@@ -17,8 +20,18 @@
       "isKeyMilestone": false,
       "datingClueExplanation": "O trecho conta que os homens vieram até o batel, o barco pequeno que levava os navegantes à praia. Isso só pode ter acontecido depois de avistarem terra (22 de abril). E foi antes da missa de 1º de maio, quando os portugueses já conheciam aquelas pessoas. Na carta, esse primeiro encontro é contado no dia 23 de abril."
     },
-    { "evidenceId": "missa-cruz", "referenceOrder": 4, "belongsToStory": true, "isKeyMilestone": true },
-    { "evidenceId": "terra-brasilis", "referenceOrder": 5, "belongsToStory": true, "isKeyMilestone": false },
+    {
+      "evidenceId": "missa-cruz",
+      "referenceOrder": 4,
+      "belongsToStory": true,
+      "isKeyMilestone": true
+    },
+    {
+      "evidenceId": "terra-brasilis",
+      "referenceOrder": 5,
+      "belongsToStory": true,
+      "isKeyMilestone": false
+    },
     {
       "evidenceId": "tordesilhas",
       "referenceOrder": null,
@@ -28,17 +41,75 @@
     }
   ],
   "timelineHints": [
-    { "level": 1, "condition": { "type": "milestone_missing" }, "text": "Um dos trechos com data da carta ainda não está na sua linha." },
-    { "level": 1, "condition": { "type": "irrelevant_between_milestones" }, "text": "Uma das cartas é de antes da viagem. Confira os anos." },
-    { "level": 1, "condition": { "type": "milestones_inverted", "pair": ["partida", "monte-pascoal"] }, "text": "Uma viagem começa pela partida. Confira os meses: março vem antes de abril." },
-    { "level": 2, "condition": { "type": "milestones_inverted", "pair": ["monte-pascoal", "missa-cruz"] }, "text": "Para erguer uma cruz na praia, primeiro era preciso chegar à terra." },
-    { "level": 1, "condition": { "type": "default" }, "text": "Releia os dias e os meses escritos em cada trecho da carta." }
+    {
+      "level": 1,
+      "condition": {
+        "type": "milestone_missing"
+      },
+      "text": "Um dos trechos com data da carta ainda não está na sua linha."
+    },
+    {
+      "level": 1,
+      "condition": {
+        "type": "irrelevant_between_milestones"
+      },
+      "text": "Uma das cartas é de antes da viagem. Confira os anos."
+    },
+    {
+      "level": 1,
+      "condition": {
+        "type": "milestones_inverted",
+        "pair": [
+          "partida",
+          "monte-pascoal"
+        ]
+      },
+      "text": "Uma viagem começa pela partida. Confira os meses: março vem antes de abril."
+    },
+    {
+      "level": 2,
+      "condition": {
+        "type": "milestones_inverted",
+        "pair": [
+          "monte-pascoal",
+          "missa-cruz"
+        ]
+      },
+      "text": "Para erguer uma cruz na praia, primeiro era preciso chegar à terra."
+    },
+    {
+      "level": 1,
+      "condition": {
+        "type": "default"
+      },
+      "text": "Releia os dias e os meses escritos em cada trecho da carta."
+    }
   ],
   "evidenceRelations": [
-    { "from": "monte-pascoal", "to": "partida", "type": "consequence_of", "explanation": "A frota que partiu de Lisboa em março avistou terra em 22 de abril." },
-    { "from": "missa-cruz", "to": "monte-pascoal", "type": "consequence_of", "explanation": "Depois de chegar, os portugueses ergueram uma cruz para marcar a posse da terra." },
-    { "from": "terra-brasilis", "to": "missa-cruz", "type": "consequence_of", "explanation": "Depois da posse, Portugal começou a explorar o pau-brasil, como mostra o mapa." },
-    { "from": "missa-cruz", "to": "tordesilhas", "type": "mentions", "explanation": "A cruz com o brasão do rei mostra que Portugal se achava dono daquela terra, como dizia o tratado." }
+    {
+      "from": "monte-pascoal",
+      "to": "partida",
+      "type": "consequence_of",
+      "explanation": "A frota que partiu de Lisboa em março avistou terra em 22 de abril."
+    },
+    {
+      "from": "missa-cruz",
+      "to": "monte-pascoal",
+      "type": "consequence_of",
+      "explanation": "Depois de chegar, os portugueses ergueram uma cruz para marcar a posse da terra."
+    },
+    {
+      "from": "terra-brasilis",
+      "to": "missa-cruz",
+      "type": "consequence_of",
+      "explanation": "Depois da posse, Portugal começou a explorar o pau-brasil, como mostra o mapa."
+    },
+    {
+      "from": "missa-cruz",
+      "to": "tordesilhas",
+      "type": "mentions",
+      "explanation": "A cruz com o brasão do rei mostra que Portugal se achava dono daquela terra, como dizia o tratado."
+    }
   ],
   "solution": {
     "referenceAnswer": "A carta foi escrita por Pero Vaz de Caminha, escrivão da frota de Pedro Álvares Cabral, ao rei D. Manuel I, em 1º de maio de 1500. Ela conta a chegada dos portugueses ao litoral da atual Bahia, em abril de 1500: o Monte Pascoal, o encontro com os povos que já viviam ali e a cruz erguida para marcar a posse da terra.",
@@ -59,37 +130,89 @@
       {
         "id": "frota",
         "label": "A frota de Cabral",
-        "synonyms": ["cabral", "frota", "esquadra", "naus", "navegantes", "navegadores", "portugueses", "viagem"]
+        "synonyms": [
+          "cabral",
+          "frota",
+          "esquadra",
+          "naus",
+          "navegantes",
+          "navegadores",
+          "portugueses",
+          "viagem"
+        ]
       },
       {
         "id": "chegada",
         "label": "A chegada à nova terra, em 1500",
-        "synonyms": ["chegada", "chegaram", "chegou", "descobrimento", "descobriram", "achamento", "bahia", "porto seguro", "vera cruz", "monte pascoal", "brasil", "1500"]
+        "synonyms": [
+          "chegada",
+          "chegaram",
+          "chegou",
+          "descobrimento",
+          "descobriram",
+          "achamento",
+          "bahia",
+          "porto seguro",
+          "vera cruz",
+          "monte pascoal",
+          "brasil",
+          "1500"
+        ]
       },
       {
         "id": "autor",
         "label": "Caminha escreveu ao rei",
-        "synonyms": ["caminha", "escrivao", "rei", "manuel"]
+        "synonyms": [
+          "caminha",
+          "escrivao",
+          "rei",
+          "manuel"
+        ]
       }
     ],
     "minGroupsToAccept": 2,
     "acceptedVariants": [],
     "partialAnswers": [
-      { "requiredGroups": ["autor"], "feedback": "Você descobriu quem escreveu e para quem. Mas o que ele contou ao rei? Olhe os trechos com data." },
-      { "requiredGroups": ["frota"], "feedback": "Você encontrou a frota. Para onde ela ia, e onde acabou chegando?" },
-      { "requiredGroups": ["chegada"], "feedback": "Você viu a chegada. Quem chegou, e quem contou isso por escrito?" }
+      {
+        "requiredGroups": [
+          "autor"
+        ],
+        "feedback": "Você descobriu quem escreveu e para quem. Mas o que ele contou ao rei? Olhe os trechos com data."
+      },
+      {
+        "requiredGroups": [
+          "frota"
+        ],
+        "feedback": "Você encontrou a frota. Para onde ela ia, e onde acabou chegando?"
+      },
+      {
+        "requiredGroups": [
+          "chegada"
+        ],
+        "feedback": "Você viu a chegada. Quem chegou, e quem contou isso por escrito?"
+      }
     ],
     "commonErrors": [
       {
-        "triggers": ["colombo", "colombro"],
+        "triggers": [
+          "colombo",
+          "colombro"
+        ],
         "feedback": "Colombo chegou à América em 1492, por outra rota e a serviço da Espanha. Releia quem é o capitão nesta carta."
       },
       {
-        "triggers": ["vazia", "desabitada", "ninguem morava"],
+        "triggers": [
+          "vazia",
+          "desabitada",
+          "ninguem morava"
+        ],
         "feedback": "Releia o trecho “Gente na praia”: quem os portugueses encontraram?"
       }
     ],
     "defaultPartialFeedback": "Você está no caminho. Quem escreveu a carta, para quem, e o que aconteceu entre março e maio de 1500?",
     "defaultRejectedFeedback": "Releia as datas e os lugares nos trechos da carta: de onde a frota saiu, o que avistou e o que fez ao chegar?"
+  },
+  "codes": {
+    "gaveta-arquivo": "22"
   }
 }

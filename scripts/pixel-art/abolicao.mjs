@@ -175,13 +175,7 @@ function escritorio() {
   c.box(198, 100, 18, 10, "green");
   c.hline(199, 101, 16, "greenLight");
 
-  // chaveiro (204, 96, 18, 28) — fica acima da luminária, na parede
-  c.box(206, 72, 14, 4, "woodLight");
-  c.ring(213, 81, 2, "manila");
-  c.vline(213, 83, 10, "manila");
-  c.hline(213, 89, 3, "manila");
-  c.hline(213, 92, 2, "manila");
-  c.box(208, 94, 10, 5, "paper");
+  // Parede livre: o cadeado é uma interação, não uma chave desenhada.
 
   // retrato-gama (232, 24, 36, 48) · retrato-reboucas (276, 24, 36, 48)
   portrait(c, 232, 24, "#5a3c28", true);

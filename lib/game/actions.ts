@@ -4,11 +4,9 @@ import { z } from "zod";
 import { getPrivateCase } from "@/lib/content/private";
 import { getPublicCase } from "@/lib/content/public";
 import type { LinkType } from "@/lib/content/schema";
-import { evaluateAnswer, normalize, type Verdict } from "./answer";
 import { checkTimeline as runCheck, type CheckResult } from "./check";
-import { strings } from "@/lib/strings/pt-BR";
-import { applyCodeTry, applyEpochGuess, applyPieces, applyQuiz, applySkipCode } from "./puzzles";
-import { computeResult } from "./score";
+import { applyCodeTry, applyPieces, applyQuiz, applySkipCode } from "./puzzles";
+import { computeResult, orderRatio, SOLVED_POINTS } from "./score";
 import { freshState, readState, writeState, type GameState, type Result } from "./signed-state";
 
 /**
@@ -23,16 +21,13 @@ const orderSchema = z.strictObject({ slots: z.array(idList.min(1)).max(60), outs
 
 export type PublicGameState = {
   checksLeft: number;
-  attemptsLeft: number;
   maxChecks: number;
-  maxAttempts: number;
   outcome: GameState["outcome"];
-  choicesLeft: number;
-  maxChoices: number;
   practice: boolean;
   official: { stars: number; points: number } | null;
-  epochAnswered: boolean;
   openedCodes: string[];
+  answeredQuiz: string[];
+  pieces: "solved" | "skipped" | null;
 };
 
 async function load(slug: unknown) {
@@ -42,19 +37,16 @@ async function load(slug: unknown) {
   return { c, state: await readState(s) };
 }
 
-function view(c: { maxTimelineChecks: number; conclusion: { maxChoices: number } }, state: GameState): PublicGameState {
+function view(c: { maxTimelineChecks: number }, state: GameState): PublicGameState {
   return {
     checksLeft: Math.max(0, c.maxTimelineChecks - state.checksUsed),
-    attemptsLeft: Math.max(0, c.conclusion.maxChoices - state.choicesUsed),
     maxChecks: c.maxTimelineChecks,
-    maxAttempts: c.conclusion.maxChoices,
     outcome: state.outcome,
-    choicesLeft: Math.max(0, c.conclusion.maxChoices - state.choicesUsed),
-    maxChoices: c.conclusion.maxChoices,
     practice: state.practice,
     official: state.official ? { stars: state.official.stars, points: state.official.points } : null,
-    epochAnswered: state.puzzles.epoch.firstTryCorrect !== null,
     openedCodes: Object.entries(state.puzzles.codes).filter(([, v]) => v.opened).map(([k]) => k),
+    answeredQuiz: Object.keys(state.puzzles.quiz),
+    pieces: state.puzzles.pieces,
   };
 }
 
@@ -63,8 +55,11 @@ export async function getGameState(slug: string): Promise<PublicGameState> {
   return view(c, state);
 }
 
+/** Quantas cartas estão no lugar certo (as de fora contam se foram postas fora), nunca quais. */
+export type CheckTally = { inPlace: number; total: number };
+
 export type CheckResponse =
-  | { ok: true; result: CheckResult; state: PublicGameState }
+  | { ok: true; result: CheckResult; tally: CheckTally; state: PublicGameState }
   | { ok: false; error: "no_checks" | "closed" | "empty"; state: PublicGameState };
 
 export async function checkTimeline(slug: string, order: unknown): Promise<CheckResponse> {
@@ -75,44 +70,16 @@ export async function checkTimeline(slug: string, order: unknown): Promise<Check
   if (player.slots.length === 0) return { ok: false, error: "empty", state: view(c, state) };
 
   const next = { ...state, checksUsed: state.checksUsed + 1 };
-  const result = runCheck(await getPrivateCase(c.slug), player, next.checksUsed);
+  const priv = await getPrivateCase(c.slug);
+  const result = runCheck(priv, player, next.checksUsed);
+  const tally = { inPlace: Math.round(orderRatio(priv.timelineReference, player) * priv.timelineReference.length), total: priv.timelineReference.length };
   await writeState(next);
-  return { ok: true, result, state: view(c, next) };
-}
-
-const answerSchema = z.strictObject({
-  answer: z.string().max(3000),
-  order: orderSchema,
-  supporting: idList,
-});
-
-export type AnswerResponse =
-  | { ok: true; verdict: Verdict; feedback: string | null; state: PublicGameState }
-  | { ok: false; error: "no_attempts" | "closed" | "empty" | "locked"; state: PublicGameState };
-
-export async function submitAnswer(slug: string, input: unknown): Promise<AnswerResponse> {
-  const { c, state } = await load(slug);
-  const { answer, order } = answerSchema.parse(input);
-  if (state.outcome) return { ok: false, error: "closed", state: view(c, state) };
-  if (state.choicesUsed >= c.conclusion.maxChoices) return { ok: false, error: "no_attempts", state: view(c, state) };
-  // Resposta vazia ou curta demais não consome tentativa.
-  if (normalize(answer).split(" ").filter(Boolean).length < 3) return { ok: false, error: "empty", state: view(c, state) };
-  // A tela só libera com o mínimo de cartas posicionadas (PRD §5.7.4); o servidor confere de novo.
-  const placed = new Set(order.slots.flat().filter((id) => c.evidence.some((e) => e.id === id))).size;
-  if (placed < c.minCardsToResolve) return { ok: false, error: "locked", state: view(c, state) };
-
-  const { verdict, feedback } = evaluateAnswer((await getPrivateCase(c.slug)).solution, answer);
-  const choicesUsed = state.choicesUsed + 1;
-  const outcome = verdict === "accepted" ? "solved" : choicesUsed >= c.conclusion.maxChoices ? "failed" : null;
-  // Quem resolve precisa de `solvedOnChoice`, senão a pontuação não conta a resposta.
-  const solvedOnChoice = outcome === "solved" ? (choicesUsed === 1 ? 1 : 2) : state.solvedOnChoice;
-  const next: GameState = { ...state, choicesUsed, outcome, solvedOnChoice };
-  await writeState(next);
-  return { ok: true, verdict, feedback, state: view(c, next) };
+  return { ok: true, result, tally, state: view(c, next) };
 }
 
 export type ClosureData = {
   outcome: "solved" | "failed";
+  epoch: { options: { title: string; years: string }[]; correct: number; chosen: number | null };
   referenceAnswer: string;
   explanation: string[];
   sourceLimitations: string[];
@@ -134,6 +101,7 @@ export async function getClosure(slug: string): Promise<ClosureData | null> {
   const priv = await getPrivateCase(c.slug);
   return {
     outcome: state.outcome,
+    epoch: { options: c.epochOptions, correct: priv.epochAnswer, chosen: state.epochChoice },
     referenceAnswer: priv.solution.referenceAnswer,
     explanation: priv.solution.explanation,
     sourceLimitations: priv.solution.sourceLimitations,
@@ -159,18 +127,6 @@ function codeLock(c: PublicCase, objectId: string) {
     if (obj?.unlock && "code" in obj.unlock) return obj.unlock.code;
   }
   throw new Error("Este objeto não tem cadeado de código.");
-}
-
-export async function guessEpoch(slug: string, index: number) {
-  const { c, state } = await load(slug);
-  const i = indexSchema.parse(index);
-  if (!c.epochGuess || i >= c.epochGuess.options.length) throw new Error("Palpite de época inválido.");
-  if (state.outcome) return { ok: false, error: "closed", state: view(c, state) } as Closed;
-  const answer = (await getPrivateCase(c.slug)).epochAnswer;
-  if (answer === undefined) throw new Error("Caso sem resposta de época.");
-  const { state: next, correct } = applyEpochGuess(state, i, answer);
-  await writeState(next);
-  return { ok: true as const, correct, hint: correct ? undefined : strings.puzzles.epochHint, state: view(c, next) };
 }
 
 export async function tryCode(slug: string, objectId: string, input: string) {
@@ -230,53 +186,38 @@ export async function finishPieces(slug: string, how: "solved" | "skipped") {
   return { ok: true as const, state: view(c, next) };
 }
 
-const choiceSchema = z.strictObject({
-  choiceId: idSchema,
-  justification: z.string().max(600),
+const verdictSchema = z.strictObject({
+  epochIndex: z.number().int().min(0).max(4),
   order: orderSchema,
 });
 
-export type ChoiceResponse =
-  | { ok: true; verdict: "correct" | "wrong"; feedback: string | null; state: PublicGameState }
-  | { ok: false; error: "closed" | "no_choices" | "locked"; state: PublicGameState };
+export type VerdictResponse =
+  | { ok: true; result: Result; state: PublicGameState }
+  | { ok: false; error: "closed" | "locked"; state: PublicGameState };
 
-const better = (a: GameState["justification"], b: GameState["justification"]) => {
-  const rank = { accepted: 2, partial: 1 } as const;
-  return (b ? rank[b] : 0) > (a ? rank[a] : 0) ? b : a;
-};
-
-export async function submitChoice(slug: string, input: unknown): Promise<ChoiceResponse> {
+/**
+ * O veredito (D21): a época escolhida e a linha do tempo do jogador, de uma vez só.
+ * Encerra o caso e calcula os pontos no servidor; a resposta certa só sai em `getClosure`.
+ */
+export async function submitVerdict(slug: string, input: unknown): Promise<VerdictResponse> {
   const { c, state } = await load(slug);
-  const { choiceId, justification, order } = choiceSchema.parse(input);
-  if (!c.conclusion.choices.some((x) => x.id === choiceId)) throw new Error("Alternativa inexistente.");
+  const { epochIndex, order } = verdictSchema.parse(input);
   if (state.outcome) return { ok: false, error: "closed", state: view(c, state) };
-  if (state.choicesUsed >= c.conclusion.maxChoices) return { ok: false, error: "no_choices", state: view(c, state) };
-  // Mesmo mínimo de cartas da tela; o servidor confere de novo e não gasta a escolha.
+  // Mesmo mínimo de cartas da tela; o servidor confere de novo e não encerra o caso.
   const placed = new Set(order.slots.flat().filter((id) => c.evidence.some((e) => e.id === id))).size;
   if (placed < c.minCardsToResolve) return { ok: false, error: "locked", state: view(c, state) };
 
   const priv = await getPrivateCase(c.slug);
-  const correct = choiceId === priv.choiceAnswer.correctId;
-  const choicesUsed = state.choicesUsed + 1;
-  let jus = state.justification;
-  if (correct && normalize(justification).split(" ").filter(Boolean).length >= 3) {
-    const v = evaluateAnswer(priv.solution, justification).verdict;
-    if (v === "accepted" || v === "partial") jus = better(jus, v);
-  }
-  const outcome = correct ? "solved" : choicesUsed >= c.conclusion.maxChoices ? "failed" : null;
-  let next: GameState = {
+  const result = computeResult({ epochCorrect: epochIndex === priv.epochAnswer, reference: priv.timelineReference, player: order });
+  const next: GameState = {
     ...state,
-    choicesUsed,
-    outcome,
-    justification: jus,
-    solvedOnChoice: correct ? (choicesUsed === 1 ? 1 : 2) : state.solvedOnChoice,
+    epochChoice: epochIndex,
+    outcome: result.points >= SOLVED_POINTS ? "solved" : "failed",
+    current: result,
+    official: state.official ?? (state.practice ? null : result),
   };
-  if (outcome) {
-    const current = computeResult({ state: next, reference: priv.timelineReference, player: order });
-    next = { ...next, current, official: next.official ?? (next.practice ? null : current) };
-  }
   await writeState(next);
-  return { ok: true, verdict: correct ? "correct" : "wrong", feedback: correct ? null : (priv.choiceAnswer.wrongFeedback[choiceId] ?? null), state: view(c, next) };
+  return { ok: true, result, state: view(c, next) };
 }
 
 export async function getResult(slug: string): Promise<{ official: Result | null; current: Result | null; practice: boolean }> {

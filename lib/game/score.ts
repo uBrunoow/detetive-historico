@@ -1,19 +1,15 @@
 import type { PrivateCase } from "@/lib/content/schema";
 import type { PlayerOrder } from "./check";
 import { compareTimelines } from "./closure";
-import type { GameState, Result } from "./signed-state";
 
-/** Pontuação do caso (spec "jogo colorido"): função pura, sem cookies nem leitura de arquivos. */
-export type ScoreBreakdown = {
-  answer: number;
-  order: number;
-  justification: number;
-  epoch: number;
-  codes: number;
-  pieces: number;
-  quiz: number;
-  checks: number;
-};
+/** Pontuação do veredito (DECISOES.md, D21): época 400 + ordem até 600; 1000 = 100%. Função pura. */
+export type ScoreBreakdown = { epoch: number; order: number };
+export type Result = { stars: 0 | 1 | 2 | 3; points: number; breakdown: ScoreBreakdown };
+
+export const EPOCH_POINTS = 400;
+export const ORDER_POINTS = 600;
+/** A partir daqui o caso conta como resolvido (2 estrelas). */
+export const SOLVED_POINTS = 600;
 
 /** (cartas "ordered" + "correctlyOutside") ÷ total de cartas da referência. */
 export function orderRatio(reference: PrivateCase["timelineReference"], player: PlayerOrder): number {
@@ -24,32 +20,15 @@ export function orderRatio(reference: PrivateCase["timelineReference"], player: 
 }
 
 export function computeResult(input: {
-  state: GameState;
+  epochCorrect: boolean;
   reference: PrivateCase["timelineReference"];
   player: PlayerOrder;
 }): Result {
-  const { state, reference, player } = input;
-  const solved = state.outcome === "solved";
-  const ratio = orderRatio(reference, player);
-  const { puzzles } = state;
-
   const breakdown: ScoreBreakdown = {
-    answer: solved ? (state.solvedOnChoice === 1 ? 500 : 250) : 0,
-    order: Math.round(300 * ratio),
-    justification: state.justification === "accepted" ? 150 : state.justification === "partial" ? 75 : 0,
-    epoch: puzzles.epoch.firstTryCorrect === true ? 100 : 0,
-    codes: 50 * Object.values(puzzles.codes).filter((c) => c.opened && !c.skipped).length,
-    pieces: puzzles.pieces === "solved" ? 50 : 0,
-    quiz: 25 * Object.values(puzzles.quiz).filter(Boolean).length,
-    checks: -25 * state.checksUsed,
+    epoch: input.epochCorrect ? EPOCH_POINTS : 0,
+    order: Math.round(ORDER_POINTS * orderRatio(input.reference, input.player)),
   };
-  const points = Math.max(0, Object.values(breakdown).reduce((a, b) => a + b, 0));
-
-  let stars: Result["stars"] = 0;
-  if (solved) {
-    stars = 1;
-    if (ratio > 0.7) stars = 2;
-    if (state.solvedOnChoice === 1 && ratio === 1 && (state.justification === "accepted" || state.justification === "partial")) stars = 3;
-  }
+  const points = breakdown.epoch + breakdown.order;
+  const stars: Result["stars"] = points === EPOCH_POINTS + ORDER_POINTS ? 3 : points >= SOLVED_POINTS ? 2 : points > 0 ? 1 : 0;
   return { stars, points, breakdown };
 }

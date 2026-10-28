@@ -36,7 +36,7 @@ export function CheckPanel({ slug, progress, update, state, onState }: Props) {
           return;
         }
         const hint = r.result.kind === "ok" ? null : r.result.text;
-        update((p) => ({ ...p, checks: [...p.checks, { hint, at: new Date().toISOString() }] }));
+        update((p) => ({ ...p, checks: [...p.checks, { hint, tally: r.tally, at: new Date().toISOString() }] }));
       } catch {
         setError(t.error);
       }
@@ -81,7 +81,12 @@ export function CheckPanel({ slug, progress, update, state, onState }: Props) {
       <div role="status" aria-live="polite">
         {error && <p className="mt-3 font-semibold text-ribbon">{error}</p>}
         {last && !pending && (
-          <div className="mt-4 border-l-4 border-stamp bg-paper-1 p-3">
+          <div key={last.at} className="mt-4 bg-paper-1 p-3 px-frame-flat [--px:2px]">
+            {last.tally && (
+              <p className={`stamp-drop mb-3 inline-block -rotate-6 border-4 border-current px-3 pb-1 font-pixel text-2xl ${last.tally.inPlace === last.tally.total ? "text-[#23774a]" : "text-stamp"}`}>
+                {t.tally(last.tally.inPlace, last.tally.total)}
+              </p>
+            )}
             <p className="font-pixel text-sm font-bold text-stamp">{t.hintLabel}</p>
             <p className="mt-1">{last.hint ?? t.ok}</p>
           </div>
@@ -93,7 +98,10 @@ export function CheckPanel({ slug, progress, update, state, onState }: Props) {
           <summary className="cursor-pointer font-pixel text-sm font-semibold">{t.history}</summary>
           <ol className="mt-2 flex list-decimal flex-col gap-2 pl-5 text-sm">
             {earlier.map((c) => (
-              <li key={c.at}>{c.hint ?? t.ok}</li>
+              <li key={c.at}>
+                {c.tally && <span className="font-bold">{t.tally(c.tally.inPlace, c.tally.total)}. </span>}
+                {c.hint ?? t.ok}
+              </li>
             ))}
           </ol>
         </details>

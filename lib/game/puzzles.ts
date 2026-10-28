@@ -12,17 +12,6 @@ export function normalizeCode(s: string): string {
   return t.replace(/^0+(?=.)/, "");
 }
 
-/** O primeiro palpite define `firstTryCorrect`; os seguintes só contam tentativas. */
-export function applyEpochGuess(state: GameState, index: number, answer: number): { state: GameState; correct: boolean } {
-  const correct = index === answer;
-  const { epoch } = state.puzzles;
-  const next = {
-    tries: epoch.tries + 1,
-    firstTryCorrect: epoch.firstTryCorrect === null ? correct : epoch.firstTryCorrect,
-  };
-  return { state: { ...state, puzzles: { ...state.puzzles, epoch: next } }, correct };
-}
-
 /** Dica a partir da 2ª tentativa, "abrir mesmo assim" a partir da 3ª. */
 export function applyCodeTry(
   state: GameState,

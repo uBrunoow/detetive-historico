@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
+import { NightSky } from "@/components/pixel/NightSky";
 import { Loading } from "@/components/ui/Loading";
 import { StartButton } from "@/components/catalog/StartButton";
 import { getPublicCase, listPublishedCases } from "@/lib/content/public";
@@ -31,8 +32,9 @@ async function Briefing({ params }: Pick<PageProps<"/casos/[slug]">, "params">) 
   if (!c) notFound();
 
   return (
-    <main id="conteudo" className="flex-1 bg-wood px-3 py-6 sm:px-8 sm:py-12">
-      <div className="mx-auto max-w-3xl">
+    <main id="conteudo" className="game-world iris-open flex-1 px-3 py-6 sm:px-8 sm:py-12">
+      <NightSky moon />
+      <div className="relative z-10 mx-auto max-w-3xl">
         <Link
           href="/fases"
           className="px-btn px-btn-paper text-base"
@@ -52,11 +54,14 @@ async function Briefing({ params }: Pick<PageProps<"/casos/[slug]">, "params">) 
             {t.stamp}
           </div>
           <p className="border-b-[3px] border-double border-doc-ink pb-2 text-center font-typed text-sm font-bold">
-            {c.place} — {c.period}
+            {c.place}
           </p>
-          <h1 className="mt-6 max-w-[85%] font-pixel text-3xl font-bold leading-tight sm:text-4xl">{c.title}</h1>
+          <div className="mt-6 flex flex-wrap items-center justify-between gap-4">
+            <h1 className="max-w-[85%] font-title text-3xl leading-tight sm:text-4xl">{c.title}</h1>
+            <StartButton slug={c.slug} startSceneId={c.startSceneId} sceneIds={c.scenes.map((s) => s.id)} />
+          </div>
 
-          <div className="mt-6 max-w-[65ch] space-y-4 font-typed leading-7">
+          <div className="mt-6 max-w-[65ch] space-y-4 font-sans leading-7">
             {c.briefing.map((p, i) => (
               <p key={i}>{p}</p>
             ))}
@@ -69,23 +74,13 @@ async function Briefing({ params }: Pick<PageProps<"/casos/[slug]">, "params">) 
             <p className="mt-1 font-typed text-lg font-bold leading-snug">{c.question}</p>
           </section>
 
-          <section aria-labelledby="intervalo" className="mt-6">
-            <h2 id="intervalo" className="font-typed text-sm font-bold text-doc-faint">
-              {t.period}
+          <section aria-labelledby="regras" className="mt-6">
+            <h2 id="regras" className="font-typed text-sm font-bold text-doc-faint">
+              {t.rulesTitle}
             </h2>
-            <ol className="mt-2 border-l-2 border-doc-ink pl-4 font-typed text-sm leading-6">
-              <li>{c.timeline.startLabel}</li>
-              <li className="mt-2">{c.timeline.endLabel}</li>
-            </ol>
-          </section>
-
-          <section aria-labelledby="como" className="mt-8">
-            <h2 id="como" className="font-typed text-sm font-bold text-doc-faint">
-              {t.howTo}
-            </h2>
-            <ol className="mt-2 list-decimal space-y-1 pl-5 text-base">
-              {t.steps.map((s) => (
-                <li key={s}>{s}</li>
+            <ol className="mt-2 list-decimal space-y-2 pl-5 font-typed text-sm leading-6">
+              {t.steps.map((step) => (
+                <li key={step}>{step}</li>
               ))}
             </ol>
           </section>

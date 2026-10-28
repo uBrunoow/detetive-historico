@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { Atkinson_Hyperlegible_Next, Courier_Prime, Kalam, Pixelify_Sans } from "next/font/google";
+import { Atkinson_Hyperlegible_Next, Courier_Prime, Jacquard_24, Jersey_10, Kalam } from "next/font/google";
+import { IrisNav } from "@/components/pixel/IrisNav";
 import { settingsBootScript } from "@/lib/settings/boot";
 import { strings } from "@/lib/strings/pt-BR";
 import "./globals.css";
@@ -22,9 +23,17 @@ const kalam = Kalam({
   weight: ["400"],
 });
 
-const pixelify = Pixelify_Sans({
-  variable: "--font-pixelify",
+// Fonte pixel do jogo (títulos, botões, HUD) e o letreiro gótico, só no nome do jogo.
+const jersey = Jersey_10({
+  variable: "--font-jersey",
   subsets: ["latin"],
+  weight: "400",
+});
+
+const jacquard = Jacquard_24({
+  variable: "--font-jacquard",
+  subsets: ["latin"],
+  weight: "400",
 });
 
 export const metadata: Metadata = {
@@ -33,12 +42,10 @@ export const metadata: Metadata = {
 };
 
 const directionContract = `
-THESIS: Um jogo de aventura em pixel art numa repartição de arquivo (linhagem Papers, Please e aventuras point-and-click 320x200): a fonte fala em tipo de máquina sobre papel, o arquivo fala por carimbo; recusa o app escolar de cartões arredondados.
-OWN-WORLD: Cenas 320x200 em paleta fechada de madeira, parede verde-cinza, manila, papel e noite; molduras e botões pixel com cantos em degrau e sombra sólida; Pixelify Sans em títulos, botões e HUD; leitura nítida em Atkinson Hyperlegible Next, Courier Prime e Kalam; azul-carbono só para o foco do jogador; carimbo roxo para o sistema.
-STORY: O aluno abre o jogo na fachada do Arquivo Municipal à noite, escolhe um caso, examina a cena com a lupa, guarda fontes, ordena-as e escreve sua conclusão.
-FIRST VIEWPORT: Home: fachada do arquivo em pixel ocupando a tela, uma janela acesa, letreiro "Detetive Histórico" e o menu Jogar/Continuar/Como jogar/Opções/Créditos à esquerda. Cena: ilustração ocupa a mesa, abas de lugar em pasta manila, HUD de fontes no topo.
-FORM: Fusão pedida pelo usuário: pixel art 2D sobre a direção sorteada Repartição datilografada (seed c7c5728c).
-FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance
+THESIS: Noir 16-bit: um jogo de investigação em pixel art numa cidade à noite (linhagem das aventuras point-and-click e dos plataformas 2D), onde os documentos são o único papel claro da tela.
+OWN-WORLD: Céu índigo em faixas, estrelas, chuva e neblina em pixel, chão de pedra molhada, poste âmbar; dossiês em pergaminho com tinta-ameixa; vermelho-sangue para a ação principal, o barbante e o carimbo; âmbar para luz, pontos e escolha. Jersey 10 em títulos, botões e HUD; Jacquard 24 só no letreiro; leitura em Atkinson Hyperlegible Next, Courier Prime e Kalam.
+STORY: O aluno abre o jogo na rua do Arquivo à noite, escolhe um caso no quadro de alfinetes, examina a cena com a lanterna, guarda fontes, ordena-as no barbante e dá o veredito: a época (A a E) e a ordem.
+SOURCE: mockup aprovado pelo dono em 28/10/2026, public/mockup/index.html; decisões em DESIGN.md e DECISOES.md (D21).
 `;
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -46,7 +53,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="pt-BR"
       suppressHydrationWarning
-      className={`${atkinson.variable} ${courierPrime.variable} ${kalam.variable} ${pixelify.variable} h-full antialiased`}
+      className={`${atkinson.variable} ${courierPrime.variable} ${kalam.variable} ${jersey.variable} ${jacquard.variable} h-full antialiased`}
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: settingsBootScript }} />
@@ -60,6 +67,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           {strings.app.skipToContent}
         </a>
         {children}
+        <IrisNav />
       </body>
     </html>
   );

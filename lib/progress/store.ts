@@ -23,9 +23,21 @@ function load(slug: string): CaseProgress {
     const raw = window.localStorage.getItem(key(slug));
     if (!raw) return emptyProgress();
     const parsed = JSON.parse(raw) as Partial<Omit<CaseProgress, "version">> & { version?: number };
-    // v1 e v2 têm os mesmos campos antigos; a migração só completa os novos.
+    if (parsed.version === 3) return { ...emptyProgress(), ...parsed, version: 3 };
     if (parsed.version !== 1 && parsed.version !== 2) return emptyProgress();
-    return { ...emptyProgress(), ...parsed, version: 2 };
+    // v1 e v2 usavam a conclusão por escolha (D20). O servidor recomeça o caso (estado
+    // assinado v3), então o trabalho fica e o resultado antigo sai.
+    const kept: Record<string, unknown> = { ...parsed };
+    delete kept.attempts;
+    delete kept.draft;
+    return {
+      ...emptyProgress(),
+      ...kept,
+      version: 3,
+      status: parsed.status === "solved" || parsed.status === "failed" ? "in_progress" : (parsed.status ?? "not_started"),
+      official: null,
+      practice: false,
+    };
   } catch {
     return emptyProgress();
   }

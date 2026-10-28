@@ -1,17 +1,30 @@
 {
-  "choiceAnswer": {
-    "correctId": "governou-ditador",
-    "wrongFeedback": {
-      "eleito-1930": "Revise a carta do novo governo de 1930: Vargas chegou ao poder por uma eleição ou por um movimento armado?",
-      "so-direitos": "Os direitos foram criados, mas houve também censura e fechamento do Congresso. Revise a Constituição de 1937.",
-      "ordem-trocada": "Observe as datas na sua linha do tempo: o que veio antes, a ditadura de 1937 ou a CLT? Revise também quando o governo começou."
-    }
-  },
+  "epochAnswer": 2,
   "timelineReference": [
-    { "evidenceId": "posse-1930", "referenceOrder": 1, "belongsToStory": true, "isKeyMilestone": true },
-    { "evidenceId": "codigo-eleitoral", "referenceOrder": 2, "belongsToStory": true, "isKeyMilestone": false },
-    { "evidenceId": "constituicao-1937", "referenceOrder": 3, "belongsToStory": true, "isKeyMilestone": true },
-    { "evidenceId": "clt", "referenceOrder": 4, "belongsToStory": true, "isKeyMilestone": true },
+    {
+      "evidenceId": "posse-1930",
+      "referenceOrder": 1,
+      "belongsToStory": true,
+      "isKeyMilestone": true
+    },
+    {
+      "evidenceId": "codigo-eleitoral",
+      "referenceOrder": 2,
+      "belongsToStory": true,
+      "isKeyMilestone": false
+    },
+    {
+      "evidenceId": "constituicao-1937",
+      "referenceOrder": 3,
+      "belongsToStory": true,
+      "isKeyMilestone": true
+    },
+    {
+      "evidenceId": "clt",
+      "referenceOrder": 4,
+      "belongsToStory": true,
+      "isKeyMilestone": true
+    },
     {
       "evidenceId": "carta-testamento",
       "referenceOrder": 5,
@@ -28,17 +41,75 @@
     }
   ],
   "timelineHints": [
-    { "level": 1, "condition": { "type": "milestone_missing" }, "text": "Uma lei importante ainda não está na sua linha. Já abriu a gaveta da mesa?" },
-    { "level": 1, "condition": { "type": "irrelevant_between_milestones" }, "text": "Uma das cartas é de muito antes de 1930. Confira os anos." },
-    { "level": 1, "condition": { "type": "milestones_inverted", "pair": ["constituicao-1937", "clt"] }, "text": "Repare no começo da CLT: ela cita um artigo “da Constituição”. Qual Constituição já existia?" },
-    { "level": 2, "condition": { "type": "milestones_inverted", "pair": ["posse-1930", "constituicao-1937"] }, "text": "Para fechar o Congresso por decreto, Vargas já precisava estar no governo." },
-    { "level": 1, "condition": { "type": "default" }, "text": "Releia as datas no fim de cada lei e decreto." }
+    {
+      "level": 1,
+      "condition": {
+        "type": "milestone_missing"
+      },
+      "text": "Uma lei importante ainda não está na sua linha. Já abriu a gaveta da mesa?"
+    },
+    {
+      "level": 1,
+      "condition": {
+        "type": "irrelevant_between_milestones"
+      },
+      "text": "Uma das cartas é de muito antes de 1930. Confira os anos."
+    },
+    {
+      "level": 1,
+      "condition": {
+        "type": "milestones_inverted",
+        "pair": [
+          "constituicao-1937",
+          "clt"
+        ]
+      },
+      "text": "Repare no começo da CLT: ela cita um artigo “da Constituição”. Qual Constituição já existia?"
+    },
+    {
+      "level": 2,
+      "condition": {
+        "type": "milestones_inverted",
+        "pair": [
+          "posse-1930",
+          "constituicao-1937"
+        ]
+      },
+      "text": "Para fechar o Congresso por decreto, Vargas já precisava estar no governo."
+    },
+    {
+      "level": 1,
+      "condition": {
+        "type": "default"
+      },
+      "text": "Releia as datas no fim de cada lei e decreto."
+    }
   ],
   "evidenceRelations": [
-    { "from": "codigo-eleitoral", "to": "constituicao-1891", "type": "contradicts", "explanation": "Em 1891, na prática, só os homens votavam. O código de 1932 deu o voto às mulheres." },
-    { "from": "constituicao-1937", "to": "posse-1930", "type": "consequence_of", "explanation": "Vargas chegou ao poder em 1930 e, em 1937, deu um golpe para continuar nele." },
-    { "from": "clt", "to": "constituicao-1937", "type": "mentions", "explanation": "A CLT foi feita por decreto-lei, com base na Constituição de 1937, sem Congresso." },
-    { "from": "carta-testamento", "to": "posse-1930", "type": "mentions", "explanation": "Na carta, Vargas lembra que foi “chefe de uma revolução” e venceu." }
+    {
+      "from": "codigo-eleitoral",
+      "to": "constituicao-1891",
+      "type": "contradicts",
+      "explanation": "Em 1891, na prática, só os homens votavam. O código de 1932 deu o voto às mulheres."
+    },
+    {
+      "from": "constituicao-1937",
+      "to": "posse-1930",
+      "type": "consequence_of",
+      "explanation": "Vargas chegou ao poder em 1930 e, em 1937, deu um golpe para continuar nele."
+    },
+    {
+      "from": "clt",
+      "to": "constituicao-1937",
+      "type": "mentions",
+      "explanation": "A CLT foi feita por decreto-lei, com base na Constituição de 1937, sem Congresso."
+    },
+    {
+      "from": "carta-testamento",
+      "to": "posse-1930",
+      "type": "mentions",
+      "explanation": "Na carta, Vargas lembra que foi “chefe de uma revolução” e venceu."
+    }
   ],
   "solution": {
     "referenceAnswer": "A carta foi escrita por Getúlio Vargas. Ele chegou ao poder com a Revolução de 1930, criou o voto feminino e o voto secreto em 1932, deu um golpe em 1937 e governou como ditador no Estado Novo, com censura e sem Congresso, e criou leis trabalhistas como a CLT, em 1943. Deixou o governo em 1945, voltou eleito em 1951 e, em meio a uma grave crise, tirou a própria vida no Palácio do Catete em 24 de agosto de 1954.",
@@ -60,37 +131,87 @@
       {
         "id": "autor",
         "label": "Getúlio Vargas escreveu a carta",
-        "synonyms": ["getulio", "vargas"]
+        "synonyms": [
+          "getulio",
+          "vargas"
+        ]
       },
       {
         "id": "direitos",
         "label": "Leis trabalhistas e voto feminino",
-        "synonyms": ["clt", "leis trabalhistas", "trabalhistas", "direitos", "trabalhadores", "carteira de trabalho", "voto feminino", "voto das mulheres", "mulheres", "codigo eleitoral", "voto secreto"]
+        "synonyms": [
+          "clt",
+          "leis trabalhistas",
+          "trabalhistas",
+          "direitos",
+          "trabalhadores",
+          "carteira de trabalho",
+          "voto feminino",
+          "voto das mulheres",
+          "mulheres",
+          "codigo eleitoral",
+          "voto secreto"
+        ]
       },
       {
         "id": "ditadura",
         "label": "O golpe e a ditadura do Estado Novo",
-        "synonyms": ["ditadura", "ditador", "estado novo", "golpe", "censura", "fechou o congresso", "autoritario", "1937"]
+        "synonyms": [
+          "ditadura",
+          "ditador",
+          "estado novo",
+          "golpe",
+          "censura",
+          "fechou o congresso",
+          "autoritario",
+          "1937"
+        ]
       }
     ],
     "minGroupsToAccept": 2,
-    "acceptedVariants": ["era vargas"],
+    "acceptedVariants": [
+      "era vargas"
+    ],
     "partialAnswers": [
-      { "requiredGroups": ["autor"], "feedback": "Você descobriu quem escreveu. E o que ele fez de 1930 a 1954? Olhe as leis da sua linha do tempo." },
-      { "requiredGroups": ["direitos"], "feedback": "Você viu os direitos criados. Mas quem governava, e de que jeito? Olhe a Constituição de 1937." },
-      { "requiredGroups": ["ditadura"], "feedback": "Você viu a ditadura. Quem governava, e o que mudou para trabalhadores e mulheres?" }
+      {
+        "requiredGroups": [
+          "autor"
+        ],
+        "feedback": "Você descobriu quem escreveu. E o que ele fez de 1930 a 1954? Olhe as leis da sua linha do tempo."
+      },
+      {
+        "requiredGroups": [
+          "direitos"
+        ],
+        "feedback": "Você viu os direitos criados. Mas quem governava, e de que jeito? Olhe a Constituição de 1937."
+      },
+      {
+        "requiredGroups": [
+          "ditadura"
+        ],
+        "feedback": "Você viu a ditadura. Quem governava, e o que mudou para trabalhadores e mulheres?"
+      }
     ],
     "commonErrors": [
       {
-        "triggers": ["eleito em 1930", "ganhou a eleicao"],
+        "triggers": [
+          "eleito em 1930",
+          "ganhou a eleicao"
+        ],
         "feedback": "Releia a carta do novo governo de 1930: Vargas chegou ao poder por uma eleição ou por um movimento armado?"
       },
       {
-        "triggers": ["dom pedro", "imperador"],
+        "triggers": [
+          "dom pedro",
+          "imperador"
+        ],
         "feedback": "Em 1930 o Brasil já era uma República havia muito tempo. Quem assina as leis da sua linha do tempo?"
       }
     ],
     "defaultPartialFeedback": "Você está no caminho. Quem escreveu a carta, e o que ele fez de 1930 a 1954, de bom e de ruim?",
     "defaultRejectedFeedback": "Revise as cartas na sua linha do tempo: quem assina as leis de 1932, 1937 e 1943? O que cada uma mudou?"
+  },
+  "codes": {
+    "gaveta-gabinete": "1932"
   }
 }

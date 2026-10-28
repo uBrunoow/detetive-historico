@@ -10,7 +10,6 @@
     "src": "/cases/vargas/cover.png",
     "alt": "Uma folha datilografada sobre uma mesa, ao lado de um rádio antigo e de uma carteira de trabalho azul."
   },
-  "period": "1930 a 1954",
   "place": "Rio de Janeiro, então capital do Brasil",
   "audience": "Anos finais do Ensino Fundamental (com mediação do professor) e Ensino Médio",
   "question": "Quem escreveu a carta, e o que ele fez nos vinte anos anteriores?",
@@ -18,37 +17,34 @@
     "Versão beta: o conteúdo ainda está em revisão. A sala é uma reconstrução; os documentos são reais, e cada um indica de onde veio.",
     "Aviso para o professor: este caso termina com a morte de um presidente, que tirou a própria vida em 1954. Recomenda-se conversar com a turma no encerramento.",
     "Rio de Janeiro, agosto de 1954. No Palácio do Catete, sede do governo, uma carta é encontrada na manhã do dia 24. Horas depois, multidões tomam as ruas.",
-    "Examine o gabinete, colete as fontes, ponha-as em ordem e explique quem escreveu a carta e o que ele fez de 1930 a 1954."
+    "Examine o gabinete e colete as fontes. Depois, descubra em que época da história tudo isso aconteceu e ponha os fatos na ordem certa."
   ],
   "difficulty": "medium",
   "durationMinutes": 25,
-  "timeline": {
-    "startLabel": "Novembro de 1930 — um novo governo no Rio",
-    "endLabel": "24 de agosto de 1954 — a carta no Catete"
-  },
   "minCardsToResolve": 4,
   "maxTimelineChecks": 3,
-  "conclusion": {
-    "choices": [
-      {
-        "id": "eleito-1930",
-        "text": "Vargas chegou ao poder em 1930 ganhando uma eleição, governou com o Congresso aberto e deixou o governo em 1945."
-      },
-      {
-        "id": "governou-ditador",
-        "text": "Getúlio Vargas chegou ao poder em 1930, criou leis do trabalho, governou como ditador a partir de 1937 e morreu em 1954."
-      },
-      {
-        "id": "so-direitos",
-        "text": "Vargas só ampliou direitos, como o voto feminino e a CLT, e nunca fechou o Congresso nem criou censura no país."
-      },
-      {
-        "id": "ordem-trocada",
-        "text": "Vargas só chegou ao poder depois de 1945, quando criou a CLT e o voto das mulheres, e depois governou como ditador."
-      }
-    ],
-    "maxChoices": 2
-  },
+  "epochOptions": [
+    {
+      "title": "Segundo Reinado",
+      "years": "1840 a 1889"
+    },
+    {
+      "title": "Primeira República",
+      "years": "1889 a 1930"
+    },
+    {
+      "title": "Era Vargas e República de 1946",
+      "years": "1930 a 1954"
+    },
+    {
+      "title": "Ditadura militar",
+      "years": "1964 a 1985"
+    },
+    {
+      "title": "Nova República",
+      "years": "1985 até hoje"
+    }
+  ],
   "startSceneId": "gabinete",
   "scenes": [
     {
@@ -63,63 +59,92 @@
           "id": "folha-datilografada",
           "type": "evidence",
           "label": "Folha datilografada sobre a mesa",
-          "hotspot": { "x": 16.25, "y": 53, "w": 11.25, "h": 12 },
+          "hotspot": {
+            "x": 16.25,
+            "y": 53,
+            "w": 11.25,
+            "h": 12
+          },
           "evidenceId": "carta-testamento"
         },
         {
           "id": "diario-oficial",
           "type": "evidence",
           "label": "Jornal oficial dobrado",
-          "hotspot": { "x": 28.75, "y": 54, "w": 11.25, "h": 11 },
+          "hotspot": {
+            "x": 28.75,
+            "y": 54,
+            "w": 11.25,
+            "h": 11
+          },
           "evidenceId": "codigo-eleitoral"
         },
         {
           "id": "quadro-grupo",
           "type": "evidence",
           "label": "Quadro com um grupo de homens",
-          "hotspot": { "x": 32.5, "y": 12, "w": 20, "h": 24 },
+          "hotspot": {
+            "x": 32.5,
+            "y": 12,
+            "w": 20,
+            "h": 24
+          },
           "evidenceId": "posse-1930"
         },
         {
           "id": "arquivo-metal",
           "type": "evidence",
           "label": "Arquivo de metal com uma carteira azul",
-          "hotspot": { "x": 55, "y": 58, "w": 15, "h": 26 },
+          "hotspot": {
+            "x": 55,
+            "y": 58,
+            "w": 15,
+            "h": 26
+          },
           "evidenceId": "clt"
         },
         {
           "id": "quadro-texto",
           "type": "evidence",
           "label": "Texto antigo emoldurado",
-          "hotspot": { "x": 75, "y": 10, "w": 15, "h": 26 },
+          "hotspot": {
+            "x": 75,
+            "y": 10,
+            "w": 15,
+            "h": 26
+          },
           "evidenceId": "constituicao-1891"
         },
         {
           "id": "gaveta-gabinete",
           "type": "locked",
           "label": "Gaveta trancada da mesa",
-          "hotspot": { "x": 11.25, "y": 73, "w": 13.75, "h": 9 },
+          "hotspot": {
+            "x": 11.25,
+            "y": 73,
+            "w": 13.75,
+            "h": 9
+          },
           "evidenceId": "constituicao-1937",
           "unlock": {
-            "requiresExamined": ["chave-secretario"],
-            "lockedMessage": "A gaveta está trancada. O secretário costuma deixar a chave por perto."
-          }
-        },
-        {
-          "id": "chave-secretario",
-          "type": "context",
-          "label": "Chave pendurada na parede",
-          "hotspot": { "x": 61.25, "y": 18, "w": 7.5, "h": 16 },
-          "content": {
-            "title": "A chave do secretário",
-            "text": "Uma chave pequena com a etiqueta “gaveta do gabinete”. Agora você pode abrir a gaveta."
+            "code": {
+              "prompt": "O cadeado pede o ano do Código Eleitoral.",
+              "hint": "Leia o jornal oficial dobrado sobre a mesa.",
+              "inputMode": "numeric"
+            },
+            "lockedMessage": "O cadeado está trancado. Resolva o enigma para abrir."
           }
         },
         {
           "id": "janela-catete",
           "type": "context",
           "label": "Janela com cortinas",
-          "hotspot": { "x": 5, "y": 10, "w": 20, "h": 30 },
+          "hotspot": {
+            "x": 5,
+            "y": 10,
+            "w": 20,
+            "h": 30
+          },
           "content": {
             "title": "O Palácio do Catete",
             "text": "Até 1960, o Rio de Janeiro era a capital do Brasil, e o Palácio do Catete era a sede do governo e a casa do presidente. Hoje o prédio é o Museu da República."
@@ -129,7 +154,12 @@
           "id": "radio",
           "type": "context",
           "label": "Rádio de madeira",
-          "hotspot": { "x": 73.75, "y": 40, "w": 22.5, "h": 48 },
+          "hotspot": {
+            "x": 73.75,
+            "y": 40,
+            "w": 22.5,
+            "h": 48
+          },
           "content": {
             "title": "A voz no rádio",
             "text": "Nos anos de 1930 e 1940, o rádio chegava a muitas casas do Brasil. O governo usava o rádio para falar direto com a população e fazer propaganda de si mesmo."
@@ -144,90 +174,167 @@
       "code": "RJ-01",
       "title": "Constituição de 1891, art. 70",
       "sourceType": "Constituição",
-      "image": { "src": "/cases/vargas/ev-constituicao-1891.png", "alt": "Folha impressa com um brasão e linhas de texto." },
+      "image": {
+        "src": "/cases/vargas/ev-constituicao-1891.png",
+        "alt": "Folha impressa com um brasão e linhas de texto."
+      },
       "description": "Trecho da primeira Constituição da República sobre quem podia votar.",
       "transcription": "Art. 70. São eleitores os cidadãos maiores de 21 anos que se alistarem na forma da lei.\n§ 1º Não podem alistar-se eleitores para as eleições federais ou para as dos Estados:\n1º) os mendigos;\n2º) os analfabetos;\n[…]",
       "provenance": "Constituição da República dos Estados Unidos do Brasil, de 24 de fevereiro de 1891. Texto disponível no site da Presidência da República (Planalto).",
       "author": "Congresso Nacional Constituinte",
-      "date": { "iso": "1891-02-24", "label": "24 de fevereiro de 1891" },
+      "date": {
+        "iso": "1891-02-24",
+        "label": "24 de fevereiro de 1891"
+      },
       "back": "Em português de hoje: votavam os “cidadãos” com mais de 21 anos, menos mendigos, analfabetos e alguns outros. A lei não proibia as mulheres com todas as letras, mas na prática elas não podiam votar.",
-      "presentation": { "style": "typed", "paper": "office", "heading": "Constituição de 1891" }
+      "presentation": {
+        "style": "typed",
+        "paper": "office",
+        "heading": "Constituição de 1891"
+      }
     },
     {
       "id": "posse-1930",
       "code": "RJ-02",
       "title": "Um novo governo",
       "sourceType": "Ilustração da equipe",
-      "image": { "src": "/cases/vargas/ev-posse-1930.png", "alt": "Ilustração em pixel de homens de chapéu e uniforme na sacada de um palácio, com uma multidão embaixo." },
+      "image": {
+        "src": "/cases/vargas/ev-posse-1930.png",
+        "alt": "Ilustração em pixel de homens de chapéu e uniforme na sacada de um palácio, com uma multidão embaixo."
+      },
       "description": "Ilustração feita pela equipe. Depois de um movimento armado que começou no Rio Grande do Sul, Getúlio Vargas chegou ao Rio de Janeiro e assumiu a chefia de um “Governo Provisório”, no lugar do presidente deposto.",
       "provenance": "Ilustração da equipe, inspirada em fotografias da época do acervo do CPDOC/FGV.",
       "author": "Equipe do jogo",
-      "date": { "iso": "1930-11-03", "label": "3 de novembro de 1930" },
+      "date": {
+        "iso": "1930-11-03",
+        "label": "3 de novembro de 1930"
+      },
       "back": "A Revolução de 1930 derrubou o governo da chamada República Velha. Vargas não foi eleito: chegou ao poder por um movimento armado.",
-      "presentation": { "style": "drawing" }
+      "presentation": {
+        "style": "drawing"
+      }
     },
     {
       "id": "codigo-eleitoral",
       "code": "RJ-03",
       "title": "Código Eleitoral",
       "sourceType": "Decreto",
-      "image": { "src": "/cases/vargas/ev-codigo-eleitoral.png", "alt": "Folha impressa de jornal oficial com uma urna desenhada." },
+      "image": {
+        "src": "/cases/vargas/ev-codigo-eleitoral.png",
+        "alt": "Folha impressa de jornal oficial com uma urna desenhada."
+      },
       "description": "Decreto do Governo Provisório que criou novas regras para as eleições.",
       "transcription": "O Chefe do Governo Provisorio da Republica dos Estados Unidos do Brasil […]\nArt. 2º E' eleitor o cidadão maior de 21 anos, sem distinção de sexo, alistado na fórma deste Codigo.\nRio de Janeiro, 24 de fevereiro de 1932, 111º da Independencia e 44º da Republica.",
       "provenance": "Decreto nº 21.076, de 24 de fevereiro de 1932 (Código Eleitoral). Texto disponível no site da Presidência da República (Planalto).",
       "author": "Getúlio Vargas, chefe do Governo Provisório",
-      "date": { "iso": "1932-02-24", "label": "24 de fevereiro de 1932" },
+      "date": {
+        "iso": "1932-02-24",
+        "label": "24 de fevereiro de 1932"
+      },
       "back": "Em português de hoje: pode votar quem tem mais de 21 anos, “sem distinção de sexo”, ou seja, homens e mulheres. O código também criou o voto secreto e a Justiça Eleitoral. O voto feminino veio de décadas de luta de mulheres como Bertha Lutz e Leolinda Daltro.",
-      "presentation": { "style": "printed", "paper": "newsprint", "heading": "Diario Official" }
+      "presentation": {
+        "style": "printed",
+        "paper": "newsprint",
+        "heading": "Diario Official"
+      }
     },
     {
       "id": "constituicao-1937",
       "code": "RJ-04",
       "title": "Constituição de 1937",
       "sourceType": "Constituição",
-      "image": { "src": "/cases/vargas/ev-constituicao-1937.png", "alt": "Folha impressa com um brasão e um carimbo vermelho." },
+      "image": {
+        "src": "/cases/vargas/ev-constituicao-1937.png",
+        "alt": "Folha impressa com um brasão e um carimbo vermelho."
+      },
       "description": "Trechos de uma Constituição que não foi votada por ninguém: o presidente a impôs ao país.",
       "transcription": "O PRESIDENTE DA REPÚBLICA DOS ESTADOS UNIDOS DO BRASIL,\nATENDENDO às legitimas aspirações do povo brasileiro à paz política e social, profundamente perturbada por conhecidos fatores de desordem […]\nArt. 178. São dissolvidos nesta data a Câmara dos Deputados, o Senado Federal, as Assembléias Legislativas dos Estados e as Câmaras Municipais.\nRio de Janeiro, 10 de novembro de 1937.",
       "provenance": "Constituição dos Estados Unidos do Brasil, de 10 de novembro de 1937. Texto disponível no site da Presidência da República (Planalto).",
       "author": "Getúlio Vargas, presidente da República",
-      "date": { "iso": "1937-11-10", "label": "10 de novembro de 1937" },
+      "date": {
+        "iso": "1937-11-10",
+        "label": "10 de novembro de 1937"
+      },
       "back": "Em português de hoje: com a desculpa de proteger a paz, o presidente fechou o Congresso, as assembleias dos estados e as câmaras das cidades. Foi um golpe: começava a ditadura do Estado Novo, com censura à imprensa e perseguição a opositores.",
-      "presentation": { "style": "typed", "paper": "office", "heading": "Constituição de 1937" }
+      "presentation": {
+        "style": "typed",
+        "paper": "office",
+        "heading": "Constituição de 1937"
+      }
     },
     {
       "id": "clt",
       "code": "RJ-05",
       "title": "Consolidação das Leis do Trabalho",
       "sourceType": "Decreto-lei",
-      "image": { "src": "/cases/vargas/ev-clt.png", "alt": "Uma carteira de trabalho azul ao lado de uma folha impressa." },
+      "image": {
+        "src": "/cases/vargas/ev-clt.png",
+        "alt": "Uma carteira de trabalho azul ao lado de uma folha impressa."
+      },
       "description": "Decreto-lei que juntou num só texto as leis sobre o trabalho.",
       "transcription": "O PRESIDENTE DA REPÚBLICA, usando da atribuição que lhe confere o art. 180 da Constituição,\nDECRETA:\nArt. 1º Fica aprovada a Consolidação das Leis do Trabalho, que a este decreto-lei acompanha […]\nArt. 2º O presente decreto-lei entrará em vigor em 10 de novembro de 1943.\nRio de Janeiro, 1 de maio de 1943, 122º da Independência e 55º da República.",
       "provenance": "Decreto-Lei nº 5.452, de 1º de maio de 1943. Texto disponível no site da Presidência da República (Planalto).",
       "author": "Getúlio Vargas, presidente da República",
-      "date": { "iso": "1943-05-01", "label": "1º de maio de 1943" },
+      "date": {
+        "iso": "1943-05-01",
+        "label": "1º de maio de 1943"
+      },
       "back": "Em português de hoje: o presidente aprova a CLT, que reúne regras como jornada de trabalho, férias e carteira de trabalho. Foi assinada no Dia do Trabalhador e ajudou a criar a imagem de Vargas como “pai dos pobres”. Repare: o presidente fazia leis sozinho, sem Congresso.",
-      "presentation": { "style": "typed", "paper": "office", "heading": "Decreto-Lei nº 5.452" }
+      "presentation": {
+        "style": "typed",
+        "paper": "office",
+        "heading": "Decreto-Lei nº 5.452"
+      }
     },
     {
       "id": "carta-testamento",
       "code": "RJ-06",
       "title": "Uma carta datilografada",
       "sourceType": "Carta",
-      "image": { "src": "/cases/vargas/ev-carta-testamento.png", "alt": "Folha datilografada com uma assinatura à mão no fim." },
+      "image": {
+        "src": "/cases/vargas/ev-carta-testamento.png",
+        "alt": "Folha datilografada com uma assinatura à mão no fim."
+      },
       "description": "Trechos de uma carta assinada, dirigida ao povo brasileiro. A folha não traz data.",
       "transcription": "Mais uma vez as forças e os interesses contra o povo coordenaram-se e novamente se desencadeiam sobre mim. […]\nSigo o destino que me é imposto. Depois de decênios de domínio e espoliação dos grupos econômicos e financeiros internacionais, fiz-me chefe de uma revolução e venci. Iniciei o trabalho de libertação e instaurei o regime de liberdade social. Tive de renunciar. Voltei ao governo nos braços do povo. […] Quis criar liberdade nacional na potencialização das nossas riquezas através da Petrobrás e, mal começa esta a funcionar, a onda de agitação se avoluma. […]\nLutei contra a espoliação do Brasil. Lutei contra a espoliação do povo. […] Serenamente dou o primeiro passo no caminho da eternidade e saio da vida para entrar na História.",
       "provenance": "Carta-testamento de Getúlio Vargas. Arquivo Getúlio Vargas, CPDOC/FGV; texto publicado pela Câmara dos Deputados.",
       "author": "Getúlio Vargas",
       "back": "O autor diz que liderou uma revolução, que teve de deixar o governo e que voltou “nos braços do povo”. Ele cita a Petrobras, que começava a funcionar. Quando será que isso foi escrito?",
-      "presentation": { "style": "typed", "paper": "office" }
+      "presentation": {
+        "style": "typed",
+        "paper": "office"
+      }
     }
   ],
   "references": [
-    { "kind": "source", "text": "Constituição da República dos Estados Unidos do Brasil, de 24 de fevereiro de 1891.", "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao91.htm" },
-    { "kind": "source", "text": "Decreto nº 21.076, de 24 de fevereiro de 1932 (Código Eleitoral).", "url": "https://www.planalto.gov.br/ccivil_03/decreto/1930-1949/d21076.htm" },
-    { "kind": "source", "text": "Constituição dos Estados Unidos do Brasil, de 10 de novembro de 1937.", "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao37.htm" },
-    { "kind": "source", "text": "Decreto-Lei nº 5.452, de 1º de maio de 1943 (Consolidação das Leis do Trabalho).", "url": "https://www.planalto.gov.br/ccivil_03/decreto-lei/del5452.htm" },
-    { "kind": "source", "text": "Carta-testamento de Getúlio Vargas, 24 de agosto de 1954 (GV c 1954.08.24/2). Arquivo Getúlio Vargas, CPDOC/FGV; texto na Câmara dos Deputados.", "url": "https://www2.camara.leg.br/atividade-legislativa/plenario/discursos/escrevendohistoria/getulio-vargas/carta-testamento-de-getulio-vargas" },
-    { "kind": "credit", "text": "Ilustrações em pixel feitas pela equipe." }
+    {
+      "kind": "source",
+      "text": "Constituição da República dos Estados Unidos do Brasil, de 24 de fevereiro de 1891.",
+      "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao91.htm"
+    },
+    {
+      "kind": "source",
+      "text": "Decreto nº 21.076, de 24 de fevereiro de 1932 (Código Eleitoral).",
+      "url": "https://www.planalto.gov.br/ccivil_03/decreto/1930-1949/d21076.htm"
+    },
+    {
+      "kind": "source",
+      "text": "Constituição dos Estados Unidos do Brasil, de 10 de novembro de 1937.",
+      "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao37.htm"
+    },
+    {
+      "kind": "source",
+      "text": "Decreto-Lei nº 5.452, de 1º de maio de 1943 (Consolidação das Leis do Trabalho).",
+      "url": "https://www.planalto.gov.br/ccivil_03/decreto-lei/del5452.htm"
+    },
+    {
+      "kind": "source",
+      "text": "Carta-testamento de Getúlio Vargas, 24 de agosto de 1954 (GV c 1954.08.24/2). Arquivo Getúlio Vargas, CPDOC/FGV; texto na Câmara dos Deputados.",
+      "url": "https://www2.camara.leg.br/atividade-legislativa/plenario/discursos/escrevendohistoria/getulio-vargas/carta-testamento-de-getulio-vargas"
+    },
+    {
+      "kind": "credit",
+      "text": "Ilustrações em pixel feitas pela equipe."
+    }
   ]
 }

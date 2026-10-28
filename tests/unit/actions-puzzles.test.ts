@@ -36,98 +36,96 @@ vi.mock("@/lib/content/private", async (orig) => {
 });
 
 import { getPrivateCase } from "@/lib/content/private";
-import { getPublicCase } from "@/lib/content/public";
-import { getResult, restartCase, submitChoice, tryCode } from "@/lib/game/actions";
+import { checkTimeline, getClosure, getResult, restartCase, submitVerdict, tryCode } from "@/lib/game/actions";
 
 const slug = "demo-biblioteca";
-const order = { slots: [["oficio-prefeitura"], ["recibo-encadernacao"], ["registro-visitas"], ["bilhete"]], outside: [] };
+const perfect = {
+  slots: [["oficio-prefeitura"], ["recibo-encadernacao"], ["registro-visitas"], ["bilhete"], ["croqui"], ["ata-camara"]],
+  outside: ["jornal-1898"],
+};
+const partial = { slots: [["oficio-prefeitura"], ["recibo-encadernacao"], ["registro-visitas"], ["bilhete"]], outside: [] };
 
-async function ids() {
-  const c = (await getPublicCase(slug))!;
-  const p = await getPrivateCase(slug);
-  const wrong = c.conclusion.choices.find((x) => x.id !== p.choiceAnswer.correctId)!.id;
-  return { right: p.choiceAnswer.correctId, wrong };
+async function epochs() {
+  const right = (await getPrivateCase(slug)).epochAnswer;
+  return { right, wrong: (right + 1) % 5 };
 }
 
 beforeEach(() => jar.clear());
 
-describe("submitChoice / getResult / restartCase", () => {
-  it("certa na 1ª encerra com solvedOnChoice 1 e grava o resultado oficial", async () => {
-    const { right } = await ids();
-    const r = await submitChoice(slug, { choiceId: right, justification: "", order });
-    expect(r).toMatchObject({ ok: true, verdict: "correct", feedback: null });
+describe("submitVerdict / getResult / getClosure / restartCase", () => {
+  it("época certa e ordem perfeita: 1000, 3 estrelas, resolvido e oficial gravado", async () => {
+    const { right } = await epochs();
+    const r = await submitVerdict(slug, { epochIndex: right, order: perfect });
+    expect(r).toMatchObject({ ok: true, result: { points: 1000, stars: 3 }, state: { outcome: "solved" } });
     const res = await getResult(slug);
-    expect(res.current?.breakdown.answer).toBe(500);
     expect(res.official).toEqual(res.current);
   });
 
-  it("errada dá orientação, não revela a certa, e esgota em failed", async () => {
-    const { wrong } = await ids();
-    const a = await submitChoice(slug, { choiceId: wrong, justification: "", order });
-    expect(a).toMatchObject({ ok: true, verdict: "wrong", state: { outcome: null, choicesLeft: 1 } });
-    expect(typeof (a as { feedback: unknown }).feedback).toBe("string");
-    expect((await getResult(slug)).current).toBeNull();
-    const b = await submitChoice(slug, { choiceId: wrong, justification: "", order });
-    expect(b).toMatchObject({ ok: true, state: { outcome: "failed" } });
-    expect((await getResult(slug)).current?.stars).toBe(0);
+  it("ordem perfeita com a época errada fica em 600, sem 100%", async () => {
+    const { wrong } = await epochs();
+    const r = await submitVerdict(slug, { epochIndex: wrong, order: perfect });
+    expect(r).toMatchObject({ ok: true, result: { points: 600, breakdown: { epoch: 0, order: 600 } } });
   });
 
-  it("certa na 2ª vale 250", async () => {
-    const { right, wrong } = await ids();
-    await submitChoice(slug, { choiceId: wrong, justification: "", order });
-    await submitChoice(slug, { choiceId: right, justification: "", order });
-    expect((await getResult(slug)).current?.breakdown.answer).toBe(250);
+  it("antes do veredito o encerramento não sai; depois traz a época certa e a escolhida", async () => {
+    const { right, wrong } = await epochs();
+    expect(await getClosure(slug)).toBeNull();
+    await submitVerdict(slug, { epochIndex: wrong, order: partial });
+    const closure = await getClosure(slug);
+    expect(closure?.epoch).toMatchObject({ correct: right, chosen: wrong });
+    expect(closure?.epoch.options).toHaveLength(5);
   });
 
-  it("recusa alternativa inexistente e justificativa gigante", async () => {
-    await expect(submitChoice(slug, { choiceId: "nao-existe", justification: "", order })).rejects.toThrow();
-    const { right } = await ids();
-    await expect(submitChoice(slug, { choiceId: right, justification: "x".repeat(601), order })).rejects.toThrow();
+  it("pontuação baixa encerra como em aberto (failed), com os pontos", async () => {
+    const { wrong } = await epochs();
+    const r = await submitVerdict(slug, { epochIndex: wrong, order: partial });
+    expect(r).toMatchObject({ ok: true, state: { outcome: "failed" } });
+    expect((await getResult(slug)).official!.points).toBeGreaterThan(0);
   });
 
-  it("depois de encerrado, nova escolha não muda nada", async () => {
-    const { right, wrong } = await ids();
-    await submitChoice(slug, { choiceId: right, justification: "", order });
-    const r = await submitChoice(slug, { choiceId: wrong, justification: "", order });
+  it("recusa época fora de A a E", async () => {
+    await expect(submitVerdict(slug, { epochIndex: 5, order: perfect })).rejects.toThrow();
+    await expect(submitVerdict(slug, { epochIndex: -1, order: perfect })).rejects.toThrow();
+  });
+
+  it("depois de encerrado, novo veredito não muda nada", async () => {
+    const { right, wrong } = await epochs();
+    await submitVerdict(slug, { epochIndex: right, order: perfect });
+    const r = await submitVerdict(slug, { epochIndex: wrong, order: partial });
     expect(r).toMatchObject({ ok: false, error: "closed", state: { outcome: "solved" } });
   });
 
+  it("com poucas cartas o veredito é recusado e o caso continua aberto", async () => {
+    const { right } = await epochs();
+    const r = await submitVerdict(slug, { epochIndex: right, order: { slots: [["bilhete"]], outside: [] } });
+    expect(r).toMatchObject({ ok: false, error: "locked", state: { outcome: null } });
+  });
+
   it("Jogar de novo zera o caso, mantém o oficial e o treino não o sobrescreve", async () => {
-    const { right, wrong } = await ids();
-    await submitChoice(slug, { choiceId: right, justification: "", order });
+    const { right, wrong } = await epochs();
+    await submitVerdict(slug, { epochIndex: wrong, order: partial });
     const official = (await getResult(slug)).official!;
     const s = await restartCase(slug);
-    expect(s).toMatchObject({ ok: true, state: { outcome: null, choicesLeft: 2, practice: true, official: { stars: official.stars, points: official.points } } });
+    expect(s).toMatchObject({ ok: true, state: { outcome: null, practice: true, official: { stars: official.stars, points: official.points } } });
     expect((await getResult(slug)).current).toBeNull();
-    await submitChoice(slug, { choiceId: wrong, justification: "", order });
-    await submitChoice(slug, { choiceId: wrong, justification: "", order });
+    await submitVerdict(slug, { epochIndex: right, order: perfect });
     const res = await getResult(slug);
+    expect(res.current!.points).toBe(1000);
     expect(res.official).toEqual(official);
-    expect(res.current?.stars).toBe(0);
     expect(res.practice).toBe(true);
   });
 
-  it("recomeçar com o caso aberto é recusado e não apaga nada", async () => {
-    const { wrong } = await ids();
-    await submitChoice(slug, { choiceId: wrong, justification: "", order });
+  it("a conferência conta quantas cartas estão no lugar, sem dizer quais", async () => {
+    const ok = await checkTimeline(slug, perfect);
+    expect(ok).toMatchObject({ ok: true, tally: { inPlace: 7, total: 7 } });
+    const some = await checkTimeline(slug, partial);
+    expect(some).toMatchObject({ ok: true, tally: { inPlace: 4, total: 7 } });
+    expect(Object.keys((some as { tally: object }).tally)).toEqual(["inPlace", "total"]);
+  });
+
+  it("recomeçar com o caso aberto é recusado", async () => {
     const r = await restartCase(slug);
-    expect(r).toMatchObject({ ok: false, error: "not_closed", state: { outcome: null, choicesLeft: 1 } });
-    expect((await getResult(slug)).practice).toBe(false);
-  });
-
-  it("1ª conclusão errada também grava o oficial (0 estrelas, pontos aparecem)", async () => {
-    const { wrong } = await ids();
-    await submitChoice(slug, { choiceId: wrong, justification: "", order });
-    await submitChoice(slug, { choiceId: wrong, justification: "", order });
-    const res = await getResult(slug);
-    expect(res.official).toMatchObject({ stars: 0 });
-    expect(res.official!.points).toBeGreaterThan(0);
-  });
-
-  it("com poucas cartas a escolha é recusada e não é gasta", async () => {
-    const { right } = await ids();
-    const r = await submitChoice(slug, { choiceId: right, justification: "", order: { slots: [["bilhete"]], outside: [] } });
-    expect(r).toMatchObject({ ok: false, error: "locked", state: { outcome: null, choicesLeft: 2 } });
+    expect(r).toMatchObject({ ok: false, error: "not_closed", state: { outcome: null } });
   });
 
   it("código vazio não conta como tentativa", async () => {
@@ -137,18 +135,5 @@ describe("submitChoice / getResult / restartCase", () => {
     const b = await tryCode(slug, "cadeado-teste", "2");
     expect(a).toMatchObject({ showHint: false });
     expect(b).toMatchObject({ showHint: true, hint: "dica" });
-  });
-
-  it("treino melhor que o oficial não o sobrescreve", async () => {
-    const { right, wrong } = await ids();
-    await submitChoice(slug, { choiceId: wrong, justification: "", order });
-    await submitChoice(slug, { choiceId: wrong, justification: "", order });
-    const official = (await getResult(slug)).official!;
-    expect(official.stars).toBe(0);
-    expect(await restartCase(slug)).toMatchObject({ ok: true, state: { practice: true } });
-    await submitChoice(slug, { choiceId: right, justification: "", order });
-    const res = await getResult(slug);
-    expect(res.current!.points).toBeGreaterThan(official.points);
-    expect(res.official).toEqual(official);
   });
 });

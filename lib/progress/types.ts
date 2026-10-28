@@ -47,23 +47,16 @@ export type PlayerTimeline = {
   links: CardLink[];
 };
 
-/** Histórico local, só para mostrar ao jogador. Quem conta é o servidor (lib/game/signed-state.ts). */
-export type AttemptRecord = {
-  answer: string;
-  supporting: string[];
-  verdict: "accepted" | "partial" | "rejected";
-  feedback: string | null;
-  at: string;
-};
-
 export type CheckRecord = {
   /** null = os marcos principais estão coerentes. */
   hint: string | null;
+  /** Quantas cartas estavam no lugar nessa conferência (sem dizer quais). */
+  tally?: { inPlace: number; total: number };
   at: string;
 };
 
 export type CaseProgress = {
-  version: 2;
+  version: 3;
   status: CaseStatus;
   /** Objetos de cena já examinados (ids). */
   examined: string[];
@@ -74,12 +67,11 @@ export type CaseProgress = {
   hypotheses: Hypothesis[];
   timeline: PlayerTimeline;
   checks: CheckRecord[];
-  attempts: AttemptRecord[];
-  /** Rascunho da conclusão, para não perder o texto ao sair da tela. */
-  draft: { answer: string; supporting: string[] };
+  /** Rascunho do veredito: a época marcada (índice em `epochOptions`) antes de fechar o caso. */
+  draft: { epochIndex: number | null };
   /** Cadeados de código já abertos (ids dos objetos). */
   unlocked: string[];
-  /** Resultado da 1ª conclusão, copiado para Fases e HUD. Quem conta é o servidor. */
+  /** Resultado do 1º veredito, copiado para Fases e HUD. Quem conta é o servidor. */
   official: { stars: number; points: number } | null;
   /** Verdadeiro quando o caso foi jogado de novo depois do resultado oficial. */
   practice: boolean;
@@ -88,7 +80,7 @@ export type CaseProgress = {
 };
 
 export const emptyProgress = (): CaseProgress => ({
-  version: 2,
+  version: 3,
   status: "not_started",
   examined: [],
   cards: {},
@@ -96,8 +88,7 @@ export const emptyProgress = (): CaseProgress => ({
   hypotheses: [],
   timeline: { slots: [], outside: [], placements: {}, links: [] },
   checks: [],
-  attempts: [],
-  draft: { answer: "", supporting: [] },
+  draft: { epochIndex: null },
   unlocked: [],
   official: null,
   practice: false,

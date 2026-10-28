@@ -4,14 +4,14 @@ import { decode, encode, freshState } from "@/lib/game/signed-state";
 
 describe("estado assinado", () => {
   it("lê de volta o que assinou", () => {
-    const s = { ...freshState("demo"), choicesUsed: 2, checksUsed: 1 };
+    const s = { ...freshState("demo"), epochChoice: 3, checksUsed: 1 };
     expect(decode(encode(s), "demo")).toEqual(s);
   });
 
   it("recusa estado adulterado, de outro caso ou malformado", () => {
-    const token = encode({ ...freshState("demo"), choicesUsed: 4 });
+    const token = encode({ ...freshState("demo"), checksUsed: 4 });
     const [, sig] = token.split(".");
-    const forged = Buffer.from(JSON.stringify({ ...freshState("demo"), choicesUsed: 0 })).toString("base64url");
+    const forged = Buffer.from(JSON.stringify({ ...freshState("demo"), checksUsed: 0 })).toString("base64url");
     expect(decode(`${forged}.${sig}`, "demo")).toBeNull();
     expect(decode(token, "outro")).toBeNull();
     expect(decode("lixo", "demo")).toBeNull();
@@ -23,20 +23,8 @@ describe("estado assinado", () => {
     return `${payload}.${createHmac("sha256", secret).update(payload).digest("base64url")}`;
   };
 
-  it("converte um token v1 resolvido em v2 com resultado oficial", () => {
-    const s = decode(signV1({ v: 1, slug: "demo", checksUsed: 1, attemptsUsed: 1, outcome: "solved" }), "demo");
-    expect(s).toMatchObject({ v: 2, slug: "demo", checksUsed: 1, choicesUsed: 0, outcome: "solved", practice: false });
-    expect(s?.official).toEqual({
-      stars: 1,
-      points: 500,
-      breakdown: { answer: 500, order: 0, justification: 0, epoch: 0, codes: 0, pieces: 0, quiz: 0, checks: 0 },
-    });
-    expect(s?.puzzles).toEqual(freshState("demo").puzzles);
-  });
-
-  it("token v1 sem desfecho vira v2 sem resultado oficial", () => {
-    const s = decode(signV1({ v: 1, slug: "demo", checksUsed: 0, attemptsUsed: 1, outcome: null }), "demo");
-    expect(s?.official).toBeNull();
-    expect(s?.outcome).toBeNull();
+  it("tokens das versões antigas (v1 e v2) recomeçam o caso do zero", () => {
+    expect(decode(signV1({ v: 1, slug: "demo", checksUsed: 1, attemptsUsed: 1, outcome: "solved" }), "demo")).toBeNull();
+    expect(decode(signV1({ ...freshState("demo"), v: 2, choicesUsed: 1 }), "demo")).toBeNull();
   });
 });

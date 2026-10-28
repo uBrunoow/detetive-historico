@@ -33,16 +33,6 @@ function desk(c) {
   c.box(88, 147, 44, 22, "woodLight");
 }
 
-/** Chave pendurada num prego (caixa H). */
-function hangingKey(c) {
-  c.box(200, 40, 16, 4, "woodLight");
-  c.ring(208, 50, 3, "manila");
-  c.vline(208, 53, 10, "manila");
-  c.hline(208, 59, 3, "manila");
-  c.hline(208, 62, 2, "manila");
-  c.box(202, 64, 12, 5, "paper");
-}
-
 /** Só o contorno (box com "transparent" apagaria o que está dentro). */
 function outline(c, x, y, w, h, color) {
   c.hline(x, y, w, color);
@@ -232,7 +222,7 @@ function caminha() {
   books(c, 244, 300, 112, 22, 2);
   books(c, 244, 300, 140, 24, 5);
   books(c, 244, 300, 170, 26, 7);
-  hangingKey(c);
+  // Cadeado representado pelo objeto da cena; não desenhar chaves.
   // I pergaminho-selo
   scroll(c, 250, 26, 28, 40);
   seal(c, 264, 62);
@@ -329,7 +319,7 @@ function inconfidencia() {
   c.rect(250, 98, 44, 2, "woodLight");
   c.rect(270, 112, 4, 30, GOLD);
   c.rect(262, 120, 20, 4, GOLD);
-  hangingKey(c);
+  // Cadeado representado pelo objeto da cena; não desenhar chaves.
   // I bandeira de MG
   c.vline(242, 18, 56, "woodDark");
   flagMG(c, 244, 22, 44, 32);
@@ -420,7 +410,7 @@ function vargas() {
   c.vline(266, 141, 8, "red");
   c.disc(258, 160, 3, "woodDark");
   c.disc(286, 160, 3, "woodDark");
-  hangingKey(c);
+  // Cadeado representado pelo objeto da cena; não desenhar chaves.
   // I texto emoldurado
   frame(c, 242, 20, 46, 52, "manila");
   lawSheet(c, 248, 25, 34, 42, 6);
@@ -509,7 +499,7 @@ function revolucaoIndustrial() {
   c.box(294, 104, 6, 70, "woodDark");
   for (let x = 252; x < 292; x += 3) c.vline(x, 112, 38, "paper");
   c.box(250, 128, 44, 5, "woodLight");
-  hangingKey(c);
+  // Cadeado representado pelo objeto da cena; não desenhar chaves.
   // I pasta azul num prego
   c.set(264, 22, "ink");
   c.line(264, 22, 252, 32, "ink");

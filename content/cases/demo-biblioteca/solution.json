@@ -1,12 +1,5 @@
 {
-  "choiceAnswer": {
-    "correctId": "emprestou",
-    "wrongFeedback": {
-      "roubo": "Será que houve mesmo um roubo? Procure nas cartas algum sinal de que alguém autorizou a saída do livro. Confira também a data do jornal.",
-      "encadernacao": "Observe o que, de fato, foi para a encadernação: era o livro que sumiu? Revise o recibo e o bilhete.",
-      "sem-licenca": "Revise o ofício da Prefeitura: quem pediu que o livro fosse levado? Observe também o bilhete."
-    }
-  },
+  "epochAnswer": 1,
   "timelineReference": [
     {
       "evidenceId": "oficio-prefeitura",
@@ -267,5 +260,8 @@
     ],
     "defaultPartialFeedback": "Você está no caminho. Sua resposta explica parte do que aconteceu; use a linha do tempo para completar o raciocínio.",
     "defaultRejectedFeedback": "Sua resposta ainda não explica o que aconteceu com o livro. Volte à linha do tempo e veja o que aconteceu logo depois da visita registrada no livro de visitas."
+  },
+  "codes": {
+    "gaveta-mesa": "9"
   }
 }

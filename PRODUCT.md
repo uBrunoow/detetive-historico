@@ -18,9 +18,9 @@ Professores usam os casos como recurso didático (painel do professor fora do MV
 
 ## Purpose
 
-Jogo web 2D de investigação histórica. O jogador explora uma cena ilustrada, coleta evidências que viram cartas, reconstrói a ordem dos acontecimentos numa linha do tempo (com grau de certeza, justificativas e ligações de causa e consequência) e escreve uma conclusão em texto livre, com até 5 tentativas. No fim, vê a solução comentada e a linha do tempo de referência comparada à sua.
+Jogo web 2D de investigação histórica. O jogador explora uma cena ilustrada, coleta evidências que viram cartas, reconstrói a ordem dos acontecimentos numa linha do tempo (com grau de certeza, justificativas e ligações de causa e consequência), resolve enigmas opcionais e dá o veredito: em que época tudo aconteceu (cinco alternativas, A a E) e a ordem dos fatos. Época certa vale 400 pontos, a ordem vale até 600, e 100% só vem com as duas. No fim, vê o placar, a solução comentada e a linha de referência comparada à sua; pode jogar novamente em modo treino sem apagar o primeiro resultado.
 
-Diferencial: não é quiz. A resposta depende de interpretar fontes e de situar no tempo cartas sem data; o jogo nunca decide pelo jogador nem aponta qual carta está errada.
+Diferencial: não é quiz. A resposta depende de interpretar fontes, situar no tempo cartas sem data e conectar evidências; o jogo nunca decide pelo jogador nem aponta qual carta está errada. A referência visual é um noir 16-bit com arte original em pixel (cidade à noite, chuva, neblina, luz âmbar), na linhagem de Mario, Zelda, Celeste, Mega Man, Donkey Kong e Enigma do Medo; os documentos são dossiês claros que mantêm a leitura acessível.
 
 ## Constraints
 

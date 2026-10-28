@@ -10,7 +10,6 @@
     "src": "/cases/abolicao/cover.png",
     "alt": "Uma folha de lei com a data 13.5.1888 sobre uma mesa, com bandeirolas de festa penduradas na parede."
   },
-  "period": "1871 a 1888",
   "place": "Rio de Janeiro, Império do Brasil",
   "audience": "Anos finais do Ensino Fundamental e Ensino Médio",
   "question": "Como e por que a escravidão terminou no Brasil?",
@@ -18,37 +17,34 @@
     "Os lugares e o personagem são uma reconstrução. Os documentos são reais, e cada um indica de onde veio.",
     "Rio de Janeiro, fim de maio de 1888. Há dias a cidade comemora nas ruas. Jornais esgotaram, bandas tocaram e milhares de pessoas foram a uma missa ao ar livre.",
     "Tudo por causa de uma lei de dois artigos, assinada em 13 de maio. Mas ninguém acorda um dia e acaba com a escravidão. O que veio antes?",
-    "Sua investigação vai de 28 de setembro de 1871 até as festas de maio de 1888. Visite a redação de um jornal e o escritório de um advogado abolicionista, colete as fontes, ponha-as em ordem e explique como e por que a escravidão terminou."
+    "Visite a redação de um jornal e o escritório de um advogado abolicionista e colete as fontes. Depois, descubra em que época da história tudo isso aconteceu e ponha os fatos na ordem certa."
   ],
   "difficulty": "medium",
   "durationMinutes": 30,
-  "timeline": {
-    "startLabel": "28 de setembro de 1871 — Lei do Ventre Livre",
-    "endLabel": "Maio de 1888 — festas da abolição no Rio"
-  },
   "minCardsToResolve": 4,
   "maxTimelineChecks": 3,
-  "conclusion": {
-    "choices": [
-      {
-        "id": "lei-sozinha",
-        "text": "A princesa libertou todas as pessoas escravizadas por bondade, de uma hora para outra, ao assinar a Lei Áurea em 1888."
-      },
-      {
-        "id": "ventre-livre",
-        "text": "A Lei do Ventre Livre, de 1871, já tinha libertado todas as pessoas escravizadas, e a lei de 1888 só confirmou isso."
-      },
-      {
-        "id": "aos-poucos",
-        "text": "A escravidão acabou aos poucos, com leis como a do Ventre Livre e a dos Sexagenários, e a Lei Áurea veio em 1888 após muita pressão."
-      },
-      {
-        "id": "so-pressao",
-        "text": "Só a pressão das fugas e dos abolicionistas acabou com a escravidão em 1888; as leis de 1871 e 1885 não mudaram nada."
-      }
-    ],
-    "maxChoices": 2
-  },
+  "epochOptions": [
+    {
+      "title": "Período colonial",
+      "years": "1530 a 1808"
+    },
+    {
+      "title": "Corte no Rio e Independência",
+      "years": "1808 a 1831"
+    },
+    {
+      "title": "Período regencial",
+      "years": "1831 a 1840"
+    },
+    {
+      "title": "Segundo Reinado",
+      "years": "1840 a 1889"
+    },
+    {
+      "title": "Primeira República",
+      "years": "1889 a 1930"
+    }
+  ],
   "startSceneId": "redacao",
   "scenes": [
     {
@@ -63,32 +59,56 @@
           "id": "mesa-redator",
           "type": "evidence",
           "label": "Folha impressa sobre a mesa do redator",
-          "hotspot": { "x": 7, "y": 54, "w": 38, "h": 17 },
+          "hotspot": {
+            "x": 7,
+            "y": 54,
+            "w": 38,
+            "h": 17
+          },
           "evidenceId": "lei-aurea"
         },
         {
           "id": "parede-recortes",
           "type": "evidence",
           "label": "Quadro com uma multidão ao ar livre",
-          "hotspot": { "x": 32, "y": 12, "w": 21, "h": 24 },
+          "hotspot": {
+            "x": 32,
+            "y": 12,
+            "w": 21,
+            "h": 24
+          },
           "evidenceId": "missa-campal"
         },
         {
           "id": "gaveta-redacao",
           "type": "locked",
           "label": "Gaveta trancada da mesa do redator",
-          "hotspot": { "x": 11, "y": 73, "w": 14, "h": 9 },
+          "hotspot": {
+            "x": 11,
+            "y": 73,
+            "w": 14,
+            "h": 9
+          },
           "evidenceId": "clube-militar",
           "unlock": {
-            "requiresExamined": ["chaveiro"],
-            "lockedMessage": "A gaveta está trancada. Talvez a chave esteja no escritório."
+            "code": {
+              "prompt": "O cadeado pede o ano da Lei do Ventre Livre.",
+              "hint": "Olhe os volumes de leis na estante do escritório.",
+              "inputMode": "numeric"
+            },
+            "lockedMessage": "O cadeado está trancado. Resolva o enigma para abrir."
           }
         },
         {
           "id": "pilha-jornais",
           "type": "context",
           "label": "Pilha do jornal Cidade do Rio",
-          "hotspot": { "x": 55, "y": 64, "w": 14, "h": 20 },
+          "hotspot": {
+            "x": 55,
+            "y": 64,
+            "w": 14,
+            "h": 20
+          },
           "content": {
             "title": "José do Patrocínio e o Cidade do Rio",
             "text": "O jornal Cidade do Rio era de José do Patrocínio (1853–1905), jornalista negro e um dos líderes da campanha abolicionista. Os jornais abolicionistas espalhavam notícias, discursos e denúncias contra a escravidão."
@@ -98,7 +118,12 @@
           "id": "janela-rua",
           "type": "context",
           "label": "Janela aberta para a rua",
-          "hotspot": { "x": 5, "y": 10, "w": 20, "h": 30 },
+          "hotspot": {
+            "x": 5,
+            "y": 10,
+            "w": 20,
+            "h": 30
+          },
           "content": {
             "title": "A rua em festa",
             "text": "Desde 13 de maio a cidade comemora nas ruas. Há bandeirolas nas janelas e gente cantando. Para muita gente, foi o fim de uma luta de anos."
@@ -108,7 +133,12 @@
           "id": "prelo",
           "type": "decorative",
           "label": "Prensa de madeira",
-          "hotspot": { "x": 73, "y": 40, "w": 24, "h": 48 }
+          "hotspot": {
+            "x": 73,
+            "y": 40,
+            "w": 24,
+            "h": 48
+          }
         }
       ]
     },
@@ -124,45 +154,60 @@
           "id": "colecao-1850",
           "type": "evidence",
           "label": "Volume de leis de 1850",
-          "hotspot": { "x": 7, "y": 18, "w": 10, "h": 22 },
+          "hotspot": {
+            "x": 7,
+            "y": 18,
+            "w": 10,
+            "h": 22
+          },
           "evidenceId": "lei-1850"
         },
         {
           "id": "colecao-1871",
           "type": "evidence",
           "label": "Volume de leis de 1871",
-          "hotspot": { "x": 18, "y": 18, "w": 10, "h": 22 },
+          "hotspot": {
+            "x": 18,
+            "y": 18,
+            "w": 10,
+            "h": 22
+          },
           "evidenceId": "ventre-livre"
         },
         {
           "id": "colecao-1885",
           "type": "evidence",
           "label": "Volume de leis de 1885",
-          "hotspot": { "x": 28, "y": 18, "w": 11, "h": 22 },
+          "hotspot": {
+            "x": 28,
+            "y": 18,
+            "w": 11,
+            "h": 22
+          },
           "evidenceId": "sexagenarios"
         },
         {
           "id": "livro-nabuco",
           "type": "evidence",
           "label": "Livro aberto sobre a mesa",
-          "hotspot": { "x": 43, "y": 56, "w": 16, "h": 11 },
+          "hotspot": {
+            "x": 43,
+            "y": 56,
+            "w": 16,
+            "h": 11
+          },
           "evidenceId": "nabuco"
-        },
-        {
-          "id": "chaveiro",
-          "type": "context",
-          "label": "Chave pendurada na parede",
-          "hotspot": { "x": 63, "y": 35, "w": 7, "h": 15 },
-          "content": {
-            "title": "Uma chave pequena",
-            "text": "Uma chave com uma etiqueta: “gaveta da redação”. Agora você pode abrir a gaveta da mesa do redator."
-          }
         },
         {
           "id": "retrato-gama",
           "type": "context",
           "label": "Retrato de Luiz Gama",
-          "hotspot": { "x": 72, "y": 12, "w": 12, "h": 24 },
+          "hotspot": {
+            "x": 72,
+            "y": 12,
+            "w": 12,
+            "h": 24
+          },
           "content": {
             "title": "Luiz Gama (1830–1882)",
             "text": "Luiz Gama nasceu livre na Bahia e foi vendido como escravizado aos 10 anos. Conquistou a liberdade, tornou-se advogado e libertou nos tribunais centenas de pessoas. Morreu em 1882, antes da abolição."
@@ -172,7 +217,12 @@
           "id": "retrato-reboucas",
           "type": "context",
           "label": "Retrato de André Rebouças",
-          "hotspot": { "x": 86, "y": 12, "w": 12, "h": 24 },
+          "hotspot": {
+            "x": 86,
+            "y": 12,
+            "w": 12,
+            "h": 24
+          },
           "content": {
             "title": "André Rebouças (1838–1898)",
             "text": "André Rebouças foi engenheiro, negro e abolicionista. Ele defendia que as pessoas libertadas recebessem terras para trabalhar, e não só a liberdade no papel."
@@ -187,105 +237,197 @@
       "code": "ES-01",
       "title": "Lei nº 581",
       "sourceType": "Lei",
-      "image": { "src": "/cases/abolicao/ev-lei-1850.png", "alt": "Folha de lei impressa com um brasão no topo e muitas linhas de texto." },
+      "image": {
+        "src": "/cases/abolicao/ev-lei-1850.png",
+        "alt": "Folha de lei impressa com um brasão no topo e muitas linhas de texto."
+      },
       "description": "Lei do Império assinada pelo imperador D. Pedro II sobre os navios que traziam africanos escravizados.",
       "transcription": "Estabelece medidas para a repressão do trafico de africanos neste Imperio.\nDom Pedro, por Graça de Deos, e Unanime Acclamacão dos Povos, Imperador Constitucional e Defensor Perpetuo do Brasil: Fazemos saber a todos os Nossos Subditos, que a Assemblea Geral Decretou, e Nós Queremos a Lei seguinte.\nArt. 1º As embarcações brasileiras encontradas em qualquer parte, e as estrangeiras encontradas nos portos, enseadas, ancoradouros, ou mares territoriaes do Brasil, tendo a seu bordo escravos, cuja importação he prohibida pela Lei de sete de Novembro de mil oitocentos trinta e hum, ou havendo-os desembarcado, serão apprehendidas pelas Autoridades, ou pelos Navios de guerra brasileiros, e consideradas importadoras de escravos.",
       "provenance": "Coleção das Leis do Império do Brasil. Texto disponível no site da Presidência da República (Planalto).",
       "author": "D. Pedro II e a Assembleia Geral",
-      "date": { "iso": "1850-09-04", "label": "4 de setembro de 1850" },
+      "date": {
+        "iso": "1850-09-04",
+        "label": "4 de setembro de 1850"
+      },
       "back": "Em português de hoje: navios com africanos escravizados seriam apreendidos. A lei proibia trazer pessoas escravizadas pelo mar, mas não libertou ninguém que já estava escravizado no Brasil.",
-      "presentation": { "style": "typed", "paper": "office", "heading": "Lei nº 581" }
+      "presentation": {
+        "style": "typed",
+        "paper": "office",
+        "heading": "Lei nº 581"
+      }
     },
     {
       "id": "ventre-livre",
       "code": "ES-02",
       "title": "Lei nº 2.040",
       "sourceType": "Lei",
-      "image": { "src": "/cases/abolicao/ev-ventre-livre.png", "alt": "Folha de lei impressa com um brasão no topo e linhas de texto." },
+      "image": {
+        "src": "/cases/abolicao/ev-ventre-livre.png",
+        "alt": "Folha de lei impressa com um brasão no topo e linhas de texto."
+      },
       "description": "Lei do Império assinada pela Princesa Imperial Regente sobre os filhos das mulheres escravizadas.",
       "transcription": "A Princeza Imperial Regente, em nome de Sua Magestade o Imperador e Senhor D. Pedro II, faz saber a todos os subditos do Imperio que a Assembléa Geral Decretou e ella Sanccionou a Lei seguinte:\nArt. 1º Os filhos de mulher escrava que nascerem no Imperio desde a data desta lei, serão considerados de condição livre.\nDada no Palácio do Rio de Janeiro, aos vinte e oito de Setembro de mil oitocentos setenta e um.\nPRINCEZA IMPERIAL REGENTE",
       "provenance": "Coleção das Leis do Império do Brasil. Texto disponível no site da Presidência da República (Planalto).",
       "author": "Princesa Isabel, como regente, e a Assembleia Geral",
-      "date": { "iso": "1871-09-28", "label": "28 de setembro de 1871" },
+      "date": {
+        "iso": "1871-09-28",
+        "label": "28 de setembro de 1871"
+      },
       "back": "Em português de hoje: os filhos de mulheres escravizadas que nascessem depois dessa data seriam livres. Mas a própria lei (§ 1º) deixava o senhor usar o trabalho dessas crianças até os 21 anos. Quem já era escravizado continuou escravizado.",
-      "presentation": { "style": "typed", "paper": "office", "heading": "Lei nº 2.040" }
+      "presentation": {
+        "style": "typed",
+        "paper": "office",
+        "heading": "Lei nº 2.040"
+      }
     },
     {
       "id": "nabuco",
       "code": "ES-03",
       "title": "O Abolicionismo",
       "sourceType": "Trecho de livro",
-      "image": { "src": "/cases/abolicao/ev-nabuco.png", "alt": "Livro aberto com duas páginas de texto." },
+      "image": {
+        "src": "/cases/abolicao/ev-nabuco.png",
+        "alt": "Livro aberto com duas páginas de texto."
+      },
       "description": "Trecho de um livro escrito por um abolicionista sobre a vida das pessoas escravizadas e o que a lei permitia a elas.",
       "transcription": "A alforria como doação é uma esperança que todo o escravo póde ter, mas que é a sorte relativamente de muito poucos.\nTome-se a generalidade dos nossos escravos: morrem no captiveiro; os libertos sempre foram excepções.\nPonha-se de lado essa esperança de que o senhor lhe dê a liberdade, esperança que não constitue um direito; que porta ha na lei para o escravo sahir do captiveiro? A lei de 28 de Setembro de 1871 abriu-lhe, mas não facilitou-lhe, dois caminhos: o do resgate forçado pelo peculio, e o do sorteio annual.",
       "provenance": "Trecho de um livro de Joaquim Nabuco, abolicionista. A página com a data de publicação não está aqui.",
       "author": "Joaquim Nabuco",
       "back": "Em português de hoje: quase todas as pessoas escravizadas morriam escravizadas. Para sair da escravidão, a lei só oferecia dois caminhos difíceis: comprar a liberdade com as próprias economias ou ser sorteado. Quando será que isso foi escrito?",
-      "presentation": { "style": "typed", "paper": "aged", "heading": "O Abolicionismo" }
+      "presentation": {
+        "style": "typed",
+        "paper": "aged",
+        "heading": "O Abolicionismo"
+      }
     },
     {
       "id": "sexagenarios",
       "code": "ES-04",
       "title": "Lei nº 3.270",
       "sourceType": "Lei",
-      "image": { "src": "/cases/abolicao/ev-sexagenarios.png", "alt": "Folha de lei impressa com um brasão no topo e muitas linhas de texto." },
+      "image": {
+        "src": "/cases/abolicao/ev-sexagenarios.png",
+        "alt": "Folha de lei impressa com um brasão no topo e muitas linhas de texto."
+      },
       "description": "Lei do Império assinada pelo imperador D. Pedro II sobre as pessoas escravizadas mais velhas.",
       "transcription": "D. Pedro II, por Graça de Deus e Unanime Acclamação dos Povos, Imperador Constitucional e Defensor Perpetuo do Brazil: Fazemos saber a todos os Nossos subditos que a Assembléa Geral Decretou e Nós Queremos a Lei seguinte:\n§ 10. São libertos os escravos de 60 annos de idade, completos antes e depois da data em que entrar em execução esta Lei; ficando, porém, obrigados, a titulo de indemnização pela sua alforria, a prestar serviços a seus ex-senhores pelo espaço de tres annos.\nDada no Palacio do Rio de Janeiro aos 28 de Setembro de 1885.\nIMPERADOR",
       "provenance": "Coleção das Leis do Império do Brasil. Texto disponível no site da Presidência da República (Planalto).",
       "author": "D. Pedro II e a Assembleia Geral",
-      "date": { "iso": "1885-09-28", "label": "28 de setembro de 1885" },
+      "date": {
+        "iso": "1885-09-28",
+        "label": "28 de setembro de 1885"
+      },
       "back": "Em português de hoje: as pessoas escravizadas com 60 anos ou mais ficavam livres. Mas ainda tinham de trabalhar 3 anos para os antigos senhores, como pagamento pela própria liberdade.",
-      "presentation": { "style": "typed", "paper": "office", "heading": "Lei nº 3.270" }
+      "presentation": {
+        "style": "typed",
+        "paper": "office",
+        "heading": "Lei nº 3.270"
+      }
     },
     {
       "id": "clube-militar",
       "code": "RE-01",
       "title": "Pedido do Clube Militar",
       "sourceType": "Pedido (descrição da equipe)",
-      "image": { "src": "/cases/abolicao/ev-clube-militar.png", "alt": "Carta dobrada fechada com um lacre vermelho." },
+      "image": {
+        "src": "/cases/abolicao/ev-clube-militar.png",
+        "alt": "Carta dobrada fechada com um lacre vermelho."
+      },
       "description": "O Clube Militar, presidido pelo marechal Deodoro da Fonseca, pediu à Princesa Regente que o Exército não fosse mais usado para capturar pessoas escravizadas que fugiam. Naquele ano, as fugas eram tantas que os fazendeiros pediam ajuda ao governo.",
       "provenance": "O texto original deste pedido ainda não foi localizado pela equipe; esta carta resume o que ele pedia.",
       "author": "Clube Militar",
-      "date": { "label": "Outubro de 1887" },
+      "date": {
+        "label": "Outubro de 1887"
+      },
       "back": "Em 1887, muitas pessoas escravizadas fugiam das fazendas. Os militares não queriam mais caçar quem fugia. Sem ninguém para obrigar as pessoas a voltar, a escravidão ficava cada vez mais difícil de manter.",
-      "presentation": { "style": "drawing" }
+      "presentation": {
+        "style": "drawing"
+      }
     },
     {
       "id": "lei-aurea",
       "code": "RE-02",
       "title": "Lei nº 3.353",
       "sourceType": "Lei",
-      "image": { "src": "/cases/abolicao/ev-lei-aurea.png", "alt": "Folha de lei impressa com um brasão, apenas duas linhas de texto e uma assinatura." },
+      "image": {
+        "src": "/cases/abolicao/ev-lei-aurea.png",
+        "alt": "Folha de lei impressa com um brasão, apenas duas linhas de texto e uma assinatura."
+      },
       "description": "Lei do Império assinada pela Princesa Imperial Regente. Tem só dois artigos.",
       "transcription": "A Princeza Imperial Regente, em Nome de Sua Magestade o Imperador o Senhor D. Pedro II, Faz saber a todos os subditos do Imperio que a Assembléa Geral decretou e Ella sanccionou a Lei seguinte:\nArt. 1.° E’ declarada extincta, desde a data desta Lei, a escravidão no Brazil.\nArt. 2.° Revogam-se as disposições em contrario.\nDada no Palacio do Rio de Janeiro em 13 de maio de 1888, 67º da Independencia e do Imperio.\nPRINCEZA IMPERIAL REGENTE.\nRodrigo Augusto da Silva",
       "provenance": "Coleção das Leis do Império do Brasil. Texto disponível no site da Presidência da República (Planalto).",
       "author": "Princesa Isabel, como regente, e a Assembleia Geral",
-      "date": { "iso": "1888-05-13", "label": "13 de maio de 1888" },
+      "date": {
+        "iso": "1888-05-13",
+        "label": "13 de maio de 1888"
+      },
       "back": "Em português de hoje: a partir desta data, a escravidão acabou no Brasil. A lei não disse nada sobre terra, escola ou trabalho para as pessoas libertadas.",
-      "presentation": { "style": "typed", "paper": "office", "heading": "Lei nº 3.353" }
+      "presentation": {
+        "style": "typed",
+        "paper": "office",
+        "heading": "Lei nº 3.353"
+      }
     },
     {
       "id": "missa-campal",
       "code": "RE-03",
       "title": "Missa campal pela abolição",
       "sourceType": "Ilustração da equipe",
-      "image": { "src": "/cases/abolicao/ev-missa-campal.png", "alt": "Ilustração em pixel de uma multidão ao ar livre diante de um altar com toldo branco." },
+      "image": {
+        "src": "/cases/abolicao/ev-missa-campal.png",
+        "alt": "Ilustração em pixel de uma multidão ao ar livre diante de um altar com toldo branco."
+      },
       "description": "Ilustração feita pela equipe do jogo, inspirada na fotografia de Antonio Luiz Ferreira (acervo do Instituto Moreira Salles). A foto mostra a missa ao ar livre no Campo de São Cristóvão, no Rio de Janeiro, celebrada em agradecimento pela abolição, com a presença da princesa Isabel e de uma multidão.",
       "provenance": "Ilustração da equipe. A fotografia original está no acervo do Instituto Moreira Salles (IMS).",
       "author": "Equipe do jogo (inspirada em Antonio Luiz Ferreira)",
-      "date": { "iso": "1888-05-17", "label": "17 de maio de 1888" },
+      "date": {
+        "iso": "1888-05-17",
+        "label": "17 de maio de 1888"
+      },
       "back": "Quatro dias depois da lei, uma multidão se reuniu ao ar livre para comemorar. Isto é uma ilustração, não a foto: ela mostra a cena, mas não substitui a fonte original.",
-      "presentation": { "style": "drawing" }
+      "presentation": {
+        "style": "drawing"
+      }
     }
   ],
   "references": [
-    { "kind": "source", "text": "Lei nº 581, de 4 de setembro de 1850 (Lei Eusébio de Queirós).", "url": "https://www.planalto.gov.br/ccivil_03/leis/LIM/LIM581.htm" },
-    { "kind": "source", "text": "Lei nº 2.040, de 28 de setembro de 1871 (Lei do Ventre Livre).", "url": "https://www.planalto.gov.br/ccivil_03/leis/LIM/LIM2040.htm" },
-    { "kind": "source", "text": "Lei nº 3.270, de 28 de setembro de 1885 (Lei dos Sexagenários).", "url": "https://www.planalto.gov.br/ccivil_03/leis/LIM/LIM3270.htm" },
-    { "kind": "source", "text": "Lei nº 3.353, de 13 de maio de 1888 (Lei Áurea).", "url": "https://www.planalto.gov.br/ccivil_03/leis/LIM/LIM3353.htm" },
-    { "kind": "source", "text": "NABUCO, Joaquim. O Abolicionismo. Londres: Typographia de Abraham Kingdon, 1883, p. 34–35. Digitalização da UNESP.", "url": "https://bibdig.biblioteca.unesp.br/bitstreams/85aec6f6-169c-42a1-bb53-57c43bde7ebc/download" },
-    { "kind": "source", "text": "FERREIRA, Antonio Luiz. Missa campal celebrada em ação de graças pela abolição da escravatura no Brasil, 17 de maio de 1888. Acervo Instituto Moreira Salles.", "url": "https://artsandculture.google.com/asset/outdoor-mass-for-the-abolition-of-slavery-acervo-ims-antonio-luiz-ferreira/fgErIJ8FKV22ZQ" },
-    { "kind": "source", "text": "Clube Militar. Pedido à Princesa Regente para que o Exército não fosse usado na captura de escravizados fugidos, outubro de 1887. Texto original a localizar." },
-    { "kind": "credit", "text": "Ilustrações em pixel feitas pela equipe; a missa campal é inspirada na fotografia de Antonio Luiz Ferreira (IMS)." }
+    {
+      "kind": "source",
+      "text": "Lei nº 581, de 4 de setembro de 1850 (Lei Eusébio de Queirós).",
+      "url": "https://www.planalto.gov.br/ccivil_03/leis/LIM/LIM581.htm"
+    },
+    {
+      "kind": "source",
+      "text": "Lei nº 2.040, de 28 de setembro de 1871 (Lei do Ventre Livre).",
+      "url": "https://www.planalto.gov.br/ccivil_03/leis/LIM/LIM2040.htm"
+    },
+    {
+      "kind": "source",
+      "text": "Lei nº 3.270, de 28 de setembro de 1885 (Lei dos Sexagenários).",
+      "url": "https://www.planalto.gov.br/ccivil_03/leis/LIM/LIM3270.htm"
+    },
+    {
+      "kind": "source",
+      "text": "Lei nº 3.353, de 13 de maio de 1888 (Lei Áurea).",
+      "url": "https://www.planalto.gov.br/ccivil_03/leis/LIM/LIM3353.htm"
+    },
+    {
+      "kind": "source",
+      "text": "NABUCO, Joaquim. O Abolicionismo. Londres: Typographia de Abraham Kingdon, 1883, p. 34–35. Digitalização da UNESP.",
+      "url": "https://bibdig.biblioteca.unesp.br/bitstreams/85aec6f6-169c-42a1-bb53-57c43bde7ebc/download"
+    },
+    {
+      "kind": "source",
+      "text": "FERREIRA, Antonio Luiz. Missa campal celebrada em ação de graças pela abolição da escravatura no Brasil, 17 de maio de 1888. Acervo Instituto Moreira Salles.",
+      "url": "https://artsandculture.google.com/asset/outdoor-mass-for-the-abolition-of-slavery-acervo-ims-antonio-luiz-ferreira/fgErIJ8FKV22ZQ"
+    },
+    {
+      "kind": "source",
+      "text": "Clube Militar. Pedido à Princesa Regente para que o Exército não fosse usado na captura de escravizados fugidos, outubro de 1887. Texto original a localizar."
+    },
+    {
+      "kind": "credit",
+      "text": "Ilustrações em pixel feitas pela equipe; a missa campal é inspirada na fotografia de Antonio Luiz Ferreira (IMS)."
+    }
   ]
 }

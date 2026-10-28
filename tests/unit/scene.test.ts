@@ -74,10 +74,11 @@ describe("fontes não descobertas", async () => {
   });
 });
 
-describe("progresso v2", () => {
-  it("emptyProgress é v2 com os campos novos vazios", () => {
+describe("progresso v3", () => {
+  it("emptyProgress é v3 com os campos novos vazios", () => {
     const p = emptyProgress();
-    expect(p.version).toBe(2);
+    expect(p.version).toBe(3);
+    expect(p.draft).toEqual({ epochIndex: null });
     expect(p.unlocked).toEqual([]);
     expect(p.official).toBeNull();
     expect(p.practice).toBe(false);
@@ -98,13 +99,35 @@ describe("progresso v2", () => {
     });
     const p = readProgress("x");
     vi.unstubAllGlobals();
-    expect(p.version).toBe(2);
+    expect(p.version).toBe(3);
     expect(p.cards.bilhete.notes).toBe("n");
     expect(p.timeline.slots).toEqual([["bilhete"]]);
     expect(p.examined).toEqual(["a"]);
     expect(p.unlocked).toEqual([]);
     expect(p.official).toBeNull();
     expect(p.practice).toBe(false);
+  });
+
+  it("progresso v2 resolvido volta a em andamento, sem o resultado antigo nem as escolhas", async () => {
+    const { readProgress } = await import("@/lib/progress/store");
+    const v2 = {
+      ...emptyProgress(),
+      version: 2,
+      status: "solved",
+      cards: { bilhete: { collectedAt: "2026-01-01", notes: "", important: false } },
+      attempts: [{ choiceId: "a", justification: "", verdict: "correct", feedback: null, at: "2026-01-01" }],
+      draft: { choiceId: "a", justification: "porque sim" },
+      official: { stars: 3, points: 1100 },
+    };
+    const store = new Map<string, string>([["detetive-historico:v1:progress:w", JSON.stringify(v2)]]);
+    vi.stubGlobal("window", {
+      localStorage: { getItem: (k: string) => store.get(k) ?? null, setItem: (k: string, v: string) => void store.set(k, v) },
+    });
+    const p = readProgress("w");
+    vi.unstubAllGlobals();
+    expect(p).toMatchObject({ version: 3, status: "in_progress", official: null, draft: { epochIndex: null } });
+    expect(p).not.toHaveProperty("attempts");
+    expect(Object.keys(p.cards)).toEqual(["bilhete"]);
   });
 
   it("resetProgress mantém o resultado oficial só quando pedido", async () => {

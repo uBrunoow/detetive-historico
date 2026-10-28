@@ -3,7 +3,7 @@ import { getPrivateCase } from "@/lib/content/private";
 import { getPublicCase } from "@/lib/content/public";
 import { checkTimeline } from "@/lib/game/check";
 
-/** Casos beta: a linha de referência confere, as alternativas da conclusão estão completas. */
+/** Casos beta: a linha de referência confere, a época certa está entre as 5 alternativas. */
 const cases: { slug: string }[] = [
   {
     slug: "caminha",
@@ -29,13 +29,11 @@ describe.each(cases)("caso $slug", ({ slug }) => {
     expect(checkTimeline(priv, { slots, outside }, 1)).toEqual({ kind: "ok" });
   });
 
-  it("a alternativa certa existe entre as 4 e cada errada tem orientação", async () => {
+  it("a época certa é uma das 5 e as alternativas estão em ordem cronológica", async () => {
     const pub = await getPublicCase(slug);
     const priv = await getPrivateCase(slug);
-    const ids = pub!.conclusion.choices.map((c) => c.id);
-    expect(ids).toContain(priv.choiceAnswer.correctId);
-    for (const id of ids.filter((i) => i !== priv.choiceAnswer.correctId)) {
-      expect(priv.choiceAnswer.wrongFeedback[id]?.length).toBeGreaterThan(0);
-    }
+    expect(pub!.epochOptions).toHaveLength(5);
+    expect(priv.epochAnswer).toBeGreaterThanOrEqual(0);
+    expect(priv.epochAnswer).toBeLessThan(5);
   });
 });

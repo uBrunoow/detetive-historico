@@ -50,24 +50,13 @@ export function checkCaseBundle(pub: PublicCase, priv: PrivateCase): string[] {
     if (!collectable.has(e.id)) problems.push(`evidência ${e.id} não pode ser encontrada em nenhuma cena`);
   }
 
-  if (pub.epochGuess && priv.epochAnswer === undefined) problems.push("epochGuess sem epochAnswer");
-  if (pub.epochGuess && priv.epochAnswer !== undefined && priv.epochAnswer >= pub.epochGuess.options.length) {
-    problems.push("epochAnswer fora das opções");
-  }
+  if (priv.epochAnswer >= pub.epochOptions.length) problems.push("epochAnswer fora das opções");
+  for (const d of dupes(pub.epochOptions.map((o) => o.title))) problems.push(`época duplicada: ${d}`);
   for (const e of pub.evidence) {
     if (!e.quiz) continue;
     const answer = priv.quizAnswers?.[e.id];
     if (!answer) problems.push(`${e.id}: pergunta sem resposta`);
     else if (answer.correct >= e.quiz.options.length) problems.push(`${e.id}: resposta da pergunta fora das opções`);
-  }
-
-  const choiceIds = pub.conclusion.choices.map((c) => c.id);
-  for (const d of dupes(choiceIds)) problems.push(`alternativa duplicada: ${d}`);
-  if (!choiceIds.includes(priv.choiceAnswer.correctId)) problems.push("alternativa certa inexistente");
-  for (const cid of choiceIds) {
-    if (cid !== priv.choiceAnswer.correctId && !priv.choiceAnswer.wrongFeedback[cid]) {
-      problems.push(`alternativa ${cid} sem feedback`);
-    }
   }
 
   const refById = new Map(priv.timelineReference.map((r) => [r.evidenceId, r]));

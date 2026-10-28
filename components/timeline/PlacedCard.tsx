@@ -4,6 +4,9 @@ import Image from "next/image";
 import type { Evidence } from "@/lib/content/schema";
 import type { CardLink, Certainty, Placement } from "@/lib/progress/types";
 import { strings } from "@/lib/strings/pt-BR";
+import { Dialog } from "@/components/ui/Dialog";
+import { DocumentSheet } from "@/components/document/DocumentSheet";
+import { useId, useState } from "react";
 
 const t = strings.timeline;
 const CERTAINTIES: Certainty[] = ["certain", "probable", "uncertain"];
@@ -24,6 +27,9 @@ type Props = {
   onNotebook: () => void;
   onCertainty: (c: Certainty) => void;
   onReason: (reason: string) => void;
+  open: boolean;
+  onToggle: () => void;
+  position: number;
 };
 
 const arrowUp = "M3 1h2v1h1v1h1v1H5v3H3V4H1V3h1V2h1z";
@@ -33,28 +39,26 @@ const arrowDown = "M3 1h2v3h2v1H6v1H5v1H3V6H2V5H1V4h2z";
 export function PlacedCard(p: Props) {
   const { evidence: e, placement } = p;
   const id = `tl-${e.id}`;
+  const dialogId = useId();
+  const [sourceOpen, setSourceOpen] = useState(false);
   return (
-    <article aria-labelledby={`${id}-title`} className="grid grid-cols-[4rem_minmax(0,1fr)] gap-x-4 bg-paper-0 p-4 text-ink px-frame sm:grid-cols-[5.5rem_minmax(0,1fr)]">
-      <div className="relative aspect-square overflow-hidden bg-paper-2 px-frame-flat [--px:2px]">
-        <Image src={e.image.src} alt="" fill unoptimized sizes="6rem" className="pixelated object-cover" />
+    <article aria-labelledby={`${id}-title`} className="bg-paper-0 p-2 text-ink px-frame sm:p-3">
+      <div className="flex min-h-[56px] items-center gap-3">
+        <span className="relative h-9 w-12 shrink-0 overflow-hidden bg-paper-2 px-frame-flat [--px:2px]">
+          <Image src={e.image.src} alt="" fill unoptimized sizes="3rem" className="pixelated object-cover" />
+        </span>
+        <div className="min-w-0 flex-1">
+          <h3 id={`${id}-title`} tabIndex={-1} className="truncate text-base font-bold leading-tight focus:outline-none">
+            {e.title}
+          </h3>
+          <p className="truncate text-xs text-paper-5">{e.date?.label ?? t.noDate}</p>
+        </div>
+        <span aria-label={t.positionLabel(e.title)} className="font-pixel text-sm font-bold">{p.position}</span>
+        <button type="button" className="px-btn px-btn-paper text-sm" aria-expanded={p.open} onClick={p.onToggle}>
+          {p.open ? t.closeCard : t.openCard}
+        </button>
       </div>
-
-      <div className="min-w-0">
-        <h3 id={`${id}-title`} tabIndex={-1} className="font-pixel text-lg font-bold leading-tight focus:outline-none">
-          {e.title}
-        </h3>
-        <p className="text-sm text-paper-5">
-          {e.sourceType}
-          {e.date && (
-            <>
-              {" · "}
-              {t.dateOnSource}: {e.date.label}
-            </>
-          )}
-        </p>
-      </div>
-
-      <div className="col-span-2 mt-3">
+      {p.open && <div className="mt-3 border-t-2 border-paper-3 pt-3">
         <fieldset>
           <legend className="font-pixel text-sm font-bold text-paper-5">{t.certainty}</legend>
           <div className="mt-1 flex flex-wrap gap-2">
@@ -151,10 +155,16 @@ export function PlacedCard(p: Props) {
               <button type="button" onClick={p.onNotebook} className="px-btn px-btn-paper text-base">
                 {t.toNotebook}
               </button>
+              <button type="button" onClick={() => setSourceOpen(true)} className="px-btn px-btn-paper text-base">
+                {t.viewSource}
+              </button>
             </div>
           </details>
         </div>
-      </div>
+      </div>}
+      <Dialog open={sourceOpen} onClose={() => setSourceOpen(false)} labelledBy={dialogId}>
+        <div className="p-4"><h2 id={dialogId} className="sr-only">{t.viewSource}: {e.title}</h2><DocumentSheet presentation={e.presentation} transcription={e.transcription} image={e.image} /></div>
+      </Dialog>
     </article>
   );
 }
